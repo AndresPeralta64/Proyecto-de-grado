@@ -37,13 +37,6 @@ create table usuario_rol (
 	asignado_por int references usuario(id_usuario)
 );
 
-create table token_verificacion (
-	id_token serial primary key,
-	usuario int not null references usuario(id_usuario) on delete cascade,
-	expira_en timestamp not null,
-	usado boolean not null default false
-);
-
 create table nivel_microcredencial (
 	id_nivel serial primary key,
 	nombre varchar(150) not null unique
@@ -82,7 +75,7 @@ create table insignia_emitida (
 	id_global uuid not null default gen_random_uuid() unique,
 	url_externo text not null unique,
 	firma_JWS text not null,
-	certificado_publico text not null,
+	certificado_publico text,
 	fecha_emision timestamp not null default now(),
 	png_baked_url text,
 	assertion_jsonld jsonb not null,
@@ -98,10 +91,26 @@ create table revocacion_insignia (
 	revocado_en timestamp not null default now()
 );
 
+create table token_verificacion (
+	id_token serial primary key,
+	usuario int not null references usuario(id_usuario) on delete cascade,
+	token varchar(255) not null unique,
+	expira_en timestamp not null,
+	usado boolean not null default false,
+	creado_en timestamp not null default now()
+);
+
 create table perfil_academico (
 	receptor int not null references usuario(id_usuario) on delete cascade,
 	insignia int not null references insignia_emitida(id_insignia) on delete cascade,
 	visible boolean not null default true,
 	orden int,
 	primary key (receptor, insignia)
+);
+
+create table configuracion_sistema (
+	id_config serial primary key,
+	emisor_url text not null unique,
+	clave_publica text not null,
+	clave_privada text not null
 );
