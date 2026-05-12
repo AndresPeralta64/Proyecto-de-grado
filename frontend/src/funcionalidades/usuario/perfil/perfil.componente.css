@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+main {
+  background-color: #ffffff; /* Cambiado a blanco puro según tu petición */
+}
+
+/* Card principal - Mantenemos la sombra para el relieve */
+.bg-white.rounded-xl {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Sombra ligeramente más definida para compensar el fondo blanco */
+}
+
+/* Campos deshabilitados/gris */
+input.bg-\[#E2E8F0\] {
+  color: #334155;
+  cursor: default;
+}
+
+/* Transiciones para botones */
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Asegurar que los íconos dentro de botones hereden el color blanco */
+button.text-white svg {
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .lg\:col-span-4 {
+    border-right: none;
+    border-bottom: 1px solid #EEEEEE;
+    padding-right: 0;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+}

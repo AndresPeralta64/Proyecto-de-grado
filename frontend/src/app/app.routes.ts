@@ -24,9 +24,15 @@ export const routes: Routes = [
     path: 'administrador', 
     component: AdministradorComponente,
     canActivate: [AuthGuard, RolGuard],
-    data: { roles: ['Administrador'] }
+    data: { roles: ['ADMIN', 'Administrador'] } // Aceptamos ambos para evitar bloqueos
   },
 
-  // Comodín para rutas no encontradas
+  // Perfil de Usuario
+  {
+    path: 'perfil',
+    loadComponent: () => import('../funcionalidades/usuario/perfil/perfil.componente').then(m => m.PerfilComponente),
+    canActivate: [AuthGuard]
+  },
+
   { path: '**', redirectTo: 'autenticacion/iniciar-sesion' }
 ];
