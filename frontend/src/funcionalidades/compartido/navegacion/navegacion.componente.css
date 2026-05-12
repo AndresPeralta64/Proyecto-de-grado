@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+nav {
+  user-select: none;
+}
+
+/* Transición suave para los hovers */
+button, a {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Asegurar que el logo no se deforme */
+img {
+  max-width: 150px;
+}

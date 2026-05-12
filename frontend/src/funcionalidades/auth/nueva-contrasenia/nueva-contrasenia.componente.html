@@ -1,0 +1,66 @@
+<div class="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat selection:bg-blue-100"
+  style="background-image: url('background.png');">
+
+  <div class="bg-white p-10 w-110 relative shadow-2xl rounded-sm" @fadeIn>
+
+    <!-- Logo -->
+    <div class="mb-5">
+      <img src="logo-espoch.png" alt="Logo ESPOCH" class="h-8.75">
+    </div>
+
+    <div *ngIf="!exito">
+      <h1 class="text-2xl font-semibold text-[#1b1b1b] mb-4">Restablecer contraseña</h1>
+      <p class="text-sm text-gray-700 mb-6">Registre una nueva contraseña para su cuenta.</p>
+
+      <form [formGroup]="formulario" (ngSubmit)="restablecer()">
+        <!-- Nueva Contraseña -->
+        <div class="relative mb-8">
+          <input type="password" formControlName="nuevaContrasenia" placeholder="Nueva contraseña"
+            class="w-full border-b border-gray-400 py-2 focus:border-[#0067b8] outline-none transition-colors text-base placeholder:text-gray-600"
+            [ngClass]="{'border-red-600': errorNueva}">
+          <p *ngIf="errorNueva" class="text-red-600 text-xs mt-1 absolute">{{ errorNueva }}</p>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="relative mb-12">
+          <input type="password" formControlName="confirmarContrasenia" placeholder="Confirmar contraseña"
+            class="w-full border-b border-gray-400 py-2 focus:border-[#0067b8] outline-none transition-colors text-base placeholder:text-gray-600"
+            [ngClass]="{'border-red-600': errorConfirmar}">
+          <p *ngIf="errorConfirmar" class="text-red-600 text-xs mt-1 absolute">{{ errorConfirmar }}</p>
+        </div>
+
+        <div *ngIf="mensajeError" class="mb-6 p-2 bg-red-50 text-red-800 text-xs border border-red-100 rounded">
+          {{ mensajeError }}
+        </div>
+
+        <div class="flex justify-end mt-8">
+          <button type="submit" [disabled]="cargando || !token"
+            class="bg-[#0067b8] text-white px-5 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] flex items-center gap-2 min-w-30 justify-center">
+            <svg *ngIf="cargando" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+            {{ cargando ? 'Guardando...' : 'Restablecer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Mensaje de éxito limpio -->
+    <div *ngIf="exito" class="py-4">
+      <h1 class="text-2xl font-semibold text-[#1b1b1b] mb-4">Restablecimiento terminado</h1>
+      <p class="text-sm text-gray-700 leading-relaxed mb-10">{{ mensajeExito }}</p>
+
+      <div class="flex justify-end">
+        <a routerLink="/autenticacion/iniciar-sesion"
+          class="bg-[#0067b8] text-white px-8 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] inline-block">
+          Iniciar sesión
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>

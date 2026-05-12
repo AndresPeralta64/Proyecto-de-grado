@@ -21,6 +21,7 @@ create table usuario (
 	nombres varchar(200) not null,
 	apellidos varchar(200) not null,
 	correo varchar(255) not null unique,
+	telefono char(10) unique,
 	contrasenia text not null,
 	carrera int references carrera(id_carrera),
 	foto_url text,
@@ -47,6 +48,11 @@ create table area_conocimiento (
 	nombre varchar(200) not null unique
 );
 
+create table estado_microcredencial (
+	id_estado serial primary key,
+	nombre varchar(50) not null unique
+);
+
 create table microcredencial (
 	id_microcredencial serial primary key,
 	emisor int references usuario(id_usuario) not null,
@@ -59,12 +65,17 @@ create table microcredencial (
 	competencias text[] not null,
 	imagen_url text not null,
 	metadata_ob3 jsonb,
-	estado varchar(30) not null default 'Pendiente' check (estado in ('Pendiente','Aprobada','Rechazada','Inactiva','Eliminada')),
+	estado int references estado_microcredencial(id_estado) not null default 1,
 	justificacion_rechazo text,
 	aprobado_por int references usuario(id_usuario),
 	aprobado_en timestamp,
 	eliminado boolean not null default false,
 	creado_en timestamp not null default now()
+);
+
+create table estado_insignia (
+	id_estado serial primary key,
+	nombre varchar(50) not null unique
 );
 
 create table insignia_emitida (
@@ -79,7 +90,7 @@ create table insignia_emitida (
 	fecha_emision timestamp not null default now(),
 	png_baked_url text,
 	assertion_jsonld jsonb not null,
-	estado varchar(20) not null default 'Activa' check (estado in ('Activa', 'Revocada')),
+	estado int references estado_insignia(id_estado) not null default 1,
 	unique(microcredencial, receptor)
 );
 
@@ -114,3 +125,82 @@ create table configuracion_sistema (
 	clave_publica text not null,
 	clave_privada text not null
 );
+
+insert into facultad (nombre) values 
+('Administración de Empresas'),
+('Ciencias'),
+('Ciencias Pecuarias'),
+('Informática y Electrónica'),
+('Mecánica'),
+('Recursos Naturales'),
+('Salud Pública');
+
+insert into carrera (facultad, nombre) values
+(1, 'Administración de Empresas'),
+(1, 'Contabilidad y Auditoría'),
+(1, 'Finanzas'),
+(1, 'Mercadotecnia'),
+(1, 'Gestión de Transporte'),
+(2, 'Ingeniería Química'),
+(2, 'Química'),
+(2, 'Ingeniería Ambiental'),
+(2, 'Bioquímica y Farmacia'),
+(2, 'Biofísica'),
+(2, 'Estadística'),
+(2, 'Matemática'),
+(2, 'Física'),
+(3, 'Ingeniería Zootécnica'),
+(3, 'Ingeniería en Agroindustrias'),
+(3, 'Veterinaria'),
+(4, 'Diseño Gráfico'),
+(4, 'Ingeniería en Software'),
+(4, 'Ingeniería en Tecnologías de la Información'),
+(4, 'Ingeniería Electrónica y Automatización'),
+(4, 'Ingeniería en Telecomunicaciones'),
+(5, 'Ingeniería Mecánica'),
+(5, 'Ingeniería Industrial'),
+(5, 'Ingeniería en Mantenimiento Industrial'),
+(5, 'Ingeniería Automotriz'),
+(6, 'Ingeniería Agronómica'),
+(6, 'Ingeniería Forestal'),
+(6, 'Ingeniería en Recursos Naturales Renovables'),
+(6, 'Turismo'),
+(7, 'Medicina General'),
+(7, 'Nutrición y Dietética'),
+(7, 'Promoción y Cuidados de la Salud'),
+(7, 'Gestión Gastronómica');
+
+insert into rol (nombre, descripcion) values
+('Administrador', 'Es el encargado de la gestión global y el control de calidad del sistema. Tiene el nivel de acceso más alto.'),
+('Emisor', 'Es la autoridad académica o el docente responsable de diseñar y otorgar los reconocimientos.'),
+('Receptor', 'Es el usuario final que adquiere las competencias y es el dueño de las insignias digitales otorgadas.');
+
+insert into nivel_microcredencial (nombre) values
+('Básico'),
+('Intermedio'),
+('Avanzado'),
+('Experto');
+
+insert into area_conocimiento (nombre) values 
+('Programas y cualificaciones genéricos'),
+('Educación'),
+('Artes y humanidades'),
+('Ciencias sociales, periodismo e información'),
+('Negocios, administración y derecho'),
+('Ciencias naturales, matemáticas y estadística'),
+('Tecnologías de la información y la comunicación'),
+('Ingeniería, manufactura y construcción'),
+('Agricultura, silvicultura, pesquería y veterinaria'),
+('Salud y bienestar'),
+('Servicios'); 
+
+insert into estado_microcredencial (nombre) values 
+('Pendiente'), 
+('Aprobada'),
+('Rechazada'),
+('Inactiva'),
+('Eliminada');
+
+insert into estado_insignia (nombre) values 
+('Activa'), 
+('Revocada');

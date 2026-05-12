@@ -4,7 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { routes } from './app.routes';
-import { interceptorAutenticacion } from '../core/interceptors/auth.interceptor';
+import { interceptorAutenticacion } from '../core/interceptores/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,3 +15,4 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync()
   ]
 };
+

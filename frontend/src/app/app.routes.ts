@@ -1,46 +1,32 @@
 import { Routes } from '@angular/router';
-import { GuardiaAutenticacion } from '../core/guards/auth.guard';
-import { GuardiaRol } from '../core/guards/rol.guard';
-import { rutasAutenticacion } from '../features/auth/auth.routes';
-import { rutasAdministrador } from '../features/admin/admin.routes';
-import { rutasEmisor } from '../features/emisor/emisor.routes';
-import { rutasReceptor } from '../features/receptor/receptor.routes';
-import { NoAutorizadoComponent } from '../compartidos/components/no-autorizado/no-autorizado.component';
+import { LoginComponente } from '../funcionalidades/auth/login/login.componente';
+import { RecuperarContraseniaComponente } from '../funcionalidades/auth/recuperar-contrasenia/recuperar-contrasenia.componente';
+import { NuevaContraseniaComponente } from '../funcionalidades/auth/nueva-contrasenia/nueva-contrasenia.componente';
+import { AdministradorComponente } from '../funcionalidades/administrador/administrador.componente';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { RolGuard } from '../core/guards/rol.guard';
 
 export const routes: Routes = [
-  {
+  { path: '', redirectTo: 'autenticacion/iniciar-sesion', pathMatch: 'full' },
+  
+  // Módulo de Autenticación
+  { 
     path: 'autenticacion',
-    children: rutasAutenticacion
+    children: [
+      { path: 'iniciar-sesion', component: LoginComponente },
+      { path: 'recuperar-contrasenia', component: RecuperarContraseniaComponente },
+      { path: 'nueva-contrasenia/:token', component: NuevaContraseniaComponente }
+    ]
   },
-  {
-    path: 'administrador',
-    canActivate: [GuardiaAutenticacion, GuardiaRol],
-    data: { roles: ['Administrador'] },
-    children: rutasAdministrador
+
+  // Módulo Administrador
+  { 
+    path: 'administrador', 
+    component: AdministradorComponente,
+    canActivate: [AuthGuard, RolGuard],
+    data: { roles: ['Administrador'] }
   },
-  {
-    path: 'emisor',
-    canActivate: [GuardiaAutenticacion, GuardiaRol],
-    data: { roles: ['Emisor', 'Administrador'] },
-    children: rutasEmisor
-  },
-  {
-    path: 'receptor',
-    canActivate: [GuardiaAutenticacion, GuardiaRol],
-    data: { roles: ['Receptor', 'Emisor', 'Administrador'] },
-    children: rutasReceptor
-  },
-  {
-    path: 'no-autorizado',
-    component: NoAutorizadoComponent
-  },
-  {
-    path: '',
-    redirectTo: '/autenticacion/iniciar-sesion',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: '/autenticacion/iniciar-sesion'
-  }
+
+  // Comodín para rutas no encontradas
+  { path: '**', redirectTo: 'autenticacion/iniciar-sesion' }
 ];
