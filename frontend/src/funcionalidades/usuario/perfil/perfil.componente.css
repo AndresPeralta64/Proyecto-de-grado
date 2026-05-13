@@ -1,43 +1,27 @@
-:host {
-  display: block;
-  width: 100%;
+@keyframes bounce-in {
+    0% {
+        transform: translateY(100%) scale(0.9);
+        opacity: 0;
+    }
+    70% {
+        transform: translateY(-10%) scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
-main {
-  background-color: #ffffff; /* Cambiado a blanco puro según tu petición */
+.animate-bounce-in {
+    animation: bounce-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Card principal - Mantenemos la sombra para el relieve */
-.bg-white.rounded-xl {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Sombra ligeramente más definida para compensar el fondo blanco */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Campos deshabilitados/gris */
-input.bg-\[#E2E8F0\] {
-  color: #334155;
-  cursor: default;
-}
-
-/* Transiciones para botones */
-button {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-/* Asegurar que los íconos dentro de botones hereden el color blanco */
-button.text-white svg {
-  color: white;
-}
-
-@media (max-width: 1024px) {
-  .lg\:col-span-4 {
-    border-right: none;
-    border-bottom: 1px solid #EEEEEE;
-    padding-right: 0;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-  }
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
 }

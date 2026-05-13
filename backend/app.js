@@ -16,7 +16,9 @@ const app = express();
 /**
  * Configuración de middleware base y seguridad
  */
-app.use(helmet()); // Protege la aplicación configurando varias cabeceras HTTP
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+})); // Protege la aplicación permitiendo recursos cruzados para imágenes
 app.use(cors());   // Habilita el intercambio de recursos de origen cruzado
 app.use(logger('dev'));
 app.use(express.json());
