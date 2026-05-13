@@ -25,4 +25,8 @@ export class UsuarioServicio {
     formData.append('foto', archivo);
     return this.http.post(`${this.apiUrl}/subir-foto`, formData);
   }
+
+  cambiarContrasenia(nuevaContrasenia: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/cambiar-contrasenia`, { nuevaContrasenia });
+  }
 }

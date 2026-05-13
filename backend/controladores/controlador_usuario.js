@@ -1,4 +1,5 @@
 const { consultar } = require('../servicios/base_datos');
+const bcrypt = require('bcryptjs');
 
 /**
  * Obtiene el perfil completo del usuario autenticado
@@ -105,7 +106,33 @@ const actualizarPerfil = async (req, res) => {
   }
 };
 
+const cambiarContrasenia = async (req, res) => {
+  const { nuevaContrasenia } = req.body;
+  const idUsuario = req.usuario.id;
+
+  try {
+    if (!nuevaContrasenia) {
+      return res.status(400).json({ exito: false, mensaje: 'La nueva contraseña es obligatoria.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const contrasenaHash = await bcrypt.hash(nuevaContrasenia, salt);
+
+    const consulta = 'UPDATE usuario SET contrasenia = $1 WHERE id_usuario = $2';
+    await consultar(consulta, [contrasenaHash, idUsuario]);
+
+    return res.status(200).json({
+      exito: true,
+      mensaje: 'Contraseña actualizada exitosamente.'
+    });
+  } catch (error) {
+    console.error('Error en cambiarContrasenia:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al actualizar la contraseña.' });
+  }
+};
+
 module.exports = {
   obtenerPerfil,
-  actualizarPerfil
+  actualizarPerfil,
+  cambiarContrasenia
 };

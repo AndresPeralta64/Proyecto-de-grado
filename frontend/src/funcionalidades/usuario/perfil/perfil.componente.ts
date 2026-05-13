@@ -89,11 +89,11 @@ export class PerfilComponente implements OnInit {
       this.formulario.markAllAsTouched();
       return;
     }
-    
+
     this.cargando = true;
     const formData = new FormData();
     formData.append('telefono', this.formulario.get('telefono')?.value || '');
-    
+
     if (this.archivoFoto) {
       formData.append('foto', this.archivoFoto);
     }
@@ -103,7 +103,7 @@ export class PerfilComponente implements OnInit {
         if (res.exito) {
           this.lanzarNotificacion('Se ha actualizado su perfil', 'exito');
           this.archivoFoto = null;
-          
+
           setTimeout(() => {
             this.cancelar(); // Usamos la misma redirección que cancelar
           }, 2000);
@@ -135,7 +135,7 @@ export class PerfilComponente implements OnInit {
   }
 
   cambiarContrasenia(): void {
-    this.router.navigate(['/autenticacion/recuperar-contrasenia']);
+    this.router.navigate(['/autenticacion/recuperar-contrasenia'], { state: { desdePerfil: true } });
   }
 
   cancelar(): void {

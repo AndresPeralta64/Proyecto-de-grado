@@ -1,11 +1,8 @@
 <app-navegacion></app-navegacion>
 
-<main class="ml-16 p-4.5 min-h-[calc(100vh-64px)] bg-white">
+<main class="p-4.5 min-h-[calc(100vh-64px)] bg-white">
 
-  <h1 class="text-[20px] text-[#334155] mb-5 ml-4">Datos de la cuenta</h1>
-
-  <!-- Línea divisora corregida: estable y llega a los bordes sin interferir con la barra lateral -->
-  <div class="h-[0.5px] bg-[#EEEEEE] -mx-4.5 mb-8"></div>
+  <h1 class="text-[23px] text-[#334155] ml-39.75 mt-[23px]">Datos de la cuenta</h1>
 
   <div class="p-10 px-40">
     <div class="bg-white rounded-xl border border-[#EEEEEE] p-10 shadow-sm mb-20">
@@ -90,8 +87,8 @@
                 </div>
               </div>
               <!-- Mensaje de Error -->
-              <span *ngIf="formulario.get('telefono')?.invalid && formulario.get('telefono')?.touched" 
-                class="text-[#F86E6E] text-[11px] font-medium mt-0.5 animate-fade-in">
+              <span *ngIf="formulario.get('telefono')?.invalid && formulario.get('telefono')?.touched"
+                class="text-[#ee2e2e] text-[11px] font-medium mt-0.5 animate-fade-in">
                 El teléfono debe tener exactamente 10 dígitos.
               </span>
             </div>
@@ -100,15 +97,16 @@
       </form>
 
       <!-- Notificación Toast -->
-      <div *ngIf="mostrarToast" 
+      <div *ngIf="mostrarToast"
         [ngClass]="tipoToast === 'exito' ? 'bg-[#E7F9E7] border-[#D1F2D1] text-[#35BC30]' : 'bg-[#FEE7E7] border-[#FAD1D1] text-[#C12B2B]'"
         class="fixed bottom-6 right-6 px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-3 animate-bounce-in z-50 border transition-all duration-300">
-        
+
         <!-- Ícono de Información -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" [attr.stroke]="tipoToast === 'exito' ? '#35BC30' : '#C12B2B'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+          [attr.stroke]="tipoToast === 'exito' ? '#35BC30' : '#C12B2B'">
           <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2">
-            <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333"/>
-            <path stroke-width="2" d="M11.956 7.443h.01"/>
+            <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333" />
+            <path stroke-width="2" d="M11.956 7.443h.01" />
           </g>
         </svg>
 

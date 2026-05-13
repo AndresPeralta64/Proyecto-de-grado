@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ServicioToken } from '../../../core/servicios/token.servicio';
+import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
 
 @Component({
   selector: 'app-navegacion',
@@ -16,7 +17,8 @@ export class NavegacionComponente implements OnInit {
 
   constructor(
     private servicioToken: ServicioToken,
-    private router: Router
+    private router: Router,
+    public sidebarServicio: SidebarServicio
   ) {}
 
   ngOnInit(): void {
@@ -29,6 +31,10 @@ export class NavegacionComponente implements OnInit {
 
   toggleMenuPerfil(): void {
     this.menuPerfilAbierto = !this.menuPerfilAbierto;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarServicio.toggle();
   }
 
   cerrarSesion(): void {

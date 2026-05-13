@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ServicioAutenticacion } from '../../../core/servicios/auth.servicio';
+import { UsuarioServicio } from '../../../core/servicios/usuario.servicio';
+import { ServicioToken } from '../../../core/servicios/token.servicio';
 
 @Component({
   selector: 'app-nueva-contrasenia',
@@ -26,12 +28,15 @@ export class NuevaContraseniaComponente implements OnInit {
   mensajeExito = '';
   token: string | null = null;
   exito = false;
+  desdePerfil = false;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private servicioAutenticacion: ServicioAutenticacion
+    private servicioAutenticacion: ServicioAutenticacion,
+    private usuarioServicio: UsuarioServicio,
+    private servicioToken: ServicioToken
   ) {
     this.formulario = this.fb.group({
       nuevaContrasenia: ['', [Validators.required, Validators.minLength(6)]],
@@ -40,8 +45,12 @@ export class NuevaContraseniaComponente implements OnInit {
   }
 
   ngOnInit(): void {
+    if (history.state && history.state.desdePerfil) {
+      this.desdePerfil = true;
+    }
+
     this.token = this.route.snapshot.paramMap.get('token');
-    if (!this.token) {
+    if (!this.desdePerfil && !this.token) {
       this.mensajeError = 'Enlace de recuperación inválido.';
     }
   }
@@ -52,27 +61,46 @@ export class NuevaContraseniaComponente implements OnInit {
   }
 
   restablecer(): void {
-    if (this.formulario.invalid || !this.token) return;
+    if (this.formulario.invalid) return;
+    if (!this.desdePerfil && !this.token) return;
 
     this.cargando = true;
     this.mensajeError = '';
 
-    const datos = {
-      token: this.token,
-      nuevaContrasenia: this.formulario.get('nuevaContrasenia')?.value
-    };
+    const nuevaContrasenia = this.formulario.get('nuevaContrasenia')?.value;
 
-    this.servicioAutenticacion.confirmarRestablecimiento(datos).subscribe({
-      next: (res) => {
-        this.exito = true;
-        this.mensajeExito = res.mensaje;
-        this.cargando = false;
-      },
-      error: (err) => {
-        this.mensajeError = err.error?.mensaje || 'Error al actualizar la contraseña.';
-        this.cargando = false;
-      }
-    });
+    if (this.desdePerfil) {
+      this.usuarioServicio.cambiarContrasenia(nuevaContrasenia).subscribe({
+        next: (res) => {
+          this.exito = true;
+          this.mensajeExito = res.mensaje;
+          this.cargando = false;
+          // Al cambiar contraseña desde el perfil, cerramos la sesión actual para obligar a re-autenticarse
+          this.servicioToken.eliminarToken();
+        },
+        error: (err) => {
+          this.mensajeError = err.error?.mensaje || 'Error al actualizar la contraseña.';
+          this.cargando = false;
+        }
+      });
+    } else {
+      const datos = {
+        token: this.token!,
+        nuevaContrasenia: nuevaContrasenia
+      };
+
+      this.servicioAutenticacion.confirmarRestablecimiento(datos).subscribe({
+        next: (res) => {
+          this.exito = true;
+          this.mensajeExito = res.mensaje;
+          this.cargando = false;
+        },
+        error: (err) => {
+          this.mensajeError = err.error?.mensaje || 'Error al actualizar la contraseña.';
+          this.cargando = false;
+        }
+      });
+    }
   }
 
   get errorNueva(): string {

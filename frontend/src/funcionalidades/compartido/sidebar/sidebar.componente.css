@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 64px;
+  bottom: 0;
+  background-color: #f8f8f8;
+  border-right: 1px solid #EEEEEE;
+  z-index: 40;
+  overflow: hidden;
+}
+
+.sidebar-content {
+  height: 100%;
+  overflow: hidden;
+}

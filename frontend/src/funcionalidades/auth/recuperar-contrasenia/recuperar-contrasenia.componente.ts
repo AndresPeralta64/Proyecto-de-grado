@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -19,12 +19,19 @@ import { ServicioAutenticacion } from '../../../core/servicios/auth.servicio';
     ])
   ]
 })
-export class RecuperarContraseniaComponente {
+export class RecuperarContraseniaComponente implements OnInit {
   formulario: FormGroup;
   cargando = false;
   mensajeExito = '';
   mensajeError = '';
   enviado = false;
+  desdePerfil = false;
+
+  ngOnInit() {
+    if (history.state && history.state.desdePerfil) {
+      this.desdePerfil = true;
+    }
+  }
 
   constructor(
     private fb: FormBuilder,

@@ -22,19 +22,21 @@
         </div>
 
         <!-- Confirmar Contraseña -->
-        <div class="relative mb-12">
+        <div class="relative mb-10">
           <input type="password" formControlName="confirmarContrasenia" placeholder="Confirmar contraseña"
             class="w-full border-b border-gray-400 py-2 focus:border-[#0067b8] outline-none transition-colors text-base placeholder:text-gray-600"
             [ngClass]="{'border-red-600': errorConfirmar}">
           <p *ngIf="errorConfirmar" class="text-red-600 text-xs mt-1 absolute">{{ errorConfirmar }}</p>
         </div>
 
-        <div *ngIf="mensajeError" class="mb-6 p-2 bg-red-50 text-red-800 text-xs border border-red-100 rounded">
+        <div *ngIf="mensajeError" class="mb-6 text-red-600 text-[13px] animate-fade-in">
           {{ mensajeError }}
         </div>
 
-        <div class="flex justify-end mt-8">
-          <button type="submit" [disabled]="cargando || !token"
+        <div class="flex mt-8 items-center" [ngClass]="desdePerfil ? 'justify-between' : 'justify-end'">
+          <a *ngIf="desdePerfil" routerLink="/perfil"
+            class="text-[#0067b8] text-sm hover:underline px-4 py-1.5">Volver a Perfil</a>
+          <button type="submit" [disabled]="cargando || (!desdePerfil && !token)"
             class="bg-[#0067b8] text-white px-5 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] flex items-center gap-2 min-w-30 justify-center">
             <svg *ngIf="cargando" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
               viewBox="0 0 24 24">
