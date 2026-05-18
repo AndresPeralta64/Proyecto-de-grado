@@ -16,7 +16,7 @@ const iniciarSesion = async (req, res) => {
       return res.status(400).json({ exito: false, mensaje: 'Por favor, ingrese su correo y contraseña.' });
     }
 
-    const usuario = await buscarPorCorreo(correo);
+    const usuario = await buscarPorCorreo(correo.toLowerCase().trim());
     if (!usuario) {
       return res.status(401).json({ exito: false, mensaje: 'Las credenciales ingresadas son incorrectas.' });
     }
@@ -66,7 +66,7 @@ const verificarCorreo = async (req, res) => {
   const { correo } = req.body;
   try {
     if (!correo) return res.status(400).json({ exito: false, mensaje: 'El correo es obligatorio.' });
-    const usuario = await buscarPorCorreo(correo);
+    const usuario = await buscarPorCorreo(correo.toLowerCase().trim());
     if (usuario) {
       return res.status(200).json({ exito: true, mensaje: 'Correo verificado.' });
     } else {
@@ -85,7 +85,7 @@ const solicitarRestablecimiento = async (req, res) => {
   const { correo } = req.body;
 
   try {
-    const usuario = await buscarPorCorreo(correo);
+    const usuario = await buscarPorCorreo(correo.toLowerCase().trim());
     if (!usuario) {
       return res.status(404).json({ exito: false, mensaje: 'El correo no está registrado.' });
     }

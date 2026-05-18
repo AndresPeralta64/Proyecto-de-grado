@@ -29,6 +29,8 @@ export class NuevaContraseniaComponente implements OnInit {
   token: string | null = null;
   exito = false;
   desdePerfil = false;
+  mostrarNueva = false;
+  mostrarConfirmar = false;
 
   constructor(
     private fb: FormBuilder,

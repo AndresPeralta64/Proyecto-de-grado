@@ -29,7 +29,7 @@
           <a *ngIf="desdePerfil" routerLink="/perfil" class="text-[#0067b8] text-sm hover:underline px-4 py-1.5">Volver
             a Perfil</a>
           <button type="submit" [disabled]="cargando"
-            class="bg-[#0067b8] text-white px-10px py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] flex items-center gap-2 min-w-25 justify-center">
+            class="bg-[#0067b8] text-white px-10px py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] flex items-center gap-2 min-w-25 justify-center cursor-pointer disabled:cursor-not-allowed">
             <svg *ngIf="cargando" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
               viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -50,11 +50,11 @@
 
       <div class="flex justify-end">
         <a *ngIf="!desdePerfil" routerLink="/autenticacion/iniciar-sesion"
-          class="bg-[#0067b8] text-white px-3.75 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] inline-block">
+          class="bg-[#0067b8] text-white px-3.75 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] inline-block cursor-pointer">
           Volver al inicio
         </a>
         <a *ngIf="desdePerfil" routerLink="/perfil"
-          class="bg-[#0067b8] text-white px-3.75 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] inline-block">
+          class="bg-[#0067b8] text-white px-3.75 py-1.5 hover:bg-[#005da6] transition-colors font-semibold text-[15px] inline-block cursor-pointer">
           Volver al perfil
         </a>
       </div>

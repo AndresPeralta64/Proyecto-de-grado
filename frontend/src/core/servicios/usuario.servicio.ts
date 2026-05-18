@@ -11,6 +11,10 @@ export class UsuarioServicio {
 
   constructor(private http: HttpClient) { }
 
+  obtenerUsuarios(): Observable<any> {
+    return this.http.get(`${this.apiUrl}`);
+  }
+
   obtenerPerfil(): Observable<any> {
     return this.http.get(`${this.apiUrl}/perfil`);
   }
@@ -19,7 +23,6 @@ export class UsuarioServicio {
     return this.http.put(`${this.apiUrl}/perfil`, datos);
   }
 
-  // Futura implementación para subir foto
   subirFoto(archivo: File): Observable<any> {
     const formData = new FormData();
     formData.append('foto', archivo);
@@ -28,5 +31,34 @@ export class UsuarioServicio {
 
   cambiarContrasenia(nuevaContrasenia: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/cambiar-contrasenia`, { nuevaContrasenia });
+  }
+
+  obtenerCarreras(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/carreras`);
+  }
+
+  registrarUsuario(datos: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, datos);
+  }
+
+  actualizarUsuario(id: number, datos: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, datos);
+  }
+
+
+  eliminarFotoPerfil(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/perfil/foto`);
+  }
+
+  eliminarUsuario(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  activarUsuario(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/activar`, {});
+  }
+
+  eliminarUsuarioDefinitivo(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}/permanente`);
   }
 }

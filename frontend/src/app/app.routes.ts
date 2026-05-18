@@ -22,7 +22,7 @@ export const routes: Routes = [
   // Módulo Administrador
   { 
     path: 'administrador', 
-    component: AdministradorComponente,
+    loadChildren: () => import('../funcionalidades/administrador/administrador.rutas').then(m => m.rutasAdministrador),
     canActivate: [AuthGuard, RolGuard],
     data: { roles: ['ADMIN', 'Administrador'] } // Aceptamos ambos para evitar bloqueos
   },

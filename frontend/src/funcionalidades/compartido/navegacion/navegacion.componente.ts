@@ -30,6 +30,9 @@ export class NavegacionComponente implements OnInit {
   }
 
   toggleMenuPerfil(): void {
+    if (!this.menuPerfilAbierto) {
+      this.sidebarServicio.cerrarMenusContenido();
+    }
     this.menuPerfilAbierto = !this.menuPerfilAbierto;
   }
 
@@ -40,5 +43,23 @@ export class NavegacionComponente implements OnInit {
   cerrarSesion(): void {
     this.servicioToken.eliminarToken();
     this.router.navigate(['/autenticacion/iniciar-sesion']);
+  }
+
+  redirigirAlDashboard(): void {
+    const usuario = this.servicioToken.obtenerDatosUsuario();
+    const rol = usuario?.nombre_rol;
+    if (rol === 'Administrador') {
+      this.router.navigate(['/administrador']);
+    } else if (rol === 'Emisor') {
+      this.router.navigate(['/emisor']);
+    } else if (rol === 'Receptor') {
+      this.router.navigate(['/receptor']);
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
+
+  get esPaginaPerfil(): boolean {
+    return this.router.url.includes('/perfil');
   }
 }

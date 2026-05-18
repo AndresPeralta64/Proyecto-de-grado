@@ -33,6 +33,7 @@ export class LoginComponente {
   mensajeError = '';
   mostrarErrorCorreo = false;
   mostrarErrorContrasenia = false;
+  mostrarContrasenia = false;
 
   constructor(
     private fb: FormBuilder,

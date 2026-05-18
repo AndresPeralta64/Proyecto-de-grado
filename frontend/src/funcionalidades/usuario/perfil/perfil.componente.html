@@ -12,7 +12,7 @@
         <div class="lg:col-span-4 flex flex-col items-center justify-center border-r border-[#EEEEEE] pr-12">
           <div class="w-44 h-53 flex items-center justify-center overflow-hidden mb-1.5">
             <ng-container *ngIf="!fotoVistaPrevia">
-              <svg class="text-[#334155] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <svg class="text-[#CBD5E1] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path fill="currentColor"
                   d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
               </svg>
@@ -22,19 +22,35 @@
 
           <span class="text-[#334155] text-sm font-medium mb-9">Foto de perfil</span>
 
-          <button type="button" (click)="fotoInput.click()"
-            class="flex items-center gap-2 bg-[#10B981] text-white px-2.5 py-1.75 rounded-lg font-semibold hover:bg-[#059669] transition-colors cursor-pointer text-[13px]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                <path stroke-linejoin="round" d="M21.25 13V8.5a5 5 0 0 0-5-5h-8.5a5 5 0 0 0-5 5v7a5 5 0 0 0 5 5h6.26" />
-                <path stroke-linejoin="round"
-                  d="m3.01 17l2.74-3.2a2.2 2.2 0 0 1 2.77-.27a2.2 2.2 0 0 0 2.77-.27l2.33-2.33a4 4 0 0 1 5.16-.43l2.47 1.91M8.01 10.17a1.66 1.66 0 1 0-.02-3.32a1.66 1.66 0 0 0 .02 3.32" />
-                <path stroke-miterlimit="10" d="M18.707 15v5" />
-                <path stroke-linejoin="round" d="m21 17.105l-1.967-1.967a.46.46 0 0 0-.652 0l-1.967 1.967" />
-              </g>
-            </svg>
-            Subir imagen
-          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" (click)="fotoInput.click()"
+              class="flex items-center gap-2 bg-[#10B981] text-white px-2.5 py-1.75 rounded-lg font-semibold hover:bg-[#059669] transition-colors cursor-pointer text-[13px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                  <path stroke-linejoin="round"
+                    d="M21.25 13V8.5a5 5 0 0 0-5-5h-8.5a5 5 0 0 0-5 5v7a5 5 0 0 0 5 5h6.26" />
+                  <path stroke-linejoin="round"
+                    d="m3.01 17l2.74-3.2a2.2 2.2 0 0 1 2.77-.27a2.2 2.2 0 0 0 2.77-.27l2.33-2.33a4 4 0 0 1 5.16-.43l2.47 1.91M8.01 10.17a1.66 1.66 0 1 0-.02-3.32a1.66 1.66 0 0 0 .02 3.32" />
+                  <path stroke-miterlimit="10" d="M18.707 15v5" />
+                  <path stroke-linejoin="round" d="m21 17.105l-1.967-1.967a.46.46 0 0 0-.652 0l-1.967 1.967" />
+                </g>
+              </svg>
+              Subir imagen
+            </button>
+            <button *ngIf="fotoVistaPrevia" type="button" (click)="eliminarFoto()"
+              class="flex items-center justify-center px-2.5 py-1.75 rounded-lg cursor-pointer transition-colors"
+              style="background-color: #E53935;" onmouseenter="this.style.backgroundColor='#C62828'"
+              onmouseleave="this.style.backgroundColor='#E53935'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                  <path
+                    d="M5.47 6.015v12.514a2.72 2.72 0 0 0 2.721 2.721h7.618a2.72 2.72 0 0 0 2.72-2.72V6.014m-15.235.001h17.412" />
+                  <path d="M8.735 6.015V4.382a1.63 1.63 0 0 1 1.633-1.632h3.264a1.63 1.63 0 0 1 1.633 1.632v1.633" />
+                </g>
+              </svg>
+            </button>
+          </div>
           <input #fotoInput type="file" (change)="seleccionarArchivo($event)" hidden accept="image/*">
         </div>
 
@@ -42,34 +58,90 @@
         <div class="lg:col-span-8 flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
             <label class="text-[13px] font-semibold text-[#334155]">Carrera</label>
-            <input formControlName="carrera"
-              class="bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none">
+            <div class="relative">
+              <input formControlName="carrera"
+                class="w-full bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none pr-10 uppercase"
+                placeholder="Sin especificar">
+              <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                    <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+                  </g>
+                </svg>
+              </div>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1.5">
               <label class="text-[13px] font-semibold text-[#334155]">Nombres</label>
-              <input formControlName="nombres"
-                class="bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none">
+              <div class="relative">
+                <input formControlName="nombres"
+                  class="w-full bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none pr-10 uppercase">
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                      <path d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                      <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-[13px] font-semibold text-[#334155]">Apellidos</label>
-              <input formControlName="apellidos"
-                class="bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none">
+              <div class="relative">
+                <input formControlName="apellidos"
+                  class="w-full bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none pr-10 uppercase">
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                      <path d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                      <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="flex flex-col gap-1.5">
             <label class="text-[13px] font-semibold text-[#334155]">Correo institucional</label>
-            <input formControlName="correo"
-              class="bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none">
+            <div class="relative">
+              <input formControlName="correo"
+                class="w-full bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none pr-10">
+              <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                    <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+                  </g>
+                </svg>
+              </div>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1.5">
               <label class="text-[13px] font-semibold text-[#334155]">Cédula</label>
-              <input formControlName="cedula"
-                class="bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none">
+              <div class="relative">
+                <input formControlName="cedula"
+                  class="w-full bg-[#E2E8F0] px-4 py-2 rounded-lg text-[#334155] outline-none border-none pr-10">
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                      <path d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                      <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-[13px] font-semibold text-[#334155]">Teléfono</label>
@@ -143,7 +215,7 @@
       </button>
 
       <button (click)="cancelar()"
-        class="flex items-center gap-2 bg-[#E2E8F0] border-2 border-[#334155] text-[#334155] px-2.5 py-1.75 rounded-lg font-bold hover:bg-[#C9CED5] transition-all cursor-pointer text-sm">
+        class="flex items-center gap-2 bg-[#E2E8F0] border-2 border-[#CBD5E1] text-[#334155] px-2.5 py-1.75 rounded-lg font-bold hover:bg-[#C9CED5] transition-all cursor-pointer text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
           <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
             d="M19 5L5 19m14 0L5 5" />

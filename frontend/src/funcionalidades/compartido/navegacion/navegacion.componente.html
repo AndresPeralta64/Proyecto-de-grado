@@ -1,10 +1,10 @@
-<nav class="h-16 bg-[#f8f8f8] border-b border-[#EEEEEE] flex items-center justify-between sticky top-0 z-50">
+<nav class="h-16 bg-[#f8f8f8] border-b border-[#EEEEEE] flex items-center justify-between sticky top-0 z-[100]">
 
   <!-- Parte Izquierda: Hamburger + Flecha + Logo -->
   <div class="flex items-center h-full">
 
     <!-- Un solo botón: ≡ fijo en el centro, flechas pequeñas a los lados -->
-    <button (click)="toggleSidebar()"
+    <button *ngIf="!esPaginaPerfil" (click)="toggleSidebar()"
       class="h-full flex items-center justify-center text-[#334155] hover:bg-[#e2e8f0] transition-colors focus:outline-none cursor-pointer border-r border-[#EEEEEE]"
       style="width: 64px; min-width: 64px;">
       <div class="relative flex items-center justify-center w-full h-full">
@@ -31,10 +31,15 @@
     </button>
 
     <!-- Logo y Título -->
-    <div class="flex items-center gap-3 px-6">
+    <button (click)="redirigirAlDashboard()"
+      class="group flex items-center gap-3 px-6 text-[#334155] focus:outline-none cursor-pointer h-full">
       <img src="espoch-marca.jpeg" alt="Logo ESPOCH" class="h-9 w-9 object-cover rounded-full border border-[#EEEEEE]">
-      <span class="text-[#334155] font-medium text-[15px] hidden sm:inline">Microcredenciales ESPOCH</span>
-    </div>
+      <!-- Texto con fondo gris al hover -->
+      <span
+        class="text-[#334155] font-medium text-[15px] hidden sm:inline px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0]">
+        Microcredenciales ESPOCH
+      </span>
+    </button>
   </div>
 
   <!-- Parte Derecha: Usuario y Dropdown -->
@@ -59,7 +64,7 @@
 
     <!-- Menú Desplegable con Íconos -->
     <div *ngIf="menuPerfilAbierto"
-      class="absolute right-6 top-full mt-1 w-52 bg-white border border-[#EEEEEE] shadow-xl z-50 rounded-xl overflow-hidden py-0">
+      class="absolute right-6 top-full mt-1 w-52 bg-white border border-[#EEEEEE] shadow-xl z-[110] rounded-xl overflow-hidden py-0">
       <button routerLink="/perfil"
         class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
@@ -103,4 +108,4 @@
 
 
 <!-- Backdrop -->
-<div *ngIf="menuPerfilAbierto" class="fixed inset-0 z-40" (click)="menuPerfilAbierto = false"></div>
+<div *ngIf="menuPerfilAbierto" class="fixed inset-0 z-[65]" (click)="menuPerfilAbierto = false"></div>

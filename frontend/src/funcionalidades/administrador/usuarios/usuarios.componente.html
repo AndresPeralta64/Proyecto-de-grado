@@ -1,0 +1,932 @@
+<div class="flex flex-col">
+  <h1 class="text-[22px] font-semibold text-[#334155] mb-8">Gestión de usuarios</h1>
+
+  <!-- Barra de Herramientas -->
+  <div class="flex items-center gap-4 mb-8">
+
+    <!-- Barra de búsqueda -->
+    <div class="relative flex-1 max-w-[300px]">
+      <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M10.783 18.828a8.05 8.05 0 0 0 7.439-4.955a8.03 8.03 0 0 0-1.737-8.765a8.045 8.045 0 0 0-13.735 5.68c0 2.131.846 4.174 2.352 5.681a8.05 8.05 0 0 0 5.68 2.359m5.706-2.337l4.762 4.759" />
+        </svg>
+      </span>
+      <input type="text" [(ngModel)]="terminoBusqueda" (input)="paginaActual = 1"
+        class="w-full pl-10 pr-4 py-2 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#828891] transition-all placeholder-[#CBD5E1]"
+        placeholder="Buscar...">
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="flex items-center gap-3">
+
+      <!-- Botón Mostrar -->
+      <div class="relative">
+        <button (click)="toggleMostrar()" [ngClass]="{
+            'bg-[#C9CED5]': menuMostrarAbierto,
+            'bg-[#E2E8F0]': !menuMostrarAbierto,
+            'z-50': menuMostrarAbierto || menuOrdenarAbierto
+          }"
+          class="relative flex items-center gap-2 px-2.5 py-2 border border-[#CBD5E1] rounded-lg text-[#334155] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path fill="none" stroke="#334155" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"
+              d="M21.25 12H8.895m-4.361 0H2.75m18.5 6.607h-5.748m-4.361 0H2.75m18.5-13.214h-3.105m-4.361 0H2.75m13.214 2.18a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm-9.25 6.607a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm6.607 6.608a2.18 2.18 0 1 0 0-4.361a2.18 2.18 0 0 0 0 4.36Z" />
+          </svg>
+          <span class="text-[14px]">Mostrar</span>
+        </button>
+
+        <!-- Mini Ventana Modal (Dropdown) -->
+        <div *ngIf="menuMostrarAbierto"
+          class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex overflow-hidden min-w-[240px]">
+
+          <!-- Columna Estado -->
+          <div class="flex-1 px-3 py-2.75 border-r border-[#CBD5E1]">
+            <h3 class="text-[13.5px] font-bold text-[#334155] mb-2 text-center">Estado</h3>
+            <div class="flex flex-col gap-2.5">
+              <!-- Activo -->
+              <label (click)="filtros.estados.activo = !filtros.estados.activo"
+                class="flex items-center gap-2.5 cursor-pointer group">
+                <div
+                  [ngClass]="filtros.estados.activo ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+                  <svg *ngIf="filtros.estados.activo" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[11px] text-[#334155]">Activo</span>
+              </label>
+              <!-- Inactivo -->
+              <label (click)="filtros.estados.inactivo = !filtros.estados.inactivo"
+                class="flex items-center gap-2.5 cursor-pointer group">
+                <div
+                  [ngClass]="filtros.estados.inactivo ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+                  <svg *ngIf="filtros.estados.inactivo" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[11px] text-[#334155]">Inactivo</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Columna Rol -->
+          <div class="flex-1 p-2.75">
+            <h3 class="text-[13.5px] font-bold text-[#334155] mb-2 text-center">Rol</h3>
+            <div class="flex flex-col gap-2.5">
+              <!-- Administrador -->
+              <label (click)="filtros.roles.administrador = !filtros.roles.administrador"
+                class="flex items-center gap-2.5 cursor-pointer group">
+                <div
+                  [ngClass]="filtros.roles.administrador ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+                  <svg *ngIf="filtros.roles.administrador" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[11px] text-[#334155]">Administrador</span>
+              </label>
+              <!-- Emisor -->
+              <label (click)="filtros.roles.emisor = !filtros.roles.emisor"
+                class="flex items-center gap-3 cursor-pointer group">
+                <div
+                  [ngClass]="filtros.roles.emisor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+                  <svg *ngIf="filtros.roles.emisor" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[11px] text-[#334155]">Emisor</span>
+              </label>
+              <!-- Receptor -->
+              <label (click)="filtros.roles.receptor = !filtros.roles.receptor"
+                class="flex items-center gap-3 cursor-pointer group">
+                <div
+                  [ngClass]="filtros.roles.receptor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+                  <svg *ngIf="filtros.roles.receptor" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[11px] text-[#334155]">Receptor</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backdrop para cerrar al hacer clic fuera -->
+        <div *ngIf="menuMostrarAbierto" class="fixed inset-0 z-40" (click)="menuMostrarAbierto = false"></div>
+      </div>
+
+      <!-- Botón Ordenar por -->
+      <div class="relative">
+        <button (click)="toggleOrdenar()" [ngClass]="{
+            'bg-[#C9CED5]': menuOrdenarAbierto,
+            'bg-[#E2E8F0]': !menuOrdenarAbierto,
+            'z-50': menuMostrarAbierto || menuOrdenarAbierto
+          }"
+          class="relative flex items-center gap-2 px-2.5 py-2 border border-[#CBD5E1] rounded-lg text-[#334155] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <g fill="none" stroke="#334155" stroke-linecap="square" stroke-width="2">
+              <path d="m16 17l3 3V4l3 3" opacity=".88" />
+              <path d="M3 19h9M3 5h9m-9 7h9" />
+            </g>
+          </svg>
+          <span class="text-[14px]">Ordenar por</span>
+        </button>
+
+        <!-- Mini Ventana Modal (Dropdown) -->
+        <div *ngIf="menuOrdenarAbierto"
+          class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden w-full p-3 gap-2.5">
+
+          <!-- Número -->
+          <label (click)="ordenarPor.numero = !ordenarPor.numero"
+            class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.numero ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.numero" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">ID</span>
+          </label>
+
+          <!-- Nombres -->
+          <label (click)="ordenarPor.nombres = !ordenarPor.nombres"
+            class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.nombres ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.nombres" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Nombres</span>
+          </label>
+
+          <!-- Apellidos -->
+          <label (click)="ordenarPor.apellidos = !ordenarPor.apellidos"
+            class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.apellidos ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.apellidos" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Apellidos</span>
+          </label>
+
+          <!-- Correo -->
+          <label (click)="ordenarPor.correo = !ordenarPor.correo"
+            class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.correo ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.correo" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Correo</span>
+          </label>
+
+          <!-- Estado -->
+          <label (click)="ordenarPor.estado = !ordenarPor.estado"
+            class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.estado ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.estado" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Estado</span>
+          </label>
+
+          <!-- Rol -->
+          <label (click)="ordenarPor.rol = !ordenarPor.rol" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.rol ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.rol" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Rol</span>
+          </label>
+
+        </div>
+
+        <!-- Backdrop para cerrar al hacer clic fuera -->
+        <div *ngIf="menuOrdenarAbierto" class="fixed inset-0 z-40" (click)="menuOrdenarAbierto = false"></div>
+      </div>
+
+      <!-- Botón Flecha -->
+      <button (click)="toggleOpciones()" [ngClass]="{'z-50': menuMostrarAbierto || menuOrdenarAbierto}"
+        class="relative flex items-center justify-center w-[38.5px] h-[38.5px] bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] hover:bg-[#C9CED5] cursor-pointer transition-all">
+
+        <!-- Flecha hacia arriba -->
+        <svg *ngIf="opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#64748b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+        </svg>
+
+        <!-- Flecha hacia abajo -->
+        <svg *ngIf="!opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#64748b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+        </svg>
+
+      </button>
+
+    </div>
+
+    <!-- Botón Usuario -->
+    <div class="ml-auto">
+      <button (click)="abrirModalRegistro()" [ngClass]="{'z-50': menuMostrarAbierto || menuOrdenarAbierto}"
+        class="relative flex items-center gap-2 px-2.5 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white font-medium hover:bg-[#43A5C2] cursor-pointer transition-all shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+          <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.5">
+            <path stroke-linejoin="round"
+              d="M12.125 14.719c-3.6 0-7.62 2.928-7.62 6.526m7.62-9.785a4.36 4.36 0 0 0 4.035-2.683a4.355 4.355 0 0 0-3.17-5.948a4.362 4.362 0 0 0-5.215 4.274a4.356 4.356 0 0 0 4.35 4.357" />
+            <path stroke-miterlimit="10" d="M16.488 14.983v5.997m-2.993-2.992h6" />
+          </g>
+        </svg>
+        <span class="text-[15px]">Nuevo usuario</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Tabla de Usuarios Registrados -->
+  <div class="border border-[#EEEEEE] bg-white w-full mb-8">
+    <table class="w-full text-center border-collapse">
+      <thead class="bg-white">
+        <tr class="border-b border-[#EEEEEE]">
+          <th colspan="7" class="py-1.5 text-[13px] font-bold text-[#334155] tracking-wider text-center uppercase">
+            Listado de usuarios registrados
+          </th>
+        </tr>
+        <tr class="bg-white border-b border-[#EEEEEE] text-[11px] font-bold text-[#334155] uppercase">
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[70px]">ID</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[230px]">Usuario</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[97px]">Cédula</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[270px]">Correo</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[104px]">Estado</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[320px]">Roles</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[235px]">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#EEEEEE] bg-white">
+        <tr *ngFor="let usuario of usuariosPaginados"
+          class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
+          <!-- ID -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ usuario.id_usuario }}</td>
+          <!-- Usuario (Nombres y Apellidos) -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ usuario.nombres }} {{
+            usuario.apellidos }}</td>
+          <!-- Cédula -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] font-medium">{{ usuario.cedula }}</td>
+          <!-- Correo -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] text-[13px]">{{ usuario.correo }}</td>
+          <!-- Estado -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE]">
+            <span [ngClass]="usuario.activo ? 'text-[#30A32C] bg-[#DCFFDB]' : 'text-[#A32C2E] bg-[#FFDBDC]'"
+              class="px-1.5 py-0.5 rounded font-bold text-[11px] uppercase tracking-wider inline-block">
+              {{ usuario.activo ? 'ACTIVO' : 'INACTIVO' }}
+            </span>
+          </td>
+          <!-- Roles -->
+          <td class="py-2 px-0 border-r border-[#EEEEEE]">
+            <div class="flex flex-wrap gap-1.5 justify-center">
+              <span *ngFor="let rol of usuario.roles" [ngClass]="{
+                      'text-[#7A0FAB] bg-[#F3E8FF]': rol.nombre?.toLowerCase() === 'administrador',
+                      'text-[#2944B7] bg-[#DBEAFE]': rol.nombre?.toLowerCase() === 'emisor',
+                      'text-[#B79629] bg-[#FEF3DB]': rol.nombre?.toLowerCase() === 'receptor'
+                    }" class="px-1.5 py-0.5 rounded font-bold text-[11px] uppercase tracking-wider">
+                {{ rol.nombre }}
+              </span>
+            </div>
+          </td>
+          <!-- Acciones -->
+          <td class="py-2 px-2">
+            <div class="flex items-center justify-center gap-3">
+
+              <!-- Para Usuarios Activos -->
+              <ng-container *ngIf="usuario.activo">
+                <!-- Botón Editar -->
+                <button type="button" (click)="abrirModalEdicion(usuario)"
+                  class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <g fill="none" stroke="#0ea5e9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                      <path
+                        d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56" />
+                      <path
+                        d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.36 1.36 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.36 1.36 0 0 1-.953.395H8.197a1.36 1.36 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086" />
+                    </g>
+                  </svg>
+                  Editar
+                </button>
+
+
+                <!-- Botón Eliminar -->
+                <button type="button" (click)="abrirModalEliminar(usuario)"
+                  class="flex items-center gap-1 px-1.75 py-1 border border-[#FDBABB] bg-white rounded-lg text-[#E90E12] text-[13px] font-medium hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <g fill="none" stroke="#E90E12" stroke-width="1">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
+                        d="M7.874 8.218v7.908a1.72 1.72 0 0 0 1.72 1.719h4.813a1.72 1.72 0 0 0 1.719-1.72V8.219m-9.627-.001h11.002m-7.564 0V7.187a1.03 1.03 0 0 1 1.032-1.032h2.062a1.03 1.03 0 0 1 1.032 1.032v1.031" />
+                      <rect width="18.5" height="18.5" x="2.75" y="2.75" stroke-width="1.5" rx="6" />
+                    </g>
+                  </svg>
+                  Eliminar
+                </button>
+
+                <!-- Ícono Info (No botón, fondo blanco con hover gris, sin cursor-pointer) -->
+                <div class="flex items-center justify-center flex-shrink-0" title="Información">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <g stroke="#334155" stroke-linecap="round" stroke-linejoin="round">
+                      <!-- Círculo interior del ícono que cambia de relleno en hover -->
+                      <circle cx="12" cy="12" r="9.5" stroke-width="1.5"
+                        class="fill-white hover:fill-[#E2E8F0] transition-colors duration-200" />
+                      <!-- Línea del ícono -->
+                      <path stroke-width="1.5" d="M12.005 17.278v-6.333" fill="none" />
+                      <!-- Punto del ícono -->
+                      <path stroke-width="2" d="M11.956 7.443h.01" fill="none" />
+                    </g>
+                  </svg>
+                </div>
+              </ng-container>
+
+              <!-- Para Usuarios Inactivos -->
+              <ng-container *ngIf="!usuario.activo">
+                <!-- Botón Activar -->
+                <button type="button" (click)="activarUsuario(usuario)"
+                  class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="1.5" d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                  Activar
+                </button>
+
+                <!-- Botón Eliminar Definitivamente -->
+                <button type="button" (click)="abrirModalEliminar(usuario)"
+                  class="flex items-center gap-1 px-1.75 py-1 border border-[#FDBABB] bg-white rounded-lg text-[#E90E12] text-[13px] font-medium hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <g fill="none" stroke="#E90E12" stroke-width="1">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
+                        d="M7.874 8.218v7.908a1.72 1.72 0 0 0 1.72 1.719h4.813a1.72 1.72 0 0 0 1.719-1.72V8.219m-9.627-.001h11.002m-7.564 0V7.187a1.03 1.03 0 0 1 1.032-1.032h2.062a1.03 1.03 0 0 1 1.032 1.032v1.031" />
+                      <rect width="18.5" height="18.5" x="2.75" y="2.75" stroke-width="1.5" rx="6" />
+                    </g>
+                  </svg>
+                  Eliminar
+                </button>
+              </ng-container>
+
+            </div>
+          </td>
+        </tr>
+        <!-- Mensaje si no hay registros o no coinciden los filtros -->
+        <tr *ngIf="usuariosFiltrados.length === 0">
+          <td colspan="7" class="py-8 text-center text-[#64748B] bg-white">
+            <div class="flex flex-col items-center justify-center gap-2 py-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="text-[#94A3B8]">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
+              </svg>
+              <span class="text-[13px] font-medium">No se encontraron usuarios con los parámetros establecidos.</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación y Control de Registros -->
+  <div class="flex items-center justify-center gap-12 mt-4 w-full text-[11px] text-[#64748B] select-none">
+
+    <!-- Lado Izquierdo: Mostrando n de n registros -->
+    <div class="font-medium">
+      Mostrando {{ usuariosPaginados.length }} de {{ usuariosFiltrados.length }} registros
+    </div>
+
+    <!-- Centro: Botones de Paginación -->
+    <div class="flex items-center gap-1">
+      <!-- Botón Primera Página (Doble flecha izquierda) -->
+      <button type="button" (click)="irAPrimeraPagina()" [disabled]="paginaActual === 1"
+        [class]="paginaActual === 1 ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m18.64 19l-5.763-5.763a1.737 1.737 0 0 1 0-2.474L18.64 5m-7 14l-5.763-5.763a1.74 1.74 0 0 1 0-2.474L11.64 5" />
+        </svg>
+      </button>
+
+      <!-- Botón Página Anterior (Flecha izquierda) -->
+      <button type="button" (click)="irAPaginaAnterior()" [disabled]="paginaActual === 1"
+        [class]="paginaActual === 1 ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m15.583 4l-6.587 6.587a2.013 2.013 0 0 0 0 2.826L15.583 20" />
+        </svg>
+      </button>
+
+      <!-- Número de Página Actual -->
+      <div class="w-7 h-7 flex items-center justify-center rounded-full bg-[#ECFDF5] text-[#047857] font-bold">
+        {{ paginaActual }}
+      </div>
+
+      <!-- Botón Página Siguiente (Flecha derecha) -->
+      <button type="button" (click)="irAPaginaSiguiente()" [disabled]="paginaActual === totalPaginas"
+        [class]="paginaActual === totalPaginas ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m8.417 20l6.587-6.587a2.013 2.013 0 0 0 0-2.826L8.417 4" />
+        </svg>
+      </button>
+
+      <!-- Botón Última Página (Doble flecha derecha) -->
+      <button type="button" (click)="irAUltimaPagina()" [disabled]="paginaActual === totalPaginas"
+        [class]="paginaActual === totalPaginas ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5.36 19l5.763-5.763a1.74 1.74 0 0 0 0-2.474L5.36 5m7 14l5.763-5.763a1.74 1.74 0 0 0 0-2.474L12.36 5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Lado Derecho: Selector Desplegable de Límite de Registros -->
+    <div class="relative">
+
+      <!-- Overlay transparente para cerrar al hacer click fuera -->
+      <div *ngIf="dropdownLimiteAbierto" class="fixed inset-0 z-40" (click)="dropdownLimiteAbierto = false"></div>
+
+      <!-- Trigger Box del Desplegable -->
+      <button type="button" (click)="dropdownLimiteAbierto = !dropdownLimiteAbierto"
+        [class]="dropdownLimiteAbierto ? 'border-[#4BC29F]' : 'border-[#CBD5E1]'"
+        class="flex items-center justify-between px-3 py-1.5 border bg-white rounded-lg text-[11px] text-[#64748B] font-medium min-w-[65px] transition-all cursor-pointer select-none focus:outline-none relative z-50">
+        <span>{{ limiteRegistros }}</span>
+        <!-- Ícono Flecha: cambia de dirección y color de forma instantánea sin animación -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          [class]="dropdownLimiteAbierto ? 'text-[#4BC29F]' : 'text-[#64748B]'" class="ml-2 flex-shrink-0">
+          <polyline *ngIf="!dropdownLimiteAbierto" points="6 9 12 15 18 9"></polyline>
+          <polyline *ngIf="dropdownLimiteAbierto" points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+
+      <!-- Lista de Opciones (Despliega hacia arriba) -->
+      <div *ngIf="dropdownLimiteAbierto"
+        class="absolute bottom-full mb-1 right-0 w-full min-w-[65px] bg-white border border-[#CBD5E1] rounded-lg shadow-lg overflow-hidden z-50 flex flex-col">
+        <button *ngFor="let opcion of limiteOpciones" type="button" (click)="cambiarLimite(opcion)" [class]="opcion === limiteRegistros
+                  ? 'bg-[#ECFDF5] text-[#047857] font-semibold active:bg-[#D1FAE5]'
+                  : 'text-[#64748B] hover:bg-[#F1F5F9] active:bg-[#DDE1E5]'"
+          class="w-full text-center py-1.5 text-[11px] transition-all cursor-pointer focus:outline-none border-0">
+          {{ opcion }}
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MODAL REGISTRO DE USUARIO ===================== -->
+<div *ngIf="modalRegistroAbierto" class="fixed inset-0 z-[200] flex items-center justify-center">
+
+  <!-- Fondo oscuro -->
+  <div class="absolute inset-0 bg-[#E2E8F0] opacity-50" (click)="cerrarModalRegistro()"></div>
+
+  <!-- Contenido de la modal -->
+  <div
+    class="relative bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl w-full max-w-3xl mx-4 z-10 overflow-hidden">
+
+    <!-- Título -->
+    <div class="px-12 pt-7 pb-10">
+      <h2 class="text-[21px] font-semibold text-[#334155]">{{ esEdicion ? 'Editar usuario' : 'Registrar usuario' }}</h2>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="flex px-12 pb-15 gap-0">
+
+      <!-- Columna Izquierda: Foto -->
+      <div class="flex flex-col items-center justify-center pr-9 border-r border-[#CBD5E1] min-w-[210px]">
+        <!-- Ícono / Foto de perfil -->
+        <div class="w-44 h-53 flex items-center justify-center overflow-hidden mb-3">
+          <ng-container *ngIf="!fotoVistaPrevia">
+            <svg class="text-[#CBD5E1] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
+            </svg>
+          </ng-container>
+          <img *ngIf="fotoVistaPrevia" [src]="fotoVistaPrevia" class="w-full h-full object-cover" alt="Foto de perfil">
+        </div>
+
+        <span class="text-[14px] text-[#334155] font-medium mb-5">Foto de perfil</span>
+        <div class="flex items-center gap-2">
+          <button type="button" (click)="fotoInput.click()"
+            class="flex items-center gap-2 bg-[#10B981] text-white px-2.5 py-2 rounded-lg text-[14px] font-medium hover:bg-[#059669] transition-colors cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.5">
+                <path stroke-linejoin="round" d="M21.25 13V8.5a5 5 0 0 0-5-5h-8.5a5 5 0 0 0-5 5v7a5 5 0 0 0 5 5h6.26" />
+                <path stroke-linejoin="round"
+                  d="m3.01 17l2.74-3.2a2.2 2.2 0 0 1 2.77-.27a2.2 2.2 0 0 0 2.77-.27l2.33-2.33a4 4 0 0 1 5.16-.43l2.47 1.91M8.01 10.17a1.66 1.66 0 1 0-.02-3.32a1.66 1.66 0 0 0 .02 3.32" />
+                <path stroke-miterlimit="10" d="M18.707 15v5" />
+                <path stroke-linejoin="round" d="m21 17.105l-1.967-1.967a.46.46 0 0 0-.652 0l-1.967 1.967" />
+              </g>
+            </svg>
+            Subir imagen
+          </button>
+          <button *ngIf="fotoVistaPrevia" type="button" (click)="eliminarFotoRegistro()"
+            class="flex items-center justify-center px-2.5 py-2 rounded-lg cursor-pointer transition-colors"
+            style="background-color: #E53935;" onmouseenter="this.style.backgroundColor='#C62828'"
+            onmouseleave="this.style.backgroundColor='#E53935'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M5.47 6.015v12.514a2.72 2.72 0 0 0 2.721 2.721h7.618a2.72 2.72 0 0 0 2.72-2.72V6.014m-15.235.001h17.412" />
+                <path d="M8.735 6.015V4.382a1.63 1.63 0 0 1 1.633-1.632h3.264a1.63 1.63 0 0 1 1.633 1.632v1.633" />
+              </g>
+            </svg>
+          </button>
+        </div>
+        <input #fotoInput type="file" (change)="seleccionarArchivo($event)" hidden accept="image/*">
+      </div>
+
+      <!-- Columna Derecha: Formulario -->
+      <div class="flex-1 pl-9 flex flex-col gap-5">
+
+        <!-- Nombres y Apellidos -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Nombres <span
+                class="text-[#F86E6E]">*</span></label>
+            <input [(ngModel)]="nuevoUsuario.nombres" name="nombres" autocomplete="off"
+              (input)="errores['nombres'] = ''" [class.border-[#E53935]]="errores['nombres']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]"
+              placeholder="Sin especificar">
+            <span *ngIf="errores['nombres']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['nombres'] }}</span>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Apellidos <span
+                class="text-[#F86E6E]">*</span></label>
+            <input [(ngModel)]="nuevoUsuario.apellidos" name="apellidos" autocomplete="off"
+              (input)="errores['apellidos'] = ''" [class.border-[#E53935]]="errores['apellidos']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]"
+              placeholder="Sin especificar">
+            <span *ngIf="errores['apellidos']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['apellidos']
+              }}</span>
+          </div>
+        </div>
+
+        <!-- Cédula y Correo -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Cédula <span class="text-[#F86E6E]">*</span></label>
+            <input [(ngModel)]="nuevoUsuario.cedula" name="cedula" maxlength="10" autocomplete="off"
+              (input)="validarSoloNumeros($event, 'cedula'); errores['cedula'] = ''"
+              [class.border-[#E53935]]="errores['cedula']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]"
+              placeholder="Sin especificar">
+            <span *ngIf="errores['cedula']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['cedula'] }}</span>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Correo <span class="text-[#F86E6E]">*</span></label>
+            <input [(ngModel)]="nuevoUsuario.correo" name="correo" type="email" autocomplete="off"
+              (input)="errores['correo'] = ''" [class.border-[#E53935]]="errores['correo']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]"
+              placeholder="Sin especificar">
+            <span *ngIf="errores['correo']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['correo'] }}</span>
+          </div>
+        </div>
+
+        <!-- Contraseña y Carrera -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Contraseña -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Contraseña <span *ngIf="!esEdicion"
+                class="text-[#F86E6E]">*</span></label>
+
+            <div class="relative flex items-center">
+              <input [(ngModel)]="nuevoUsuario.contrasenia" name="contrasenia" autocomplete="off"
+                [type]="mostrarContrasenia ? 'text' : 'password'" (input)="errores['contrasenia'] = ''"
+                [class.border-[#E53935]]="errores['contrasenia']"
+                class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]"
+                [placeholder]="esEdicion ? 'Dejar vacío para mantener la actual' : '••••••••'">
+
+              <!-- Toggle ver/ocultar contraseña -->
+              <button type="button" (click)="mostrarContrasenia = !mostrarContrasenia"
+                class="absolute right-2.5 flex items-center justify-center cursor-pointer">
+                <!-- Ícono "no ver" (contraseña oculta) -->
+                <svg *ngIf="!mostrarContrasenia" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                  viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <g fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path
+                      d="M5.45 16.92a10.8 10.8 0 0 1-2.55-3.71a1.85 1.85 0 0 1 0-1.46A10.6 10.6 0 0 1 6.62 7.1A9 9 0 0 1 12 5.48a8.8 8.8 0 0 1 4 .85m2.56 1.72a10.85 10.85 0 0 1 2.54 3.7a1.85 1.85 0 0 1 0 1.46a10.6 10.6 0 0 1-3.72 4.65A9 9 0 0 1 12 19.48a8.8 8.8 0 0 1-4-.85" />
+                    <path
+                      d="M8.71 13.65a3.3 3.3 0 0 1-.21-1.17a3.5 3.5 0 0 1 3.5-3.5c.4-.002.796.07 1.17.21m2.12 2.12c.14.374.212.77.21 1.17a3.5 3.5 0 0 1-3.5 3.5a3.3 3.3 0 0 1-1.17-.21M3 20L19 4" />
+                  </g>
+                </svg>
+                <!-- Ícono "ver" (contraseña visible) -->
+                <svg *ngIf="mostrarContrasenia" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                  viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <g fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path
+                      d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                    <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+                  </g>
+                </svg>
+              </button>
+            </div>
+            <span *ngIf="errores['contrasenia']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['contrasenia']
+              }}</span>
+          </div>
+
+          <!-- Carrera (Dropdown/Search) -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Carrera</label>
+            <div class="relative">
+              <div class="relative flex items-center">
+                <input type="text" [(ngModel)]="nuevoUsuario.carreraNombre" name="carrera" autocomplete="off"
+                  (input)="filtrarCarreras()" (focus)="filtrarCarreras()" (blur)="validarCarrera()"
+                  class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] outline-none transition-colors bg-white text-left"
+                  [ngClass]="(nuevoUsuario.carreraNombre && nuevoUsuario.carreraNombre !== 'Sin especificar') ? 'text-[#334155]' : 'text-[#94A3B8]'"
+                  placeholder="Sin especificar">
+
+                <!-- Flecha arriba/abajo -->
+                <div class="absolute right-3.5 flex items-center pointer-events-none">
+                  <svg *ngIf="dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+                  </svg>
+                  <svg *ngIf="!dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Lista de carreras -->
+              <div *ngIf="dropdownCarreraAbierto && carrerasFiltradas.length > 0"
+                class="absolute top-full left-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-20 mt-1 max-h-48 overflow-y-auto">
+                <!-- Sin especificar (opcional, se puede dejar que el blur lo haga) -->
+                <div (mousedown)="seleccionarCarrera(null, 'Sin especificar')"
+                  class="px-3.5 py-2.5 text-[14px] text-[#94A3B8] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors">
+                  Sin especificar
+                </div>
+                <!-- Carreras filtradas -->
+                <div *ngFor="let carrera of carrerasFiltradas"
+                  (mousedown)="seleccionarCarrera(carrera.id_carrera, carrera.nombre)"
+                  class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors">
+                  {{ carrera.nombre }}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Teléfono y Rol -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Teléfono -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Teléfono</label>
+            <input [(ngModel)]="nuevoUsuario.telefono" name="telefono" type="tel" maxlength="10" autocomplete="off"
+              (input)="validarSoloNumeros($event, 'telefono'); errores['telefono'] = ''"
+              [class.border-[#E53935]]="errores['telefono']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]"
+              placeholder="Sin especificar">
+            <span *ngIf="errores['telefono']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['telefono'] }}</span>
+          </div>
+          <!-- Rol -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Rol <span class="text-[#F86E6E]">*</span></label>
+            <!-- Contenedor tipo campo con checkboxes verticales -->
+            <div [class.border-[#E53935]]="errores['roles']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 flex flex-col gap-2">
+              <!-- Administrador -->
+              <label
+                (click)="nuevoUsuario.roles.administrador = !nuevoUsuario.roles.administrador; errores['roles'] = ''"
+                class="flex items-center gap-2.5 cursor-pointer">
+                <div
+                  [ngClass]="nuevoUsuario.roles.administrador ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-[18px] h-[18px] border-2 rounded flex items-center justify-center transition-all flex-shrink-0">
+                  <svg *ngIf="nuevoUsuario.roles.administrador" xmlns="http://www.w3.org/2000/svg" width="12"
+                    height="12" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[13px] text-[#334155]">Administrador</span>
+              </label>
+              <!-- Emisor -->
+              <label (click)="nuevoUsuario.roles.emisor = !nuevoUsuario.roles.emisor; errores['roles'] = ''"
+                class="flex items-center gap-2.5 cursor-pointer">
+                <div
+                  [ngClass]="nuevoUsuario.roles.emisor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-[18px] h-[18px] border-2 rounded flex items-center justify-center transition-all flex-shrink-0">
+                  <svg *ngIf="nuevoUsuario.roles.emisor" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[13px] text-[#334155]">Emisor</span>
+              </label>
+              <!-- Receptor -->
+              <label (click)="nuevoUsuario.roles.receptor = !nuevoUsuario.roles.receptor; errores['roles'] = ''"
+                class="flex items-center gap-2.5 cursor-pointer">
+                <div
+                  [ngClass]="nuevoUsuario.roles.receptor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-[18px] h-[18px] border-2 rounded flex items-center justify-center transition-all flex-shrink-0">
+                  <svg *ngIf="nuevoUsuario.roles.receptor" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[13px] text-[#334155]">Receptor</span>
+              </label>
+            </div>
+            <span *ngIf="errores['roles']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['roles'] }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="flex items-center justify-center gap-8 pb-7 px-12">
+      <!-- Mensaje de validación general -->
+      <!-- Registrar -->
+      <button type="button" (click)="registrarUsuario()"
+        class="flex items-center gap-2 px-2.5 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white text-[14px] font-medium hover:bg-[#43A5C2] cursor-pointer transition-all">
+        <!-- Ícono para Registrar (Crear) -->
+        <svg *ngIf="!esEdicion" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        <!-- Ícono para Actualizar (Editar) -->
+        <svg *ngIf="esEdicion" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+            <path
+              d="M21.25 9.16v7.987a4.1 4.1 0 0 1-1.204 2.901a4.1 4.1 0 0 1-2.906 1.202H6.86a4.1 4.1 0 0 1-2.906-1.202a4.1 4.1 0 0 1-1.204-2.901V6.853a4.1 4.1 0 0 1 1.204-2.901A4.1 4.1 0 0 1 6.86 2.75h8.35a3 3 0 0 1 2.25.998l3 3.415c.501.545.783 1.256.79 1.997" />
+            <path
+              d="M7 21.22v-5.241a1.995 1.995 0 0 1 2-1.997h6a2 2 0 0 1 2 1.997v5.241M15.8 2.81v4.183a1.526 1.526 0 0 1-1.52 1.528H9.72A1.53 1.53 0 0 1 8.2 6.993V2.75m1.946 15.108h3.708" />
+          </g>
+        </svg>
+        {{ esEdicion ? 'Actualizar' : 'Registrar' }}
+      </button>
+
+      <!-- Cancelar -->
+      <button type="button" (click)="cerrarModalRegistro()"
+        class="flex items-center gap-2 px-2.5 py-2 bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+        </svg>
+        Cancelar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Notificación Toast -->
+<div *ngIf="mostrarToast"
+  [ngClass]="tipoToast === 'exito' ? 'bg-[#E7F9E7] border-[#D1F2D1] text-[#35BC30]' : 'bg-[#FEE7E7] border-[#FAD1D1] text-[#C12B2B]'"
+  class="fixed bottom-6 right-6 px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-3 animate-bounce-in z-200 border transition-all duration-300">
+
+  <!-- Ícono de Información -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+    [attr.stroke]="tipoToast === 'exito' ? '#35BC30' : '#C12B2B'">
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2">
+      <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333" />
+      <path d="M11.995 7.278a.222.222 0 1 0 0-.444a.222.222 0 0 0 0 .444" />
+      <path stroke-width="2" d="M11.956 7.443h.01" />
+    </g>
+  </svg>
+  <span class="font-medium text-sm tracking-tight">{{ mensajeToast }}</span>
+</div>
+
+<!-- Modal Confirmar Eliminación (Inactivar) -->
+<div *ngIf="modalEliminarAbierto" class="fixed inset-0 z-[200] flex items-center justify-center select-none">
+
+  <!-- Fondo oscuro idéntico al modal de registro -->
+  <div class="absolute inset-0 bg-[#E2E8F0] opacity-50" (click)="cerrarModalEliminar()"></div>
+
+  <div
+    class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col p-6 z-10">
+
+    <!-- Encabezado -->
+    <div class="flex items-center mb-10">
+      <h2 class="text-[21px] font-semibold text-[#334155] tracking-tight">
+        {{ usuarioAEliminar?.activo ? 'Eliminar usuario' : 'Eliminar permanentemente' }}
+      </h2>
+    </div>
+
+    <!-- Mensaje con nombre en UPPERCASE -->
+    <div class="text-[13.5px] text-[#334155] leading-relaxed mb-10">
+      <span *ngIf="usuarioAEliminar?.activo">¿Está seguro de eliminar al usuario <span
+          class="font-semibold text-[#334155]">{{ (usuarioAEliminar?.nombres + ' ' + usuarioAEliminar?.apellidos) |
+          uppercase }}</span> del sistema de Microcredenciales ESPOCH?</span>
+      <span *ngIf="!usuarioAEliminar?.activo">Esta acción no se puede deshacer. ¿Está seguro de eliminar al usuario
+        <span class="font-semibold text-[#334155]">{{ (usuarioAEliminar?.nombres + ' ' + usuarioAEliminar?.apellidos) |
+          uppercase }}</span> permanentemente del sistema de Microcredenciales ESPOCH?</span>
+    </div>
+
+    <!-- Botones de Acción (Mismo orden y centrado que el modal de registro) -->
+    <div class="flex items-center justify-center gap-8">
+      <!-- Eliminar -->
+      <button type="button" (click)="confirmarEliminarUsuario()"
+        class="flex items-center gap-2 px-2.5 py-2 bg-[#E53935] border border-[#C8332E] rounded-lg text-white text-[14px] font-medium hover:bg-[#C62828] cursor-pointer transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Eliminar
+      </button>
+
+
+
+      <!-- Cancelar -->
+      <button type="button" (click)="cerrarModalEliminar()"
+        class="flex items-center gap-2 px-2.5 py-2 bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+        </svg>
+        Cancelar
+      </button>
+    </div>
+
+  </div>
+</div>

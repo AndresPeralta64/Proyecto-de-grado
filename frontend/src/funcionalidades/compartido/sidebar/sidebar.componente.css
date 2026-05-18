@@ -1,8 +1,8 @@
 :host {
   display: block;
-  position: fixed;
+  position: absolute;
   left: 0;
-  top: 64px;
+  top: 0;
   bottom: 0;
   background-color: #f8f8f8;
   border-right: 1px solid #EEEEEE;

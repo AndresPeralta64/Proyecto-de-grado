@@ -20,6 +20,8 @@ export class PerfilComponente implements OnInit {
   archivoFoto: File | null = null;
   cargando: boolean = false;
 
+  carreraId: number | null = null;
+
   constructor(
     private fb: FormBuilder,
     private servicioToken: ServicioToken,
@@ -52,8 +54,9 @@ export class PerfilComponente implements OnInit {
             nombres: datos.nombres,
             apellidos: datos.apellidos,
             telefono: datos.telefono,
-            carrera: datos.carrera || 'Sin especificar'
+            carrera: datos.carrera || ''
           });
+          this.carreraId = datos.id_carrera || null;
 
           if (datos.foto_url) {
             this.fotoVistaPrevia = datos.foto_url;
@@ -80,6 +83,21 @@ export class PerfilComponente implements OnInit {
     }
   }
 
+  eliminarFoto(): void {
+    this.usuarioServicio.eliminarFotoPerfil().subscribe({
+      next: (res) => {
+        if (res.exito) {
+          this.fotoVistaPrevia = null;
+          this.archivoFoto = null;
+          this.lanzarNotificacion('Foto de perfil eliminada', 'exito');
+        }
+      },
+      error: () => {
+        this.lanzarNotificacion('Error al eliminar la foto', 'error');
+      }
+    });
+  }
+
   mensajeToast: string = '';
   mostrarToast: boolean = false;
   tipoToast: 'exito' | 'error' = 'exito';
@@ -93,6 +111,7 @@ export class PerfilComponente implements OnInit {
     this.cargando = true;
     const formData = new FormData();
     formData.append('telefono', this.formulario.get('telefono')?.value || '');
+    formData.append('id_carrera', this.carreraId ? this.carreraId.toString() : '');
 
     if (this.archivoFoto) {
       formData.append('foto', this.archivoFoto);
