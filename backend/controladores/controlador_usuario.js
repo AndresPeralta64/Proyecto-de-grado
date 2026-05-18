@@ -73,7 +73,7 @@ const actualizarPerfil = async (req, res) => {
     if (fotoUrl) {
       consulta = `
         UPDATE usuario 
-        SET telefono = $1, carrera = $2, foto_url = $3
+        SET telefono = $1, carrera = $2, foto_url = $3, ultima_actualizacion = NOW()
         WHERE id_usuario = $4
         RETURNING id_usuario, nombres, apellidos, telefono, carrera, foto_url
       `;
@@ -81,7 +81,7 @@ const actualizarPerfil = async (req, res) => {
     } else {
       consulta = `
         UPDATE usuario 
-        SET telefono = $1, carrera = $2
+        SET telefono = $1, carrera = $2, ultima_actualizacion = NOW()
         WHERE id_usuario = $3
         RETURNING id_usuario, nombres, apellidos, telefono, carrera, foto_url
       `;
@@ -117,7 +117,7 @@ const cambiarContrasenia = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const contrasenaHash = await bcrypt.hash(nuevaContrasenia, salt);
 
-    const consulta = 'UPDATE usuario SET contrasenia = $1 WHERE id_usuario = $2';
+    const consulta = 'UPDATE usuario SET contrasenia = $1, ultima_actualizacion = NOW() WHERE id_usuario = $2';
     await consultar(consulta, [contrasenaHash, idUsuario]);
 
     return res.status(200).json({
@@ -246,7 +246,7 @@ const eliminarFotoPerfil = async (req, res) => {
       }
     }
 
-    await consultar('UPDATE usuario SET foto_url = NULL WHERE id_usuario = $1', [idUsuario]);
+    await consultar('UPDATE usuario SET foto_url = NULL, ultima_actualizacion = NOW() WHERE id_usuario = $1', [idUsuario]);
 
     return res.status(200).json({ exito: true, mensaje: 'Foto de perfil eliminada exitosamente.' });
   } catch (error) {
@@ -329,7 +329,7 @@ const actualizarUsuario = async (req, res) => {
 
     await consultar('BEGIN');
 
-    let campos = ['cedula = $1', 'nombres = $2', 'apellidos = $3', 'correo = $4', 'carrera = $5', 'telefono = $6'];
+    let campos = ['cedula = $1', 'nombres = $2', 'apellidos = $3', 'correo = $4', 'carrera = $5', 'telefono = $6', 'ultima_actualizacion = NOW()'];
     let valores = [cedula, nombres, apellidos, correo.toLowerCase().trim(), carrera || null, telefono || null];
     let contador = 7;
 

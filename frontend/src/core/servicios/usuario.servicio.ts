@@ -58,7 +58,5 @@ export class UsuarioServicio {
     return this.http.patch(`${this.apiUrl}/${id}/activar`, {});
   }
 
-  eliminarUsuarioDefinitivo(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}/permanente`);
-  }
+
 }

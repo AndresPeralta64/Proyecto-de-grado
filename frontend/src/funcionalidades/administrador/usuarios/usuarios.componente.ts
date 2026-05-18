@@ -32,9 +32,9 @@ export class UsuariosComponente implements OnInit, OnDestroy {
 
   // Estado de Paginación
   paginaActual = 1;
-  limiteRegistros = 25;
+  limiteRegistros = 10;
   dropdownLimiteAbierto = false;
-  limiteOpciones = [3, 25, 50, 100];
+  limiteOpciones = [10, 25, 50, 100];
 
   get usuariosFiltrados(): any[] {
     // 1. Filtrar
@@ -384,26 +384,17 @@ export class UsuariosComponente implements OnInit, OnDestroy {
   confirmarEliminarUsuario() {
     if (!this.usuarioAEliminar) return;
 
-    const esInactivo = !this.usuarioAEliminar.activo;
-    const peticion = esInactivo
-      ? this.usuarioServicio.eliminarUsuarioDefinitivo(this.usuarioAEliminar.id_usuario)
-      : this.usuarioServicio.eliminarUsuario(this.usuarioAEliminar.id_usuario);
-
     this.subscription.add(
-      peticion.subscribe({
+      this.usuarioServicio.eliminarUsuario(this.usuarioAEliminar.id_usuario).subscribe({
         next: () => {
           this.cerrarModalEliminar();
           this.cargarUsuarios();
-          const mensaje = esInactivo ? 'Usuario eliminado definitivamente' : 'Usuario eliminado correctamente';
-          this.lanzarNotificacion(mensaje, 'exito');
+          this.lanzarNotificacion('Usuario eliminado correctamente', 'exito');
         },
         error: (err: any) => {
           console.error('Error al eliminar usuario:', err);
           this.cerrarModalEliminar();
-          const mensaje = esInactivo 
-            ? 'Ocurrió un error al eliminar definitivamente al usuario' 
-            : 'Ocurrió un error al eliminar el usuario';
-          this.lanzarNotificacion(mensaje, 'error');
+          this.lanzarNotificacion('Ocurrió un error al eliminar el usuario', 'error');
         }
       })
     );

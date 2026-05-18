@@ -13,9 +13,34 @@ const almacenamiento = multer.diskStorage({
         cb(null, carpetaDestino);
     },
     filename: (req, archivo, cb) => {
-        // Nombre de archivo único: perfil-ID-TIMESTAMP.ext
         const extension = path.extname(archivo.originalname);
-        const nombreUnico = `perfil-${req.usuario.id}-${Date.now()}${extension}`;
+        
+        // 1. Obtener ID de la persona que edita (quien realiza la petición)
+        const idEditor = req.usuario ? req.usuario.id : 'sistema';
+        
+        // 2. Obtener ID del usuario al que pertenece el perfil
+        let idTarget = 'nuevo';
+        if (req.path === '/perfil') {
+            idTarget = idEditor;
+        } else if (req.params && req.params.id) {
+            idTarget = req.params.id;
+        } else {
+            // Extraer ID como fallback si req.params no está totalmente mapeado aún
+            const match = req.originalUrl.match(/\/api\/usuarios\/(\d+)/);
+            if (match) {
+                idTarget = match[1];
+            }
+        }
+        
+        // 3. Obtener la fecha actual en formato D-M-YYYY (ej. 1852026 para 18/05/2026)
+        const ahora = new Date();
+        const dia = ahora.getDate();
+        const mes = ahora.getMonth() + 1; // Enero es 0
+        const anio = ahora.getFullYear();
+        const fechaStr = `${dia}${mes}${anio}`;
+        
+        // Formato final: foto-perfil-[idTarget]-[idEditor]-[fecha]-[timestamp].ext
+        const nombreUnico = `foto-perfil-${idTarget}-${idEditor}-${fechaStr}-${Date.now()}${extension}`;
         cb(null, nombreUnico);
     }
 });

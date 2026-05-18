@@ -28,14 +28,17 @@ create table usuario (
 	activo boolean not null default true,
 	intentos_fallidos int not null default 0,
 	tiempo_bloqueo timestamp,
-	creado_en timestamp not null default now()
+	creado_en timestamp not null default now(),
+	ultima_actualizacion timestamp not null default now()
 );
 
 create table usuario_rol (
 	usuario int not null references usuario(id_usuario) on delete cascade,
 	rol int not null references rol(id_rol) on delete cascade,
 	primary key (usuario, rol),
-	asignado_por int references usuario(id_usuario)
+	asignado_por int references usuario(id_usuario),
+	creado_en timestamp not null default now(),
+	ultima_actualizacion timestamp not null default now()
 );
 
 create table nivel_microcredencial (
@@ -56,7 +59,7 @@ create table estado_microcredencial (
 create table microcredencial (
 	id_microcredencial serial primary key,
 	emisor int references usuario(id_usuario) not null,
-	nombre varchar(300) not null unique,
+	nombre varchar(300) not null,
 	descripcion text not null,
 	criterios_evaluacion text not null,
 	nivel int references nivel_microcredencial(id_nivel) not null,
@@ -70,7 +73,8 @@ create table microcredencial (
 	aprobado_por int references usuario(id_usuario),
 	aprobado_en timestamp,
 	eliminado boolean not null default false,
-	creado_en timestamp not null default now()
+	creado_en timestamp not null default now(),
+	ultima_actualizacion timestamp not null default now()
 );
 
 create table estado_insignia (
@@ -116,6 +120,7 @@ create table perfil_academico (
 	insignia int not null references insignia_emitida(id_insignia) on delete cascade,
 	visible boolean not null default true,
 	orden int,
+	ultima_actualizacion timestamp not null default now(),
 	primary key (receptor, insignia)
 );
 
@@ -125,6 +130,10 @@ create table configuracion_sistema (
 	clave_publica text not null,
 	clave_privada text not null
 );
+
+--Credenciales del admin del sistema, cambiar contraseña por una real | Contraseña: 1234567890
+insert into usuario(cedula, nombres, apellidos, correo, contrasenia) values 
+('1234567890', 'Admin', 'Primario', 'admin@espoch.edu.ec', '$2b$10$68r5GkkH3zeGawDAiUwjJuKkhez9U6Z0QRuM6jueSDO.hF5p4GTMa');
 
 insert into facultad (nombre) values 
 ('Administración de Empresas'),
@@ -205,9 +214,10 @@ insert into estado_microcredencial (nombre) values
 ('Pendiente'), 
 ('Aprobada'),
 ('Rechazada'),
-('Inactiva'),
-('Eliminada');
+('Inactiva');
 
 insert into estado_insignia (nombre) values 
 ('Activa'), 
 ('Revocada');
+
+insert into usuario_rol (usuario, rol) values (1, 1);

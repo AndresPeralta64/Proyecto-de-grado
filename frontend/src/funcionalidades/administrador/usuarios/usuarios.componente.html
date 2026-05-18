@@ -413,13 +413,13 @@
                   </svg>
                   Activar
                 </button>
-
-                <!-- Botón Eliminar Definitivamente -->
-                <button type="button" (click)="abrirModalEliminar(usuario)"
-                  class="flex items-center gap-1 px-1.75 py-1 border border-[#FDBABB] bg-white rounded-lg text-[#E90E12] text-[13px] font-medium hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer transition-all">
+ 
+                <!-- Botón Eliminar Deshabilitado -->
+                <button type="button" disabled
+                  class="flex items-center gap-1 px-1.75 py-1 border border-[#E2E8F0] bg-[#F1F5F9] rounded-lg text-[#94A3B8] text-[13px] font-medium cursor-not-allowed transition-all">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                     class="flex-shrink-0">
-                    <g fill="none" stroke="#E90E12" stroke-width="1">
+                    <g fill="none" stroke="#94A3B8" stroke-width="1">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
                         d="M7.874 8.218v7.908a1.72 1.72 0 0 0 1.72 1.719h4.813a1.72 1.72 0 0 0 1.719-1.72V8.219m-9.627-.001h11.002m-7.564 0V7.187a1.03 1.03 0 0 1 1.032-1.032h2.062a1.03 1.03 0 0 1 1.032 1.032v1.031" />
                       <rect width="18.5" height="18.5" x="2.75" y="2.75" stroke-width="1.5" rx="6" />
@@ -427,6 +427,23 @@
                   </svg>
                   Eliminar
                 </button>
+
+                <!-- Ícono Info (No botón, fondo blanco con hover gris, sin cursor-pointer) -->
+                <div class="flex items-center justify-center flex-shrink-0" title="Información">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <g stroke="#334155" stroke-linecap="round" stroke-linejoin="round">
+                      <!-- Círculo interior del ícono que cambia de relleno en hover -->
+                      <circle cx="12" cy="12" r="9.5" stroke-width="1.5"
+                        class="fill-white hover:fill-[#E2E8F0] transition-colors duration-200" />
+                      <!-- Línea del ícono -->
+                      <path stroke-width="1.5" d="M12.005 17.278v-6.333" fill="none" />
+                      <!-- Punto del ícono -->
+                      <path stroke-width="2" d="M11.956 7.443h.01" fill="none" />
+                    </g>
+                  </svg>
+                </div>
               </ng-container>
 
             </div>
