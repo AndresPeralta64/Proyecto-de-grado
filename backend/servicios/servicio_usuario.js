@@ -10,14 +10,20 @@ const { cifrarAES, descifrarAES } = require('./servicio_criptografia');
  */
 const buscarPorCorreo = async (correo) => {
   const consulta = `
-    SELECT u.*, r.nombre as nombre_rol 
+    SELECT u.*, ARRAY_AGG(r.nombre ORDER BY r.nombre) as roles
     FROM usuario u 
     LEFT JOIN usuario_rol ur ON u.id_usuario = ur.usuario 
     LEFT JOIN rol r ON ur.rol = r.id_rol 
     WHERE u.correo = $1 AND u.activo = true
+    GROUP BY u.id_usuario
   `;
   const resultado = await consultar(consulta, [correo]);
-  return resultado.rows[0] || null;
+  const usuario = resultado.rows[0] || null;
+  if (usuario && usuario.roles) {
+    // nombre_rol queda como el primer rol asignado (compatibilidad)
+    usuario.nombre_rol = usuario.roles[0] || null;
+  }
+  return usuario;
 };
 
 /**

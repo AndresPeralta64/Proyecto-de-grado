@@ -1,10 +1,10 @@
-<nav class="h-16 bg-[#f8f8f8] border-b border-[#EEEEEE] flex items-center justify-between sticky top-0 z-[100]">
+<nav class="h-16 bg-[#f8f8f8] border-b border-[#EEEEEE] flex items-center justify-between sticky top-0 z-[100] relative">
 
   <!-- Parte Izquierda: Hamburger + Flecha + Logo -->
   <div class="flex items-center h-full">
 
     <!-- Un solo botón: ≡ fijo en el centro, flechas pequeñas a los lados -->
-    <button *ngIf="!esPaginaPerfil" (click)="toggleSidebar()"
+    <button *ngIf="!esPaginaPerfil && !esPaginaCambiarRol" (click)="toggleSidebar()"
       class="h-full flex items-center justify-center text-[#334155] hover:bg-[#e2e8f0] transition-colors focus:outline-none cursor-pointer border-r border-[#EEEEEE]"
       style="width: 64px; min-width: 64px;">
       <div class="relative flex items-center justify-center w-full h-full">
@@ -77,8 +77,8 @@
         </svg>
         Editar perfil
       </button>
-
-      <button
+ 
+      <button routerLink="/cambiar-rol" (click)="menuPerfilAbierto = false"
         class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
           <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">

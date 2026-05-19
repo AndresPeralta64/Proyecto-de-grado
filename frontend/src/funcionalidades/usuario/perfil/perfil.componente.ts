@@ -158,7 +158,16 @@ export class PerfilComponente implements OnInit {
   }
 
   cancelar(): void {
-    // Redirige a la misma ruta que la opción "Cambiar rol" (asumimos administrador por ahora)
-    this.router.navigate(['/administrador']);
+    const usuario = this.servicioToken.obtenerDatosUsuario();
+    const rol = usuario?.nombre_rol;
+    if (rol === 'Administrador') {
+      this.router.navigate(['/administrador']);
+    } else if (rol === 'Emisor') {
+      this.router.navigate(['/emisor']);
+    } else if (rol === 'Receptor') {
+      this.router.navigate(['/receptor']);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 }

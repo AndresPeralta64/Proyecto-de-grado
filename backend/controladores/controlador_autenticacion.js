@@ -26,13 +26,14 @@ const iniciarSesion = async (req, res) => {
       return res.status(401).json({ exito: false, mensaje: 'Las credenciales ingresadas son incorrectas.' });
     }
 
-    // Incluimos nombres y apellidos en el token para que el frontend los use en el Header
+    // Incluimos nombres, apellidos y todos los roles en el token
     const datosParaToken = {
       id: usuario.id_usuario,
       correo: usuario.correo,
       nombres: usuario.nombres,
       apellidos: usuario.apellidos,
-      nombre_rol: usuario.nombre_rol
+      nombre_rol: usuario.nombre_rol,
+      roles: usuario.roles || [usuario.nombre_rol]
     };
 
     const token = jwt.sign(datosParaToken, process.env.JWT_SECRET, { expiresIn: '12h' });

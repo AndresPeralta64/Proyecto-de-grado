@@ -27,11 +27,40 @@ export const routes: Routes = [
     data: { roles: ['ADMIN', 'Administrador'] } // Aceptamos ambos para evitar bloqueos
   },
 
+  // Módulo Emisor
+  { 
+    path: 'emisor', 
+    loadChildren: () => import('../funcionalidades/emisor/emisor.rutas').then(m => m.rutasEmisor),
+    canActivate: [AuthGuard, RolGuard],
+    data: { roles: ['EMISOR', 'Emisor'] }
+  },
+
+  // Módulo Receptor
+  { 
+    path: 'receptor', 
+    loadChildren: () => import('../funcionalidades/receptor/receptor.rutas').then(m => m.rutasReceptor),
+    canActivate: [AuthGuard, RolGuard],
+    data: { roles: ['RECEPTOR', 'Receptor'] }
+  },
+
   // Perfil de Usuario
   {
     path: 'perfil',
     loadComponent: () => import('../funcionalidades/usuario/perfil/perfil.componente').then(m => m.PerfilComponente),
     canActivate: [AuthGuard]
+  },
+
+  // Cambiar Rol
+  {
+    path: 'cambiar-rol',
+    loadComponent: () => import('../funcionalidades/usuario/cambiar-rol/cambiar-rol.componente').then(m => m.CambiarRolComponente),
+    canActivate: [AuthGuard]
+  },
+
+  // No Autorizado
+  {
+    path: 'no-autorizado',
+    loadComponent: () => import('../compartidos/componentes/no-autorizado/no_autorizado.componente').then(m => m.NoAutorizadoComponente)
   },
 
   { path: '**', redirectTo: 'autenticacion/iniciar-sesion' }

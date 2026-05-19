@@ -625,4 +625,10 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     }
   }
 
+  tieneRolUsuario(usuario: any, nombreRol: string): boolean {
+    if (!usuario || !usuario.roles) return false;
+    return usuario.roles.some((r: any) => r.nombre?.toLowerCase() === nombreRol.toLowerCase());
+  }
+
 }
+

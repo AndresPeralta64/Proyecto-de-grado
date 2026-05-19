@@ -62,4 +62,25 @@ export class NavegacionComponente implements OnInit {
   get esPaginaPerfil(): boolean {
     return this.router.url.includes('/perfil');
   }
+
+  get esPaginaCambiarRol(): boolean {
+    return this.router.url.includes('/cambiar-rol');
+  }
+
+  get rolActual(): string {
+    // Leemos el rol directamente del JWT (sin sobreescritura de rol_activo)
+    // para mostrar el rol con el que se ingresó a esta pantalla
+    const token = this.servicioToken.obtenerToken();
+    if (!token) return '';
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(decodeURIComponent(
+        window.atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
+      ));
+      const rolActivo = localStorage.getItem('rol_activo');
+      return rolActivo || payload.nombre_rol || '';
+    } catch {
+      return '';
+    }
+  }
 }

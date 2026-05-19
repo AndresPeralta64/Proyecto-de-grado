@@ -1,0 +1,141 @@
+<app-navegacion></app-navegacion>
+
+<main class="min-h-[calc(100vh-64px)] bg-white flex flex-col items-center justify-center px-8 py-12">
+
+  <!-- Grid de tarjetas de roles -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+
+    <!-- ═══════════════════ ADMINISTRADOR ═══════════════════ -->
+    <div class="bg-white rounded-2xl border border-[#EEEEEE] shadow-sm flex flex-col items-center text-center p-8 gap-5 relative"
+      [ngClass]="{'opacity-50': !tieneRol('Administrador')}">
+
+
+      <!-- Círculo rojo con ícono -->
+      <div class="w-36 h-36 rounded-full bg-[#C62828] flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="m14.305 19.53l.923-.382m0-2.296l-.923-.383m2.547-1.241l-.383-.923m.383 6.467l-.383.924m2.679-6.468l.383-.923m-.001 7.391l-.382-.924M2 21a8 8 0 0 1 10.434-7.62m8.338 3.472l.924-.383m-.924 2.679l.924.383" />
+            <circle cx="10" cy="8" r="5" />
+            <circle cx="18" cy="18" r="3" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Nombre y descripción -->
+      <div class="flex flex-col gap-2">
+        <h2 class="text-2xl font-semibold text-[#334155] mb-5">Administrador</h2>
+        <p class="text-sm text-[#334155] leading-relaxed mb-5 px-4">
+          Gestión del sistema, administración de usuarios y aprobación de microcredenciales
+        </p>
+      </div>
+
+      <!-- Botón -->
+      <button (click)="cambiar('Administrador')"
+        [disabled]="!tieneRol('Administrador') || esRolActivo('Administrador')"
+        class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold transition-colors border-2"
+        [ngClass]="tieneRol('Administrador') && !esRolActivo('Administrador')
+          ? 'bg-[#4AB6D5] border-[#2EA6C8] text-white hover:bg-[#43A5C2] cursor-pointer'
+          : 'bg-[#F1F5F9] border-[#E2E8F0] text-[#94A3B8] cursor-default'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            [attr.stroke]="tieneRol('Administrador') && !esRolActivo('Administrador') ? '#fff' : '#94A3B8'">
+            <path d="M19.75 6.75h-12a4 4 0 0 0-4 4v2m16-1v2a4 4 0 0 1-4 4h-12" />
+            <path d="m16.75 9.75l3-3l-3-3m-10 11l-3 3l3 3" />
+          </g>
+        </svg>
+        {{ esRolActivo('Administrador') ? 'Rol activo' : 'Cambiar' }}
+      </button>
+    </div>
+
+    <!-- ═══════════════════ EMISOR ═══════════════════ -->
+    <div class="bg-white rounded-2xl border border-[#EEEEEE] shadow-sm flex flex-col items-center text-center p-8 gap-5 relative"
+      [ngClass]="{'opacity-50': !tieneRol('Emisor')}">
+
+
+      <div class="w-36 h-36 rounded-full bg-[#C62828] flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 256 256">
+          <path d="M0 0h256v256H0z" fill="none" />
+          <path fill="#fff" d="M128 136a8 8 0 0 1-8 8H72a8 8 0 0 1 0-16h48a8 8 0 0 1 8 8m-8-40H72a8 8 0 0 0 0 16h48a8 8 0 0 0 0-16m112 65.47V224a8 8 0 0 1-12 7l-24-13.74L172 231a8 8 0 0 1-12-7v-24H40a16 16 0 0 1-16-16V56a16 16 0 0 1 16-16h176a16 16 0 0 1 16 16v30.53a51.88 51.88 0 0 1 0 74.94M160 184v-22.53A52 52 0 0 1 216 76V56H40v128Zm56-12a51.88 51.88 0 0 1-40 0v38.22l16-9.16a8 8 0 0 1 7.94 0l16 9.16Zm16-48a36 36 0 1 0-36 36a36 36 0 0 0 36-36" />
+        </svg>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <h2 class="text-2xl font-semibold text-[#334155] mb-5">Emisor</h2>
+        <p class="text-sm text-[#334155] leading-relaxed mb-5 px-4">
+          Administración de microcredenciales y emisión y administración de insignias
+        </p>
+      </div>
+
+      <button (click)="cambiar('Emisor')"
+        [disabled]="!tieneRol('Emisor') || esRolActivo('Emisor')"
+        class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold transition-colors border-2"
+        [ngClass]="tieneRol('Emisor') && !esRolActivo('Emisor')
+          ? 'bg-[#4AB6D5] border-[#2EA6C8] text-white hover:bg-[#43A5C2] cursor-pointer'
+          : 'bg-[#F1F5F9] border-[#E2E8F0] text-[#94A3B8] cursor-default'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            [attr.stroke]="tieneRol('Emisor') && !esRolActivo('Emisor') ? '#fff' : '#94A3B8'">
+            <path d="M19.75 6.75h-12a4 4 0 0 0-4 4v2m16-1v2a4 4 0 0 1-4 4h-12" />
+            <path d="m16.75 9.75l3-3l-3-3m-10 11l-3 3l3 3" />
+          </g>
+        </svg>
+        {{ esRolActivo('Emisor') ? 'Rol activo' : 'Cambiar' }}
+      </button>
+    </div>
+
+    <!-- ═══════════════════ RECEPTOR ═══════════════════ -->
+    <div class="bg-white rounded-2xl border border-[#EEEEEE] shadow-sm flex flex-col items-center text-center p-8 gap-5 relative"
+      [ngClass]="{'opacity-50': !tieneRol('Receptor')}">
+
+
+      <div class="w-36 h-36 rounded-full bg-[#C62828] flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="#fff" d="M4 11.333L0 9l12-7l12 7v8.5h-2v-7.333l-2 1.166v6.678l-.223.275A9.98 9.98 0 0 1 12 22a9.98 9.98 0 0 1-7.777-3.714L4 18.011zM6 12.5v4.792A7.98 7.98 0 0 0 12 20a7.98 7.98 0 0 0 6-2.708V12.5L12 16zM3.97 9L12 13.685L20.03 9L12 4.315z" />
+        </svg>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <h2 class="text-2xl font-semibold text-[#334155] mb-5">Receptor</h2>
+        <p class="text-sm text-[#334155] leading-relaxed mb-5 px-4">
+          Administración de insignias obtenidas y gestión del perfil académico
+        </p>
+      </div>
+
+      <button (click)="cambiar('Receptor')"
+        [disabled]="!tieneRol('Receptor') || esRolActivo('Receptor')"
+        class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold transition-colors border-2"
+        [ngClass]="tieneRol('Receptor') && !esRolActivo('Receptor')
+          ? 'bg-[#4AB6D5] border-[#2EA6C8] text-white hover:bg-[#43A5C2] cursor-pointer'
+          : 'bg-[#F1F5F9] border-[#E2E8F0] text-[#94A3B8] cursor-default'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            [attr.stroke]="tieneRol('Receptor') && !esRolActivo('Receptor') ? '#fff' : '#94A3B8'">
+            <path d="M19.75 6.75h-12a4 4 0 0 0-4 4v2m16-1v2a4 4 0 0 1-4 4h-12" />
+            <path d="m16.75 9.75l3-3l-3-3m-10 11l-3 3l3 3" />
+          </g>
+        </svg>
+        {{ esRolActivo('Receptor') ? 'Rol activo' : 'Cambiar' }}
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Botón Cancelar -->
+  <div class="mt-10">
+    <button (click)="cancelar()"
+      class="flex items-center gap-2 bg-[#E2E8F0] border-2 border-[#CBD5E1] text-[#334155] px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-[#C9CED5] transition-colors cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+      </svg>
+      Cancelar
+    </button>
+  </div>
+
+</main>

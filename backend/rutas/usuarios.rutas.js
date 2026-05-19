@@ -47,6 +47,9 @@ router.get('/', autenticacion, autorizacion(['Administrador']), async (req, res)
     const consulta = `
       SELECT u.id_usuario, u.cedula, u.nombres, u.apellidos, u.correo, u.telefono, u.activo,
              u.carrera AS id_carrera, c.nombre AS carrera_nombre, u.foto_url,
+             (SELECT COUNT(*)::int FROM microcredencial WHERE emisor = u.id_usuario AND eliminado = false) AS microcredenciales_creadas,
+             (SELECT COUNT(*)::int FROM insignia_emitida WHERE emisor = u.id_usuario) AS insignias_emitidas,
+             (SELECT COUNT(*)::int FROM insignia_emitida WHERE receptor = u.id_usuario) AS insignias_obtenidas,
 
              COALESCE(
                JSON_AGG(
