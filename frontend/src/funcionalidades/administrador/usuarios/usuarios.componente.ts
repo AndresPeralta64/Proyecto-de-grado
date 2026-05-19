@@ -97,12 +97,7 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     const direction = this.opcionesExpandidas ? 1 : -1;
 
     baseList.sort((a, b) => {
-      // Secuencia: ID -> Nombres -> Apellidos -> Correo -> Estado -> Rol
-
-      if (this.ordenarPor.numero) {
-        const diff = a.id_usuario - b.id_usuario;
-        if (diff !== 0) return diff * direction;
-      }
+      // Secuencia: Nombres -> Apellidos -> Cédula -> Correo -> Estado -> Rol
 
       if (this.ordenarPor.nombres) {
         const comp = (a.nombres || '').localeCompare(b.nombres || '', 'es', { sensitivity: 'base' });
@@ -111,6 +106,11 @@ export class UsuariosComponente implements OnInit, OnDestroy {
 
       if (this.ordenarPor.apellidos) {
         const comp = (a.apellidos || '').localeCompare(b.apellidos || '', 'es', { sensitivity: 'base' });
+        if (comp !== 0) return comp * direction;
+      }
+
+      if (this.ordenarPor.cedula) {
+        const comp = (a.cedula || '').localeCompare(b.cedula || '', 'es', { sensitivity: 'base' });
         if (comp !== 0) return comp * direction;
       }
 
@@ -258,12 +258,12 @@ export class UsuariosComponente implements OnInit, OnDestroy {
   };
 
   ordenarPor = {
-    numero: true,
-    nombres: true,
-    apellidos: true,
-    correo: true,
-    estado: true,
-    rol: true
+    nombres: false,
+    apellidos: false,
+    cedula: false,
+    correo: false,
+    estado: false,
+    rol: false
   };
 
   toggleOpciones() {

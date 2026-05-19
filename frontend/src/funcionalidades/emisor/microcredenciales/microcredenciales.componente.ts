@@ -6,13 +6,13 @@ import { MicrocredencialServicio } from '../../../core/servicios/microcredencial
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-microcredenciales',
+  selector: 'app-emisor-microcredenciales',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './microcredenciales.componente.html',
   styleUrls: ['./microcredenciales.componente.css']
 })
-export class MicrocredencialesComponente implements OnInit, OnDestroy {
+export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
   opcionesExpandidas = true;
   menuMostrarAbierto = false;
   menuOrdenarAbierto = false;
@@ -40,9 +40,9 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
   // Ordenamiento
   ordenarPor = {
     microcredencial: false,
-    emisor: false,
     nivel: false,
     duracion: false,
+    area_conocimiento: false,
     estado: false
   };
 
@@ -148,7 +148,7 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
         const cleanItem = cleanString(
           (item.id || '') + ' ' +
           (item.nombre || '') + ' ' +
-          (item.emisor || '') + ' ' +
+          (item.area_conocimiento || '') + ' ' +
           (item.nivel || '') + ' ' +
           (item.duracion || '') + ' ' +
           (item.estado || '')
@@ -167,10 +167,6 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
         const comp = (a.nombre || '').localeCompare(b.nombre || '', 'es', { sensitivity: 'base' });
         if (comp !== 0) return comp * direction;
       }
-      if (this.ordenarPor.emisor) {
-        const comp = (a.emisor || '').localeCompare(b.emisor || '', 'es', { sensitivity: 'base' });
-        if (comp !== 0) return comp * direction;
-      }
       if (this.ordenarPor.nivel) {
         const comp = (a.nivel || '').localeCompare(b.nivel || '', 'es', { sensitivity: 'base' });
         if (comp !== 0) return comp * direction;
@@ -180,6 +176,10 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
         const numB = parseInt(b.duracion) || 0;
         const diff = numA - numB;
         if (diff !== 0) return diff * direction;
+      }
+      if (this.ordenarPor.area_conocimiento) {
+        const comp = (a.area_conocimiento || '').localeCompare(b.area_conocimiento || '', 'es', { sensitivity: 'base' });
+        if (comp !== 0) return comp * direction;
       }
       if (this.ordenarPor.estado) {
         const getEstadoValue = (estado: string): number => {

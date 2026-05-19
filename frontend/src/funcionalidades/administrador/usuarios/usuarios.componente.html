@@ -157,21 +157,6 @@
         <div *ngIf="menuOrdenarAbierto"
           class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden w-full p-3 gap-2.5">
 
-          <!-- Número -->
-          <label (click)="ordenarPor.numero = !ordenarPor.numero"
-            class="flex items-center gap-2.5 cursor-pointer group">
-            <div
-              [ngClass]="ordenarPor.numero ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
-              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
-              <svg *ngIf="ordenarPor.numero" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
-                viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
-              </svg>
-            </div>
-            <span class="text-[13.5px] text-[#334155]">ID</span>
-          </label>
 
           <!-- Nombres -->
           <label (click)="ordenarPor.nombres = !ordenarPor.nombres"
@@ -204,6 +189,23 @@
             </div>
             <span class="text-[13.5px] text-[#334155]">Apellidos</span>
           </label>
+
+          <!-- Cédula -->
+          <label (click)="ordenarPor.cedula = !ordenarPor.cedula"
+            class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.cedula ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.cedula" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Cédula</span>
+          </label>
+
 
           <!-- Correo -->
           <label (click)="ordenarPor.correo = !ordenarPor.correo"
@@ -319,7 +321,7 @@
         <tr *ngFor="let usuario of usuariosPaginados; let i = index"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- ID -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ opcionesExpandidas ? ((paginaActual - 1) * limiteRegistros + i + 1) : (usuariosFiltrados.length - ((paginaActual - 1) * limiteRegistros + i)) }}</td>
           <!-- Usuario (Nombres y Apellidos) -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ usuario.nombres }} {{
             usuario.apellidos }}</td>
@@ -400,7 +402,7 @@
 
                   <!-- Tooltip flotante (aparece al pasar el cursor) -->
                   <div class="absolute bottom-full mb-2 right-0 z-[100] hidden group-hover:flex flex-col gap-1 w-[220px] bg-white border border-[#E2E8F0] shadow-lg rounded-xl p-3 text-[11px] text-[#334155] text-left pointer-events-none transition-all">
-                    
+
                     <!-- Si es Emisor -->
                     <div *ngIf="tieneRolUsuario(usuario, 'Emisor')" class="flex flex-col gap-1">
                       <div>
@@ -446,7 +448,7 @@
                   </svg>
                   Activar
                 </button>
- 
+
                 <!-- Botón Eliminar Deshabilitado -->
                 <button type="button" disabled
                   class="flex items-center gap-1 px-1.75 py-1 border border-[#E2E8F0] bg-[#F1F5F9] rounded-lg text-[#94A3B8] text-[13px] font-medium cursor-not-allowed transition-all">
@@ -479,7 +481,7 @@
 
                   <!-- Tooltip flotante (aparece al pasar el cursor) -->
                   <div class="absolute bottom-full mb-2 right-0 z-[100] hidden group-hover:flex flex-col gap-1 w-[220px] bg-white border border-[#E2E8F0] shadow-lg rounded-xl p-3 text-[11px] text-[#334155] text-left pointer-events-none transition-all">
-                    
+
                     <!-- Si es Emisor -->
                     <div *ngIf="tieneRolUsuario(usuario, 'Emisor')" class="flex flex-col gap-1">
                       <div>

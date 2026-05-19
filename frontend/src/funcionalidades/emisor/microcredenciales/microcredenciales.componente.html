@@ -131,7 +131,7 @@
 
         <!-- Dropdown Ordenar por -->
         <div *ngIf="menuOrdenarAbierto"
-          class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-25">
+          class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-47">
 
           <!-- Microcredencial -->
           <label (click)="ordenarPor.microcredencial = !ordenarPor.microcredencial"
@@ -147,22 +147,6 @@
               </svg>
             </div>
             <span class="text-[13.5px] text-[#334155]">Microcredencial</span>
-          </label>
-
-          <!-- Emisor -->
-          <label (click)="ordenarPor.emisor = !ordenarPor.emisor"
-            class="flex items-center gap-2.5 cursor-pointer group select-none">
-            <div
-              [ngClass]="ordenarPor.emisor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
-              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
-              <svg *ngIf="ordenarPor.emisor" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
-                viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
-              </svg>
-            </div>
-            <span class="text-[13.5px] text-[#334155]">Emisor</span>
           </label>
 
           <!-- Nivel -->
@@ -195,6 +179,22 @@
               </svg>
             </div>
             <span class="text-[13.5px] text-[#334155]">Duración</span>
+          </label>
+
+          <!-- Área de conocimiento -->
+          <label (click)="ordenarPor.area_conocimiento = !ordenarPor.area_conocimiento"
+            class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.area_conocimiento ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.area_conocimiento" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Área del conocimiento</span>
           </label>
 
           <!-- Estado -->
@@ -255,9 +255,9 @@
         <tr class="bg-white border-b border-[#EEEEEE] text-[11px] font-bold text-[#334155] uppercase">
           <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[70px]">#</th>
           <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[250px]">Microcredencial</th>
-          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[230px]">Emisor</th>
           <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[110px]">Nivel</th>
           <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[110px]">Duración</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[230px]">Área del conocimiento</th>
           <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[110px]">Estado</th>
           <th class="py-1.5 px-2 w-[320px]">Acciones</th>
         </tr>
@@ -269,12 +269,12 @@
           <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ opcionesExpandidas ? ((paginaActual - 1) * limiteRegistros + i + 1) : (microcredencialesFiltradas.length - ((paginaActual - 1) * limiteRegistros + i)) }}</td>
           <!-- Microcredencial -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium text-left pl-4">{{ item.nombre }}</td>
-          <!-- Emisor (Nombres + Apellidos) -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.emisor }}</td>
           <!-- Nivel -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.nivel }}</td>
           <!-- Duración -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.duracion }}</td>
+          <!-- Área del conocimiento -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.area_conocimiento }}</td>
           <!-- Estado -->
           <td class="py-2 px-2 border-r border-[#EEEEEE]">
             <span [ngClass]="{
