@@ -63,5 +63,11 @@ export const routes: Routes = [
     loadComponent: () => import('../compartidos/componentes/no-autorizado/no_autorizado.componente').then(m => m.NoAutorizadoComponente)
   },
 
+  // Verificación Pública de Insignias (HT-006)
+  {
+    path: 'verificar/:uuid',
+    loadComponent: () => import('../funcionalidades/publico/verificar-insignia/verificar-insignia.componente').then(m => m.VerificarInsigniaComponente)
+  },
+
   { path: '**', redirectTo: 'autenticacion/iniciar-sesion' }
 ];

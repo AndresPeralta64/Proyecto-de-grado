@@ -11,8 +11,9 @@ export class MicrocredencialServicio {
 
   constructor(private http: HttpClient) { }
 
-  obtenerMicrocredenciales(): Observable<any> {
-    return this.http.get(`${this.apiUrl}`);
+  obtenerMicrocredenciales(soloPropias: boolean = false): Observable<any> {
+    const url = soloPropias ? `${this.apiUrl}?soloPropias=true` : `${this.apiUrl}`;
+    return this.http.get(url);
   }
 
   aprobarMicrocredencial(id: number): Observable<any> {
@@ -28,5 +29,13 @@ export class MicrocredencialServicio {
 
   eliminarMicrocredencial(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  obtenerCatalogos(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/catalogos`);
+  }
+
+  crearMicrocredencial(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, formData);
   }
 }

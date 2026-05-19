@@ -15,6 +15,10 @@ export class UsuarioServicio {
     return this.http.get(`${this.apiUrl}`);
   }
 
+  obtenerReceptores(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/receptores`);
+  }
+
   obtenerPerfil(): Observable<any> {
     return this.http.get(`${this.apiUrl}/perfil`);
   }

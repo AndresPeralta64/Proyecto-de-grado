@@ -1,0 +1,252 @@
+<div class="verificacion-container">
+
+  <!-- Abstract Background Gradients -->
+  <div class="bg-gradient-circle bg-circle-1"></div>
+  <div class="bg-gradient-circle bg-circle-2"></div>
+
+  <div class="verificacion-content">
+
+    <!-- Header / Branding -->
+    <header class="header-espoch">
+      <div class="logo-container">
+        <!-- Logotipo ficticio vectorial del escudo espoch o texto formal -->
+        <span class="espoch-brand-text">ESPOCH</span>
+        <span class="espoch-brand-sub">Escuela Superior Politécnica de Chimborazo</span>
+      </div>
+      <div class="header-divider"></div>
+      <h1 class="page-title">Sistema de Verificación Pública de Credenciales</h1>
+    </header>
+
+    <!-- LOADING STATE -->
+    <div *ngIf="cargando" class="loading-wrapper">
+      <div class="spinner"></div>
+      <p class="loading-text">Validando firma criptográfica e integridad de la credencial...</p>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div *ngIf="!cargando && errorMensaje" class="error-card card-animation">
+      <div class="error-icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h2 class="error-title">Error de Verificación</h2>
+      <p class="error-desc">{{ errorMensaje }}</p>
+      <a routerLink="/" class="btn-return">Ir al Inicio</a>
+    </div>
+
+    <!-- SUCCESS / DATA STATE -->
+    <div *ngIf="!cargando && datosVerificacion" class="grid-layout card-animation">
+
+      <!-- Column Left: Sello y Estado Criptográfico -->
+      <div class="column-left flex flex-col gap-6">
+        
+        <!-- Badge Card -->
+        <div class="badge-card-frame">
+          <div class="badge-image-container">
+            <img [src]="datosVerificacion.microcredencial.imagenUrl" class="badge-img" alt="Insignia Digital">
+          </div>
+          
+          <div class="badge-status-banner" [ngClass]="{
+            'status-valid': datosVerificacion.valido,
+            'status-revoked': datosVerificacion.estado === 'Revocada',
+            'status-invalid': !datosVerificacion.valido && datosVerificacion.estado !== 'Revocada'
+          }">
+            <div class="status-icon">
+              <!-- Check icon if active & signature valid -->
+              <svg *ngIf="datosVerificacion.valido" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <!-- Alert icon if signature invalid or revoked -->
+              <svg *ngIf="!datosVerificacion.valido" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <div class="status-info-text">
+              <span class="status-title">
+                {{ datosVerificacion.valido ? 'INSIGNIA AUTÉNTICA Y ACTIVA' : 
+                   (datosVerificacion.estado === 'Revocada' ? 'INSIGNIA REVOCADA' : 'FIRMA INVÁLIDA / ALTERADA') }}
+              </span>
+              <span class="status-subtitle">
+                {{ datosVerificacion.valido ? 'El documento no ha sido alterado y es plenamente válido.' : 
+                   (datosVerificacion.estado === 'Revocada' ? 'Esta credencial ha sido cancelada por el emisor.' : 'La credencial ha sido alterada o mal firmada.') }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revocation Box if applicable -->
+        <div *ngIf="datosVerificacion.estado === 'Revocada' && datosVerificacion.revocacion" class="revocation-box">
+          <h3 class="revocation-box-title">Detalles de Revocación</h3>
+          <div class="revocation-reason">
+            <span class="label">Justificación:</span>
+            <span class="value">{{ datosVerificacion.revocacion.justificacion }}</span>
+          </div>
+          <div class="revocation-date">
+            <span class="label">Revocado el:</span>
+            <span class="value">{{ datosVerificacion.revocacion.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+
+        <!-- Achievement Details -->
+        <div class="achievement-metadata-card">
+          <span class="meta-section-title">MICROCREDENCIAL ASOCIADA</span>
+          <h2 class="achievement-name">{{ datosVerificacion.microcredencial.nombre | uppercase }}</h2>
+          <p class="achievement-desc">{{ datosVerificacion.microcredencial.descripcion }}</p>
+          
+          <div class="achievement-specs">
+            <div class="spec-item">
+              <span class="spec-label">Nivel</span>
+              <span class="spec-val">{{ datosVerificacion.microcredencial.nivel | uppercase }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Horas Académicas</span>
+              <span class="spec-val">{{ datosVerificacion.microcredencial.duracion }} horas</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Área de Conocimiento</span>
+              <span class="spec-val">{{ datosVerificacion.microcredencial.area | uppercase }}</span>
+            </div>
+          </div>
+
+          <div class="achievement-criteria">
+            <span class="criteria-label">Criterios de Evaluación y Aprobación:</span>
+            <p class="criteria-text">{{ datosVerificacion.microcredencial.criterios }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Column Right: Validaciones y Destinatarios -->
+      <div class="column-right flex flex-col gap-6">
+
+        <!-- Verification Checklist -->
+        <div class="checklist-card">
+          <h3 class="card-section-heading">Validación Técnica del Protocolo</h3>
+          
+          <ul class="checklist-list">
+            
+            <!-- 1. Cryptographic Signature -->
+            <li class="checklist-item">
+              <div class="checklist-check-circle" [ngClass]="{'checked': datosVerificacion.firmaValida, 'unchecked': !datosVerificacion.firmaValida}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="checklist-desc">
+                <span class="check-title">Firma Criptográfica (RS256)</span>
+                <span class="check-sub">Verificación de la integridad matemática de la firma JSON-LD contra la clave pública del emisor.</span>
+              </div>
+            </li>
+
+            <!-- 2. Revocation status -->
+            <li class="checklist-item">
+              <div class="checklist-check-circle" [ngClass]="{'checked': datosVerificacion.estado === 'Activa', 'unchecked': datosVerificacion.estado !== 'Activa'}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="checklist-desc">
+                <span class="check-title">Estado de Vigencia Escolar</span>
+                <span class="check-sub">Comprobación en el registro distribuido institucional de que la credencial no ha sido revocada o suspendida.</span>
+              </div>
+            </li>
+
+            <!-- 3. Standard Open Badges 3.0 -->
+            <li class="checklist-item">
+              <div class="checklist-check-circle checked">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="checklist-desc">
+                <span class="check-title">Esquema Open Badges 3.0</span>
+                <span class="check-sub">El documento cumple en su estructura con la norma IMS Global y es portable para cargarse en mochilas digitales y redes.</span>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+        <!-- Participants Card -->
+        <div class="participants-card">
+          
+          <!-- Receptor -->
+          <div class="participant-section border-b border-[#F1F5F9] pb-5 mb-5">
+            <div class="participant-header">
+              <span class="participant-tag receptor-tag">RECEPTOR</span>
+              <span class="meta-date">Fecha de Emisión: {{ datosVerificacion.fechaEmision | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <h4 class="participant-name">{{ datosVerificacion.receptor.nombres }} {{ datosVerificacion.receptor.apellidos }}</h4>
+            <div class="participant-detail">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <span>{{ datosVerificacion.receptor.correo }}</span>
+            </div>
+          </div>
+
+          <!-- Emisor -->
+          <div class="participant-section">
+            <div class="participant-header">
+              <span class="participant-tag emisor-tag">AUTORIDAD EMISORA</span>
+            </div>
+            <h4 class="participant-name">ESCUELA SUPERIOR POLITÉCNICA DE CHIMBORAZO</h4>
+            <p class="participant-sub">Departamento de Admisión y Registro de Microcredenciales</p>
+            <div class="flex flex-col gap-2.5 mt-3">
+              <div class="participant-detail">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>{{ datosVerificacion.emisor.correo }}</span>
+              </div>
+              <div class="participant-detail">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span class="faculty-text">Carrera: {{ datosVerificacion.emisor.carrera }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- INSPECTOR ACCORDION -->
+    <div *ngIf="!cargando && datosVerificacion" class="inspector-accordion card-animation">
+      <button type="button" (click)="toggleInspector()" class="inspector-toggle-btn">
+        <span class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          Inspector de Datos Criptográficos JSON-LD (Open Badges 3.0)
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          [ngClass]="{'rotate-180': inspectorAbierto}" class="transition-transform duration-200">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+
+      <div *ngIf="inspectorAbierto" class="inspector-panel-content">
+        <div class="inspector-actions">
+          <span class="inspector-subtitle">Este objeto JSON representa la estructura completa, firmada digitalmente con la clave privada institucional.</span>
+          <button type="button" (click)="copiarJson()" class="btn-copy">
+            Copiar Código
+          </button>
+        </div>
+        <pre class="json-code-box"><code>{{ jsonLdFormateado }}</code></pre>
+      </div>
+    </div>
+
+  </div>
+</div>

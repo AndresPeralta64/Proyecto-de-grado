@@ -1,11 +1,11 @@
 const { consultar } = require('../servicios/base_datos');
 
 /**
- * Obtiene la lista completa de microcredenciales (para administradores)
+ * Obtiene la lista de microcredenciales (filtrada por emisor si no es administrador)
  */
 const listarMicrocredenciales = async (req, res) => {
   try {
-    const consulta = `
+    let consulta = `
       SELECT 
         m.id_microcredencial,
         m.nombre,
@@ -30,9 +30,17 @@ const listarMicrocredenciales = async (req, res) => {
       JOIN area_conocimiento a ON m.area_conocimiento = a.id_area
       JOIN estado_microcredencial e ON m.estado = e.id_estado
       WHERE m.eliminado = false
-      ORDER BY m.id_microcredencial ASC
     `;
-    const resultado = await consultar(consulta, []);
+    let valores = [];
+    const esAdmin = req.usuario.nombre_rol === 'Administrador' || req.usuario.nombre_rol === 'ADMIN';
+    const soloPropias = req.query.soloPropias === 'true';
+    if (!esAdmin || soloPropias) {
+      consulta += ` AND m.emisor = $1`;
+      valores.push(req.usuario.id);
+    }
+    consulta += ` ORDER BY m.id_microcredencial ASC`;
+
+    const resultado = await consultar(consulta, valores);
     return res.status(200).json({
       exito: true,
       datos: resultado.rows
@@ -44,11 +52,17 @@ const listarMicrocredenciales = async (req, res) => {
 };
 
 /**
- * Aprueba una microcredencial (cambia estado a Aprobada)
+ * Aprueba una microcredencial (cambia estado a Aprobada) - Solo Administrador
  */
 const aprobarMicrocredencial = async (req, res) => {
   const { id } = req.params;
   const idAprobador = req.usuario.id;
+  const esAdmin = req.usuario.nombre_rol === 'Administrador' || req.usuario.nombre_rol === 'ADMIN';
+
+  if (!esAdmin) {
+    return res.status(403).json({ exito: false, mensaje: 'Acceso denegado: El emisor no puede aprobar microcredenciales.' });
+  }
+
   try {
     const consulta = `
       UPDATE microcredencial 
@@ -64,13 +78,40 @@ const aprobarMicrocredencial = async (req, res) => {
 };
 
 /**
- * Cambia el estado de una microcredencial
+ * Cambia el estado de una microcredencial (con restricciones para el Emisor)
  */
 const cambiarEstado = async (req, res) => {
   const { id } = req.params;
   const { id_estado, justificacion_rechazo } = req.body;
   const idUsuario = req.usuario.id;
+  const esAdmin = req.usuario.nombre_rol === 'Administrador' || req.usuario.nombre_rol === 'ADMIN';
+
   try {
+    if (!esAdmin) {
+      // Validar que la microcredencial le pertenezca y esté en estado APROBADA
+      const queryVerificar = `SELECT estado, emisor FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false`;
+      const resVerificar = await consultar(queryVerificar, [id]);
+      
+      if (resVerificar.rows.length === 0) {
+        return res.status(404).json({ exito: false, mensaje: 'La microcredencial no existe.' });
+      }
+      
+      const micro = resVerificar.rows[0];
+      if (micro.emisor !== idUsuario) {
+        return res.status(403).json({ exito: false, mensaje: 'Acceso denegado: No tiene permisos para modificar esta microcredencial.' });
+      }
+      
+      // El emisor solo puede inactivar (estado 4)
+      if (Number(id_estado) !== 4) {
+        return res.status(403).json({ exito: false, mensaje: 'Acceso denegado: El emisor solo puede inactivar la microcredencial.' });
+      }
+      
+      // Solo se puede inactivar si actualmente está aprobada (estado 2)
+      if (Number(micro.estado) !== 2) {
+        return res.status(400).json({ exito: false, mensaje: 'Solo se puede inactivar una microcredencial aprobada.' });
+      }
+    }
+
     let consulta;
     let valores;
     if (Number(id_estado) === 2) { // Aprobada
@@ -109,16 +150,24 @@ const cambiarEstado = async (req, res) => {
 const eliminarMicrocredencial = async (req, res) => {
   const { id } = req.params;
   const idUsuario = req.usuario.id;
+  const esAdmin = req.usuario.nombre_rol === 'Administrador' || req.usuario.nombre_rol === 'ADMIN';
+
   try {
     // 1. Obtener el estado actual de la microcredencial antes de eliminarla
-    const queryEstado = `SELECT estado FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false`;
+    const queryEstado = `SELECT estado, emisor FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false`;
     const resEstado = await consultar(queryEstado, [id]);
     
     if (resEstado.rows.length === 0) {
       return res.status(404).json({ exito: false, mensaje: 'La microcredencial no existe o ya fue eliminada.' });
     }
     
-    const estadoActual = Number(resEstado.rows[0].estado);
+    const micro = resEstado.rows[0];
+    const estadoActual = Number(micro.estado);
+    
+    // Verificar propiedad si es emisor
+    if (!esAdmin && micro.emisor !== idUsuario) {
+      return res.status(403).json({ exito: false, mensaje: 'Acceso denegado: No tiene permisos para eliminar esta microcredencial.' });
+    }
     
     // 2. Si es Aprobada (2) o Inactiva (4), revocar insignias emitidas
     if (estadoActual === 2 || estadoActual === 4) {
@@ -158,9 +207,135 @@ const eliminarMicrocredencial = async (req, res) => {
   }
 };
 
+/**
+ * Obtiene los niveles y áreas de conocimiento para los catálogos
+ */
+const obtenerCatalogos = async (req, res) => {
+  try {
+    const resNiveles = await consultar('SELECT id_nivel AS id, nombre FROM nivel_microcredencial ORDER BY id_nivel ASC', []);
+    const resAreas = await consultar('SELECT id_area AS id, nombre FROM area_conocimiento ORDER BY id_area ASC', []);
+    
+    return res.status(200).json({
+      exito: true,
+      datos: {
+        niveles: resNiveles.rows,
+        areas: resAreas.rows
+      }
+    });
+  } catch (error) {
+    console.error('Error al obtener catálogos:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener los catálogos.' });
+  }
+};
+
+/**
+ * Crea/registra una nueva microcredencial
+ */
+const crearMicrocredencial = async (req, res) => {
+  const emisorId = req.usuario.id;
+  const { nombre, descripcion, criterios_evaluacion, nivel, duracion_horas, area_conocimiento, competencias } = req.body;
+  const archivo = req.file;
+
+  try {
+    // 1. Validar campos requeridos
+    if (!nombre || !nombre.trim() || !descripcion || !descripcion.trim() || !criterios_evaluacion || !criterios_evaluacion.trim() || !nivel || !duracion_horas || !area_conocimiento || !competencias) {
+      if (archivo) {
+        const fs = require('fs');
+        fs.unlinkSync(archivo.path);
+      }
+      return res.status(400).json({ exito: false, mensaje: 'Todos los campos obligatorios deben ser completados.' });
+    }
+
+    if (!archivo) {
+      return res.status(400).json({ exito: false, mensaje: 'Debe cargar o diseñar una insignia digital asociada.' });
+    }
+
+    // 2. Validar si ya existe una microcredencial con el mismo nombre (frente a eliminados)
+    const queryExiste = `SELECT id_microcredencial FROM microcredencial WHERE LOWER(nombre) = LOWER($1) AND eliminado = false`;
+    const resExiste = await consultar(queryExiste, [nombre.trim()]);
+    
+    if (resExiste.rows.length > 0) {
+      const fs = require('fs');
+      fs.unlinkSync(archivo.path);
+      return res.status(400).json({ exito: false, mensaje: 'Microcredencial ya existe' });
+    }
+
+    // 3. Procesar las competencias
+    let compsArray = [];
+    if (Array.isArray(competencias)) {
+      compsArray = competencias;
+    } else {
+      try {
+        compsArray = JSON.parse(competencias);
+      } catch (e) {
+        compsArray = competencias.split(',').map(c => c.trim()).filter(c => c.length > 0);
+      }
+    }
+
+    // 4. Crear la URL pública para la imagen de la insignia
+    const imagen_url = `/recursos/insignias/${archivo.filename}`;
+
+    // 5. Estructurar metadatos Open Badges 3.0
+    const metadata_ob3 = {
+      type: ["Achievement"],
+      name: nombre.trim(),
+      description: descripcion.trim(),
+      criteria: {
+        narrative: criterios_evaluacion.trim()
+      },
+      image: {
+        id: imagen_url,
+        type: "Image"
+      }
+    };
+
+    // 6. Insertar en la base de datos (estado 1: Pendiente)
+    const queryInsertar = `
+      INSERT INTO microcredencial (
+        emisor, nombre, descripcion, criterios_evaluacion, nivel, 
+        duracion_horas, area_conocimiento, competencias, imagen_url, metadata_ob3, estado
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 1)
+      RETURNING id_microcredencial
+    `;
+    
+    const valores = [
+      emisorId,
+      nombre.trim(),
+      descripcion.trim(),
+      criterios_evaluacion.trim(),
+      Number(nivel),
+      Number(duracion_horas),
+      Number(area_conocimiento),
+      compsArray,
+      imagen_url,
+      JSON.stringify(metadata_ob3)
+    ];
+
+    await consultar(queryInsertar, valores);
+
+    return res.status(201).json({
+      exito: true,
+      mensaje: 'Microcredencial registrada con éxito. Pendiente de aprobación.'
+    });
+
+  } catch (error) {
+    console.error('Error al registrar microcredencial:', error.message);
+    if (archivo) {
+      try {
+        const fs = require('fs');
+        fs.unlinkSync(archivo.path);
+      } catch (err) {}
+    }
+    return res.status(500).json({ exito: false, mensaje: 'Error al registrar la microcredencial.' });
+  }
+};
+
 module.exports = {
   listarMicrocredenciales,
   aprobarMicrocredencial,
   cambiarEstado,
-  eliminarMicrocredencial
+  eliminarMicrocredencial,
+  obtenerCatalogos,
+  crearMicrocredencial
 };

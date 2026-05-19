@@ -1,0 +1,311 @@
+/* ==========================================================================
+   HU-010: Gestión de Insignias Digitales - Estilos Premium
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+.insignias-dashboard-container {
+  font-family: 'Inter', sans-serif;
+  color: #1E293B;
+}
+
+/* Tabs Navigation Styling */
+.tabs-navigation {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #E2E8F0;
+  padding-bottom: 0.1px;
+}
+.tab-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #64748B;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.tab-btn:hover {
+  color: #1E3A8A;
+  background-color: #F8FAFC;
+}
+.tab-btn.active {
+  color: #0067b8;
+  border-bottom-color: #0067b8;
+}
+
+/* Cards & Container Modules */
+.filters-card {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.filter-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.filter-input, .filter-select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8rem;
+  color: #334155;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 0.375rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.filter-input:focus, .filter-select:focus {
+  border-color: #0067b8;
+  box-shadow: 0 0 0 3px rgba(0, 103, 184, 0.1);
+}
+
+/* Buttons */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  background-color: #0067b8;
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.55rem 1.25rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: #005293;
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background-color: #F8FAFC;
+  color: #1E293B;
+  border-color: #94A3B8;
+}
+
+.btn-danger {
+  display: flex;
+  align-items: center;
+  background-color: #DC2626;
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.55rem 1.25rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-danger:hover {
+  background-color: #B91C1C;
+}
+
+/* Tables and list layout */
+.table-container {
+  overflow-x: auto;
+}
+.dashboard-table th {
+  padding: 1rem 1.5rem;
+  font-size: 0.7rem;
+}
+.dashboard-table td {
+  padding: 1rem 1.5rem;
+  vertical-align: middle;
+}
+
+/* Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-active {
+  background-color: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+}
+.badge-revoked {
+  background-color: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+/* Action Buttons */
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.btn-view {
+  background-color: #F0FDF4;
+  color: #15803D;
+  border-color: #DCFCE7;
+}
+.btn-view:hover {
+  background-color: #DCFCE7;
+  transform: translateY(-1px);
+}
+.btn-revoke {
+  background-color: #FEF2F2;
+  color: #DC2626;
+  border-color: #FEE2E2;
+}
+.btn-revoke:hover {
+  background-color: #FEE2E2;
+  transform: translateY(-1px);
+}
+
+/* Step Indicator Card */
+.step-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #E0F2FE;
+  color: #0369A1;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Receptor Selection Rows */
+.receptors-scroll-area {
+  border: 1px solid #E2E8F0;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: #F8FAFC;
+}
+.receptor-select-row {
+  background: white;
+}
+.receptor-select-row.selected {
+  border-color: #0067b8;
+  background-color: #F0F7FF;
+  box-shadow: 0 0 0 1px #0067b8;
+}
+
+/* Modals backdrop & layout */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+}
+.modal-card {
+  z-index: 110;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Spinners */
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3.5px solid rgba(0, 103, 184, 0.15);
+  border-top-color: #0067b8;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+  margin: 0 auto;
+}
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+  display: inline-block;
+}
+
+.loading-state, .empty-state-card {
+  border: 1px dashed #CBD5E1;
+  background-color: #F8FAFC;
+  border-radius: 0.75rem;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.card-animation {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

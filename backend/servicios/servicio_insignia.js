@@ -1,4 +1,5 @@
 const { firmarRS256 } = require('./servicio_criptografia');
+const { validarMetadatosOpenBadges } = require('./validador_insignia');
 
 /**
  * Genera una declaración (assertion) de insignia digital conforme al estándar Open Badges 3.0
@@ -44,6 +45,14 @@ const generarInsigniaFirmada = (datosInsignia, clavePrivada) => {
       }
     }
   };
+
+  // Validar metadatos antes de firmar
+  const resultadoValidacion = validarMetadatosOpenBadges(declaracion);
+  if (!resultadoValidacion.valido) {
+    const error = new Error('Los metadatos de la microcredencial no cumplen con el estándar Open Badges 3.0.');
+    error.detalles = resultadoValidacion.errores;
+    throw error;
+  }
 
   // Generar la firma digital sobre el contenido de la declaración
   const valorFirma = firmarRS256(declaracion, clavePrivada);

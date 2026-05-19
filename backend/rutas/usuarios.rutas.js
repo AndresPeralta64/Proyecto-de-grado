@@ -33,6 +33,26 @@ router.get('/carreras', autenticacion, async (req, res) => {
   }
 });
 
+// Obtener lista de receptores activos (Administrador y Emisor)
+router.get('/receptores', [autenticacion, autorizacion(['Administrador', 'Emisor'])], async (req, res) => {
+  try {
+    const consulta = `
+      SELECT u.id_usuario, u.cedula, u.nombres, u.apellidos, u.correo, u.telefono, c.nombre AS carrera_nombre
+      FROM usuario u
+      JOIN usuario_rol ur ON u.id_usuario = ur.usuario
+      JOIN rol r ON ur.rol = r.id_rol
+      LEFT JOIN carrera c ON u.carrera = c.id_carrera
+      WHERE r.nombre = 'Receptor' AND u.activo = true
+      ORDER BY u.apellidos ASC, u.nombres ASC
+    `;
+    const resultado = await consultar(consulta, []);
+    return res.status(200).json({ exito: true, datos: resultado.rows });
+  } catch (error) {
+    console.error('Error al obtener receptores:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener los receptores.' });
+  }
+});
+
 // Registrar nuevo usuario (solo Administradores)
 router.post('/', [autenticacion, autorizacion(['Administrador']), subida.single('foto')], registrarUsuario);
 
