@@ -13,7 +13,7 @@
             d="M10.783 18.828a8.05 8.05 0 0 0 7.439-4.955a8.03 8.03 0 0 0-1.737-8.765a8.045 8.045 0 0 0-13.735 5.68c0 2.131.846 4.174 2.352 5.681a8.05 8.05 0 0 0 5.68 2.359m5.706-2.337l4.762 4.759" />
         </svg>
       </span>
-      <input type="text" [(ngModel)]="terminoBusqueda"
+      <input type="text" [(ngModel)]="terminoBusqueda" (input)="paginaActual = 1"
         class="w-full pl-10 pr-4 py-2 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#828891] transition-all placeholder-[#CBD5E1]"
         placeholder="Buscar...">
     </div>
@@ -213,6 +213,38 @@
             <span class="text-[13.5px] text-[#334155]">Estado</span>
           </label>
 
+          <!-- Fecha de creación -->
+          <label (click)="ordenarPor.fecha_creacion = !ordenarPor.fecha_creacion"
+            class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.fecha_creacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.fecha_creacion" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Fecha de creación</span>
+          </label>
+
+          <!-- Última actualización -->
+          <label (click)="ordenarPor.ultima_actualizacion = !ordenarPor.ultima_actualizacion"
+            class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.ultima_actualizacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.ultima_actualizacion" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Última actualización</span>
+          </label>
+
         </div>
 
         <!-- Backdrop -->
@@ -241,6 +273,17 @@
 
     </div>
 
+    <div class="ml-auto">
+      <button type="button" (click)="nuevaMicrocredencial()" [ngClass]="{'z-50': menuMostrarAbierto || menuOrdenarAbierto}"
+        class="relative flex items-center gap-2 px-2.5 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white font-medium hover:bg-[#43A5C2] cursor-pointer transition-all shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" class="flex-shrink-0">
+          <path d="M0 0h256v256H0z" fill="none" />
+          <path fill="#fff" d="M128 136a8 8 0 0 1-8 8H72a8 8 0 0 1 0-16h48a8 8 0 0 1 8 8m-8-40H72a8 8 0 0 0 0 16h48a8 8 0 0 0 0-16m112 65.47V224a8 8 0 0 1-12 7l-24-13.74L172 231a8 8 0 0 1-12-7v-24H40a16 16 0 0 1-16-16V56a16 16 0 0 1 16-16h176a16 16 0 0 1 16 16v30.53a51.88 51.88 0 0 1 0 74.94M160 184v-22.53A52 52 0 0 1 216 76V56H40v128Zm56-12a51.88 51.88 0 0 1-40 0v38.22l16-9.16a8 8 0 0 1 7.94 0l16 9.16Zm16-48a36 36 0 1 0-36 36a36 36 0 0 0 36-36" />
+        </svg>
+        <span class="text-[15px]">Nueva microcredencial</span>
+      </button>
+    </div>
+
   </div>
 
   <!-- Tabla de Microcredenciales Registradas -->
@@ -263,7 +306,7 @@
         </tr>
       </thead>
       <tbody class="divide-y divide-[#EEEEEE] bg-white">
-        <tr *ngFor="let item of microcredencialesPaginadas; let i = index"
+        <tr *ngFor="let item of microcredencialesPaginadas; let i = index; trackBy: trackByMicrocredencialId"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- # ID -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ opcionesExpandidas ? ((paginaActual - 1) * limiteRegistros + i + 1) : (microcredencialesFiltradas.length - ((paginaActual - 1) * limiteRegistros + i)) }}</td>
@@ -290,16 +333,16 @@
           <!-- Acciones -->
           <td class="py-2 px-2">
             <div class="flex items-center justify-center gap-3">
-              <!-- Botón Estado -->
-              <button type="button" (click)="abrirModalEstado(item)"
-                [disabled]="item.estado !== 'APROBADA' && item.estado !== 'INACTIVA'"
-                [ngClass]="(item.estado === 'APROBADA' || item.estado === 'INACTIVA')
+              <!-- Botón Estado / Editar para Rechazadas -->
+              <button type="button" (click)="accionBotonEstado(item)"
+                [disabled]="item.estado !== 'APROBADA' && item.estado !== 'RECHAZADA'"
+                [ngClass]="(item.estado === 'APROBADA' || item.estado === 'RECHAZADA')
                   ? 'border-[#BAE6FD] bg-white text-[#0EA5E9] hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer'
                   : 'border-[#E2E8F0] bg-[#F1F5F9] text-[#94A3B8] cursor-not-allowed'"
                 class="flex items-center gap-1 px-1.75 py-1 border rounded-lg text-[13px] font-medium transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
                   <g fill="none"
-                    [attr.stroke]="(item.estado === 'APROBADA' || item.estado === 'INACTIVA') ? '#0ea5e9' : '#94A3B8'"
+                    [attr.stroke]="(item.estado === 'APROBADA' || item.estado === 'RECHAZADA') ? '#0ea5e9' : '#94A3B8'"
                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
                     <path
                       d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56" />
@@ -307,38 +350,21 @@
                       d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.36 1.36 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.36 1.36 0 0 1-.953.395H8.197a1.36 1.36 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086" />
                   </g>
                 </svg>
-                Estado
+                {{ item.estado === 'RECHAZADA' ? 'Editar' : 'Estado' }}
               </button>
 
-              <!-- Condicional para PENDIENTE: Aprobar -->
-              <ng-container *ngIf="item.estado === 'PENDIENTE'">
-                <button type="button" (click)="aprobarMicrocredencial(item)"
-                  class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <g fill="none" stroke="#0ea5e9" stroke-width="1.5">
-                      <path d="M10.521 2.624a2 2 0 0 1 2.958 0l1.02 1.12a2 2 0 0 0 1.572.651l1.513-.07a2 2 0 0 1 2.092 2.09l-.071 1.514a2 2 0 0 0 .651 1.572l1.12 1.02a2 2 0 0 1 0 2.958l-1.12 1.02a2 2 0 0 0-.651 1.572l.07 1.513a2 2 0 0 1-2.09 2.092l-1.514-.071a2 2 0 0 0-1.572.651l-1.02 1.12a2 2 0 0 1-2.958 0l-1.02-1.12a2 2 0 0 0-1.572-.651l-1.513.07a2 2 0 0 1-2.092-2.09l.071-1.514a2 2 0 0 0-.651-1.572l-1.12-1.02a2 2 0 0 1 0-2.958l1.12-1.02a2 2 0 0 0 .651-1.572l-.07-1.513a2 2 0 0 1 2.09-2.092l1.514.071a2 2 0 0 0 1.572-.651z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m9 12l2 2l4-4" />
-                    </g>
-                  </svg>
-                  Aprobar
-                </button>
-              </ng-container>
-
-              <!-- Condicional para NO PENDIENTE: Información -->
-              <ng-container *ngIf="item.estado !== 'PENDIENTE'">
-                <button type="button" (click)="abrirModalInfo(item)"
-                  class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333" />
-                      <path stroke-width="2" d="M11.956 7.443h.01" />
-                    </g>
-                  </svg>
-                  Información
-                </button>
-              </ng-container>
+              <!-- Botón Información -->
+              <button type="button" (click)="abrirModalInfo(item)"
+                class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333" />
+                    <path stroke-width="2" d="M11.956 7.443h.01" />
+                  </g>
+                </svg>
+                Información
+              </button>
 
               <!-- Botón Eliminar -->
               <button type="button" (click)="abrirModalEliminar(item)"
@@ -364,7 +390,12 @@
                   stroke-width="1.5"
                   d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
               </svg>
-              <span class="text-[13px] font-medium">No se encontraron microcredenciales con los parámetros establecidos.</span>
+              <span class="text-[13px] font-medium" *ngIf="microcredenciales.length === 0 && !terminoBusqueda.trim()">
+                Usted aún no ha registrado microcredenciales en el sistema.
+              </span>
+              <span class="text-[13px] font-medium" *ngIf="microcredenciales.length > 0 || terminoBusqueda.trim()">
+                No se encontraron microcredenciales con los parámetros establecidos.
+              </span>
             </div>
           </td>
         </tr>
@@ -534,7 +565,7 @@
     <!-- Título -->
     <div class="px-12 pt-7 pb-5 flex-shrink-0">
       <h2 class="text-[21px] font-semibold text-[#334155]">
-        {{ microcredencialAEvaluar?.estado === 'PENDIENTE' ? 'Evaluar microcredencial' : 'Datos de la microcredencial' }}
+        Datos de la microcredencial
       </h2>
     </div>
 
@@ -551,7 +582,7 @@
       </div>
 
       <!-- Columna Derecha: Información detallada -->
-      <div class="flex-1 pl-9 flex flex-col gap-4 text-[#334155] overflow-y-auto pr-15">
+      <div class="flex-1 pl-9 flex flex-col gap-4 text-[#334155] overflow-y-auto pr-15 modal-scrollbar">
         <div class="grid grid-cols-[180px_1fr] gap-x-4 gap-y-3.5 text-[13px]">
 
           <div class="font-bold uppercase">Estado:</div>
@@ -566,6 +597,9 @@
               {{ microcredencialAEvaluar?.estado }}
             </span>
           </div>
+
+          <div class="font-bold uppercase">Creado en:</div>
+          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.creado_en | date:'dd/MM/yyyy HH:mm' }}</div>
 
           <div class="font-bold uppercase">Emisor:</div>
           <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.emisor }}</div>
@@ -600,7 +634,7 @@
           </ng-container>
 
           <ng-container *ngIf="microcredencialAEvaluar?.estado === 'INACTIVA'">
-            <div class="font-bold uppercase">Última Actualización:</div>
+            <div class="font-bold uppercase">Fecha de inactivación:</div>
             <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</div>
           </ng-container>
 
@@ -619,36 +653,14 @@
 
     <!-- Botones de Acción (Centrados) -->
     <div class="flex items-center justify-center gap-8 pb-10 pt-6 flex-shrink-0">
-      <ng-container *ngIf="microcredencialAEvaluar?.estado === 'PENDIENTE'">
-        <!-- Aprobar -->
-        <button type="button" (click)="confirmarAprobarMicrocredencial()"
-          class="flex items-center gap-2 px-2.5 py-2 bg-[#10B981] border border-[#2EC89A] text-white text-[14px] font-medium hover:bg-[#059669] cursor-pointer transition-all rounded-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
-          </svg>
-          Aprobar
-        </button>
-
-        <!-- Rechazar -->
-        <button type="button" (click)="abrirModalRechazar()"
-          class="flex items-center gap-2 px-2.5 py-2 bg-[#E53935] border border-[#C8332E] text-white text-[14px] font-medium hover:bg-[#C62828] cursor-pointer transition-all rounded-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m6.713-2.787L5.287 5.287" />
-          </svg>
-          Rechazar
-        </button>
-      </ng-container>
-
-      <!-- Cancelar -->
+      <!-- Cerrar -->
       <button type="button" (click)="cerrarModalEvaluar()"
         class="flex items-center gap-2 px-2.5 py-2 bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all rounded-lg">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none" />
           <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
         </svg>
-        {{ microcredencialAEvaluar?.estado === 'PENDIENTE' ? 'Cancelar' : 'Cerrar' }}
+        Cerrar
       </button>
     </div>
 
@@ -741,7 +753,7 @@
 
     <!-- Advertencia si es INACTIVO -->
     <div *ngIf="nuevoEstado === 'INACTIVO' && microcredencialAEditarEstado?.estado === 'APROBADA'" class="text-[13.5px] text-[#334155] leading-relaxed mb-10">
-      <span class="font-semibold text-[#334155]">PRECAUCIÓN:</span> Una vez inactiva la microcredencial, el usuario dueño de la misma no podrá emitir nuevas insignias. ¿Desea continuar?
+      <span class="font-semibold text-[#334155]">PRECAUCIÓN:</span> Si inactiva la microcredencial no podrá emitir nuevas insignias a partir de esta ni activarla nuevamente. ¿Desea continuar?
     </div>
 
     <!-- Botones de Acción -->

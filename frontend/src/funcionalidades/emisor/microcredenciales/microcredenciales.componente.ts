@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
 import { MicrocredencialServicio } from '../../../core/servicios/microcredencial.servicio';
+import { ServicioToken } from '../../../core/servicios/token.servicio';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -43,7 +44,9 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     nivel: false,
     duracion: false,
     area_conocimiento: false,
-    estado: false
+    estado: false,
+    fecha_creacion: false,
+    ultima_actualizacion: false
   };
 
   // Listado de microcredenciales reales obtenidas de la base de datos
@@ -74,7 +77,8 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
 
   constructor(
     private sidebarServicio: SidebarServicio,
-    private microcredencialServicio: MicrocredencialServicio
+    private microcredencialServicio: MicrocredencialServicio,
+    private tokenServicio: ServicioToken
   ) { }
 
   ngOnInit(): void {
@@ -98,7 +102,11 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.microcredencialServicio.obtenerMicrocredenciales().subscribe({
       next: (res: any) => {
         if (res && res.exito) {
-          this.microcredenciales = res.datos.map((item: any) => ({
+          const usuarioLogeado = this.tokenServicio.obtenerDatosUsuario();
+          const idUsuarioLogeado = usuarioLogeado ? usuarioLogeado.id : null;
+          const creadasPorMi = res.datos.filter((item: any) => item.id_emisor === idUsuarioLogeado);
+
+          this.microcredenciales = creadasPorMi.map((item: any) => ({
             id: item.id_microcredencial,
             nombre: item.nombre,
             descripcion: item.descripcion,
@@ -114,7 +122,8 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
             aprobado_por: item.aprobado_por,
             aprobado_en: item.aprobado_en,
             justificacion_rechazo: item.justificacion_rechazo,
-            ultima_actualizacion: item.ultima_actualizacion
+            ultima_actualizacion: item.ultima_actualizacion,
+            creado_en: item.creado_en
           }));
         }
       },
@@ -195,6 +204,21 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
         const diff = valA - valB;
         if (diff !== 0) return diff * direction;
       }
+
+      if (this.ordenarPor.fecha_creacion) {
+        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
+        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
+      if (this.ordenarPor.ultima_actualizacion) {
+        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
+        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
       return (a._index - b._index) * direction;
     });
 
@@ -207,12 +231,14 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
 
   get microcredencialesPaginadas(): any[] {
     const total = this.totalPaginas;
-    if (this.paginaActual > total) {
-      this.paginaActual = 1;
-    }
-    const inicio = (this.paginaActual - 1) * this.limiteRegistros;
+    const paginaActual = Math.min(this.paginaActual, total);
+    const inicio = (paginaActual - 1) * this.limiteRegistros;
     const fin = inicio + this.limiteRegistros;
     return this.microcredencialesFiltradas.slice(inicio, fin);
+  }
+
+  trackByMicrocredencialId(index: number, item: any): any {
+    return item.id || index;
   }
 
   cambiarLimite(limite: number) {
@@ -265,10 +291,22 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.dropdownLimiteAbierto = !this.dropdownLimiteAbierto;
   }
 
+  nuevaMicrocredencial() {
+    // Botón visual únicamente. No abre nada por ahora.
+  }
+
   abrirModalEstado(item: any) {
     this.microcredencialAEditarEstado = item;
     this.nuevoEstado = (item.estado === 'APROBADA') ? 'ACTIVO' : 'INACTIVO';
     this.modalEstadoAbierto = true;
+  }
+
+  accionBotonEstado(item: any) {
+    if (item.estado === 'APROBADA') {
+      this.abrirModalEstado(item);
+    }
+    // Para RECHAZADA el botón permanece activo solo como estilo visual.
+    // No se ejecuta la lógica del modal ni se cambia el estado en backend.
   }
 
   cerrarModalEstado() {

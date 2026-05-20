@@ -43,7 +43,9 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
     emisor: false,
     nivel: false,
     duracion: false,
-    estado: false
+    estado: false,
+    fecha_creacion: false,
+    ultima_actualizacion: false
   };
 
   // Listado de microcredenciales reales obtenidas de la base de datos
@@ -114,7 +116,8 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
             aprobado_por: item.aprobado_por,
             aprobado_en: item.aprobado_en,
             justificacion_rechazo: item.justificacion_rechazo,
-            ultima_actualizacion: item.ultima_actualizacion
+            ultima_actualizacion: item.ultima_actualizacion,
+            creado_en: item.creado_en
           }));
         }
       },
@@ -195,6 +198,21 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
         const diff = valA - valB;
         if (diff !== 0) return diff * direction;
       }
+
+      if (this.ordenarPor.fecha_creacion) {
+        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
+        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
+      if (this.ordenarPor.ultima_actualizacion) {
+        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
+        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
       return (a._index - b._index) * direction;
     });
 
@@ -207,12 +225,14 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
 
   get microcredencialesPaginadas(): any[] {
     const total = this.totalPaginas;
-    if (this.paginaActual > total) {
-      this.paginaActual = 1;
-    }
-    const inicio = (this.paginaActual - 1) * this.limiteRegistros;
+    const paginaActual = Math.min(this.paginaActual, total);
+    const inicio = (paginaActual - 1) * this.limiteRegistros;
     const fin = inicio + this.limiteRegistros;
     return this.microcredencialesFiltradas.slice(inicio, fin);
+  }
+
+  trackByMicrocredencialId(index: number, item: any): number {
+    return item.id;
   }
 
   cambiarLimite(limite: number) {

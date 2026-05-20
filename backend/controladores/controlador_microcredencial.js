@@ -18,6 +18,7 @@ const listarMicrocredenciales = async (req, res) => {
         m.aprobado_en,
         m.creado_en,
         m.ultima_actualizacion,
+        m.emisor AS id_emisor,
         CONCAT(u_emisor.nombres, ' ', u_emisor.apellidos) AS emisor,
         CONCAT(u_aprobador.nombres, ' ', u_aprobador.apellidos) AS aprobado_por,
         n.nombre AS nivel,
@@ -71,6 +72,27 @@ const cambiarEstado = async (req, res) => {
   const { id_estado, justificacion_rechazo } = req.body;
   const idUsuario = req.usuario.id;
   try {
+    // Si el usuario es un Emisor, restringir las transiciones de estado
+    if (req.usuario.nombre_rol === 'Emisor') {
+      const queryEstado = `SELECT estado, emisor FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false`;
+      const resEstado = await consultar(queryEstado, [id]);
+      if (resEstado.rows.length === 0) {
+        return res.status(404).json({ exito: false, mensaje: 'La microcredencial no existe o ya fue eliminada.' });
+      }
+      
+      const creadorId = resEstado.rows[0].emisor;
+      const estadoActual = Number(resEstado.rows[0].estado);
+
+      // El emisor solo puede modificar sus propias microcredenciales
+      if (creadorId !== idUsuario) {
+        return res.status(403).json({ exito: false, mensaje: 'No tiene permisos para modificar esta microcredencial.' });
+      }
+
+      // El emisor solo puede cambiar de APROBADA (2) a INACTIVA (4)
+      if (estadoActual !== 2 || Number(id_estado) !== 4) {
+        return res.status(400).json({ exito: false, mensaje: 'Acción no permitida: un emisor solo puede inactivar una microcredencial aprobada y no puede reactivarla.' });
+      }
+    }
     let consulta;
     let valores;
     if (Number(id_estado) === 2) { // Aprobada
@@ -111,14 +133,20 @@ const eliminarMicrocredencial = async (req, res) => {
   const idUsuario = req.usuario.id;
   try {
     // 1. Obtener el estado actual de la microcredencial antes de eliminarla
-    const queryEstado = `SELECT estado FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false`;
+    const queryEstado = `SELECT estado, emisor FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false`;
     const resEstado = await consultar(queryEstado, [id]);
     
     if (resEstado.rows.length === 0) {
       return res.status(404).json({ exito: false, mensaje: 'La microcredencial no existe o ya fue eliminada.' });
     }
     
+    const creadorId = resEstado.rows[0].emisor;
     const estadoActual = Number(resEstado.rows[0].estado);
+
+    // Si el usuario es un Emisor, solo puede eliminar sus propias microcredenciales
+    if (req.usuario.nombre_rol === 'Emisor' && creadorId !== idUsuario) {
+      return res.status(403).json({ exito: false, mensaje: 'No tiene permisos para eliminar esta microcredencial.' });
+    }
     
     // 2. Si es Aprobada (2) o Inactiva (4), revocar insignias emitidas
     if (estadoActual === 2 || estadoActual === 4) {

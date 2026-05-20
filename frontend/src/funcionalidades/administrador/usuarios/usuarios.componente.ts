@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
@@ -133,6 +133,20 @@ export class UsuariosComponente implements OnInit, OnDestroy {
         if (diff !== 0) return diff * direction;
       }
 
+      if (this.ordenarPor.fecha_creacion) {
+        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
+        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
+      if (this.ordenarPor.ultima_actualizacion) {
+        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
+        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
       // Fallback: orden de inserción de la base de datos
       return (a._index - b._index) * direction;
     });
@@ -145,14 +159,15 @@ export class UsuariosComponente implements OnInit, OnDestroy {
   }
 
   get usuariosPaginados(): any[] {
-    // Si al filtrar la página actual queda fuera de rango, volver a la 1
     const total = this.totalPaginas;
-    if (this.paginaActual > total) {
-      this.paginaActual = 1;
-    }
-    const inicio = (this.paginaActual - 1) * this.limiteRegistros;
+    const paginaActual = Math.min(this.paginaActual, total);
+    const inicio = (paginaActual - 1) * this.limiteRegistros;
     const fin = inicio + this.limiteRegistros;
     return this.usuariosFiltrados.slice(inicio, fin);
+  }
+
+  trackByUsuarioId(index: number, usuario: any): number {
+    return usuario.id_usuario;
   }
 
   cambiarLimite(limite: number) {
@@ -209,6 +224,8 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     }
   };
 
+  @ViewChild('fotoInput') fotoInputRef!: ElementRef<HTMLInputElement>;
+
   // Vista previa de la foto
   fotoVistaPrevia: string | null = null;
   fotoArchivo: File | null = null;
@@ -263,7 +280,9 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     cedula: false,
     correo: false,
     estado: false,
-    rol: false
+    rol: false,
+    fecha_creacion: false,
+    ultima_actualizacion: false
   };
 
   toggleOpciones() {
@@ -306,6 +325,12 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     } else {
       this.carrerasFiltradas = [...this.carreras];
     }
+  }
+
+  onClickEditar(event: MouseEvent, usuario: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.abrirModalEdicion(usuario);
   }
 
   abrirModalEdicion(usuario: any) {
@@ -427,6 +452,7 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     };
     this.fotoVistaPrevia = null;
     this.fotoArchivo = null;
+    this.limpiarInputFoto();
   }
 
 
@@ -477,9 +503,16 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     input.value = valorLimpio;
   }
 
+  private limpiarInputFoto() {
+    if (this.fotoInputRef?.nativeElement) {
+      this.fotoInputRef.nativeElement.value = '';
+    }
+  }
+
   eliminarFotoRegistro() {
     this.fotoVistaPrevia = null;
     this.fotoArchivo = null;
+    this.limpiarInputFoto();
   }
 
   seleccionarArchivo(event: Event) {
@@ -570,7 +603,7 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     formData.append('apellidos', this.nuevoUsuario.apellidos);
     formData.append('cedula', this.nuevoUsuario.cedula);
     formData.append('correo', this.nuevoUsuario.correo);
-    
+
     if (this.nuevoUsuario.contrasenia) {
       formData.append('contrasenia', this.nuevoUsuario.contrasenia);
     }

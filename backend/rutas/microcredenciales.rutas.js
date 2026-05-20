@@ -10,20 +10,19 @@ const {
   eliminarMicrocredencial
 } = require('../controladores/controlador_microcredencial');
 
-// Todas las rutas requieren autenticación y rol de Administrador
+// Todas las rutas requieren autenticación
 router.use(autenticacion);
-router.use(autorizacion(['Administrador']));
 
-// Obtener listado completo de microcredenciales
-router.get('/', listarMicrocredenciales);
+// Obtener listado completo de microcredenciales (Administrador y Emisor)
+router.get('/', autorizacion(['Administrador', 'Emisor']), listarMicrocredenciales);
 
-// Aprobar una microcredencial pendiente
-router.patch('/:id/aprobar', aprobarMicrocredencial);
+// Aprobar una microcredencial pendiente (Solo Administrador)
+router.patch('/:id/aprobar', autorizacion(['Administrador']), aprobarMicrocredencial);
 
-// Cambiar el estado de una microcredencial
-router.put('/:id/estado', cambiarEstado);
+// Cambiar el estado de una microcredencial (Administrador y Emisor)
+router.put('/:id/estado', autorizacion(['Administrador', 'Emisor']), cambiarEstado);
 
-// Eliminar una microcredencial (eliminado lógico)
-router.delete('/:id', eliminarMicrocredencial);
+// Eliminar una microcredencial (Administrador y Emisor)
+router.delete('/:id', autorizacion(['Administrador', 'Emisor']), eliminarMicrocredencial);
 
 module.exports = router;
