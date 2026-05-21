@@ -29,4 +29,12 @@ export class MicrocredencialServicio {
   eliminarMicrocredencial(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  obtenerNiveles(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/niveles`);
+  }
+
+  obtenerAreasConocimiento(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/areas`);
+  }
 }

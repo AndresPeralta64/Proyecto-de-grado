@@ -186,9 +186,39 @@ const eliminarMicrocredencial = async (req, res) => {
   }
 };
 
+/**
+ * Obtiene la lista de niveles de microcredenciales
+ */
+const obtenerNiveles = async (req, res) => {
+  try {
+    const query = 'SELECT id_nivel, nombre FROM nivel_microcredencial ORDER BY id_nivel ASC';
+    const resultado = await consultar(query, []);
+    return res.status(200).json({ exito: true, datos: resultado.rows });
+  } catch (error) {
+    console.error('Error al obtener niveles:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener los niveles.' });
+  }
+};
+
+/**
+ * Obtiene la lista de áreas de conocimiento
+ */
+const obtenerAreasConocimiento = async (req, res) => {
+  try {
+    const query = 'SELECT id_area, nombre FROM area_conocimiento ORDER BY nombre ASC';
+    const resultado = await consultar(query, []);
+    return res.status(200).json({ exito: true, datos: resultado.rows });
+  } catch (error) {
+    console.error('Error al obtener áreas de conocimiento:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener las áreas de conocimiento.' });
+  }
+};
+
 module.exports = {
   listarMicrocredenciales,
   aprobarMicrocredencial,
   cambiarEstado,
-  eliminarMicrocredencial
+  eliminarMicrocredencial,
+  obtenerNiveles,
+  obtenerAreasConocimiento
 };

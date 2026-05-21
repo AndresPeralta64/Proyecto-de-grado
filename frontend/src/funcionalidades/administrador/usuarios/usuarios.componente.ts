@@ -456,6 +456,11 @@ export class UsuariosComponente implements OnInit, OnDestroy {
   }
 
 
+  // Helper: elimina tildes para búsqueda sin acentos
+  private sinTildes(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
   seleccionarCarrera(id: number | null, nombre: string) {
     this.nuevoUsuario.carreraId = id;
     this.nuevoUsuario.carreraNombre = nombre;
@@ -463,15 +468,15 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     this.carrerasFiltradas = [...this.carreras];
   }
 
-  filtrarCarreras() {
-    const termino = this.nuevoUsuario.carreraNombre?.toLowerCase().trim() || '';
+  filtrarCarreras(forceAll: boolean = false) {
+    const termino = forceAll ? '' : this.sinTildes(this.nuevoUsuario.carreraNombre?.toLowerCase().trim() || '');
     if (!termino) {
       this.carrerasFiltradas = [...this.carreras];
       this.dropdownCarreraAbierto = true;
       return;
     }
     this.carrerasFiltradas = this.carreras.filter(c =>
-      c.nombre.toLowerCase().includes(termino)
+      this.sinTildes(c.nombre.toLowerCase()).includes(termino)
     );
     this.dropdownCarreraAbierto = true;
   }

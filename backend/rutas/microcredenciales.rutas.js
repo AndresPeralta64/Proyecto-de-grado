@@ -7,11 +7,19 @@ const {
   listarMicrocredenciales,
   aprobarMicrocredencial,
   cambiarEstado,
-  eliminarMicrocredencial
+  eliminarMicrocredencial,
+  obtenerNiveles,
+  obtenerAreasConocimiento
 } = require('../controladores/controlador_microcredencial');
 
 // Todas las rutas requieren autenticación
 router.use(autenticacion);
+
+// Obtener listado de niveles de microcredenciales (Administrador y Emisor)
+router.get('/niveles', autorizacion(['Administrador', 'Emisor']), obtenerNiveles);
+
+// Obtener listado de áreas de conocimiento (Administrador y Emisor)
+router.get('/areas', autorizacion(['Administrador', 'Emisor']), obtenerAreasConocimiento);
 
 // Obtener listado completo de microcredenciales (Administrador y Emisor)
 router.get('/', autorizacion(['Administrador', 'Emisor']), listarMicrocredenciales);

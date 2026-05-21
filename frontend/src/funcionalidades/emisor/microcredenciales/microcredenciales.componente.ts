@@ -75,6 +75,32 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
   microcredencialAEditarEstado: any = null;
   nuevoEstado: 'ACTIVO' | 'INACTIVO' = 'ACTIVO';
 
+  // Estado del modal de registro de microcredenciales
+  modalRegistroAbierto = false;
+  dropdownAreaAbierto = false;
+  dropdownNivelAbierto = false;
+
+  areasConocimiento: any[] = [];
+  areasFiltradas: any[] = [];
+  niveles: any[] = [];
+  nivelesFiltrados: any[] = [];
+
+  // Datos del formulario de registro
+  nuevaMicrocredencialDatos = {
+    nombre: '',
+    descripcion: '',
+    nivelId: null as number | null,
+    nivelNombre: '',
+    areaId: null as number | null,
+    areaNombre: '',
+    duracionHoras: 0,
+    criteriosEvaluacion: '',
+    competenciasInput: ''
+  };
+
+  // Errores de campo
+  errores: { [key: string]: string } = {};
+
   constructor(
     private sidebarServicio: SidebarServicio,
     private microcredencialServicio: MicrocredencialServicio,
@@ -292,7 +318,211 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
   }
 
   nuevaMicrocredencial() {
-    // Botón visual únicamente. No abre nada por ahora.
+    this.abrirModalRegistro();
+  }
+
+  abrirModalRegistro() {
+    this.modalRegistroAbierto = true;
+    this.dropdownAreaAbierto = false;
+    this.dropdownNivelAbierto = false;
+    this.errores = {};
+    this.resetFormularioRegistro();
+
+    // Cargar niveles
+    if (this.niveles.length === 0) {
+      this.subscription.add(
+        this.microcredencialServicio.obtenerNiveles().subscribe({
+          next: (res: any) => {
+            this.niveles = res.datos || [];
+            this.nivelesFiltrados = [...this.niveles];
+          },
+          error: () => {
+            this.niveles = [];
+            this.nivelesFiltrados = [];
+          }
+        })
+      );
+    } else {
+      this.nivelesFiltrados = [...this.niveles];
+    }
+
+    // Cargar áreas
+    if (this.areasConocimiento.length === 0) {
+      this.subscription.add(
+        this.microcredencialServicio.obtenerAreasConocimiento().subscribe({
+          next: (res: any) => {
+            this.areasConocimiento = res.datos || [];
+            this.areasFiltradas = [...this.areasConocimiento];
+          },
+          error: () => {
+            this.areasConocimiento = [];
+            this.areasFiltradas = [];
+          }
+        })
+      );
+    } else {
+      this.areasFiltradas = [...this.areasConocimiento];
+    }
+  }
+
+  cerrarModalRegistro() {
+    this.modalRegistroAbierto = false;
+    this.dropdownAreaAbierto = false;
+    this.dropdownNivelAbierto = false;
+    this.errores = {};
+    this.resetFormularioRegistro();
+  }
+
+  resetFormularioRegistro() {
+    this.nuevaMicrocredencialDatos = {
+      nombre: '',
+      descripcion: '',
+      nivelId: null,
+      nivelNombre: '',
+      areaId: null,
+      areaNombre: '',
+      duracionHoras: 0,
+      criteriosEvaluacion: '',
+      competenciasInput: ''
+    };
+  }
+
+  // Helper: elimina tildes para búsqueda sin acentos
+  private sinTildes(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // Filtrado y Selección de Área
+  filtrarAreas(forceAll: boolean = false) {
+    const termino = forceAll ? '' : this.sinTildes(this.nuevaMicrocredencialDatos.areaNombre?.toLowerCase().trim() || '');
+    if (!termino) {
+      this.areasFiltradas = [...this.areasConocimiento];
+      this.dropdownAreaAbierto = true;
+      return;
+    }
+    this.areasFiltradas = this.areasConocimiento.filter(a =>
+      this.sinTildes(a.nombre.toLowerCase()).includes(termino)
+    );
+    this.dropdownAreaAbierto = true;
+  }
+
+  seleccionarArea(id: number, nombre: string) {
+    this.nuevaMicrocredencialDatos.areaId = id;
+    this.nuevaMicrocredencialDatos.areaNombre = nombre;
+    this.dropdownAreaAbierto = false;
+    this.areasFiltradas = [...this.areasConocimiento];
+    this.errores['area'] = '';
+  }
+
+  validarArea() {
+    setTimeout(() => {
+      const termino = this.nuevaMicrocredencialDatos.areaNombre?.toLowerCase().trim() || '';
+      const coincidencia = this.areasConocimiento.find(a => a.nombre.toLowerCase() === termino);
+      if (coincidencia) {
+        this.nuevaMicrocredencialDatos.areaId = coincidencia.id_area;
+        this.nuevaMicrocredencialDatos.areaNombre = coincidencia.nombre;
+      } else {
+        this.nuevaMicrocredencialDatos.areaId = null;
+        this.nuevaMicrocredencialDatos.areaNombre = '';
+      }
+      this.dropdownAreaAbierto = false;
+    }, 200);
+  }
+
+  // Filtrado y Selección de Nivel
+  filtrarNiveles(forceAll: boolean = false) {
+    const termino = forceAll ? '' : this.sinTildes(this.nuevaMicrocredencialDatos.nivelNombre?.toLowerCase().trim() || '');
+    if (!termino) {
+      this.nivelesFiltrados = [...this.niveles];
+      this.dropdownNivelAbierto = true;
+      return;
+    }
+    this.nivelesFiltrados = this.niveles.filter(n =>
+      this.sinTildes(n.nombre.toLowerCase()).includes(termino)
+    );
+    this.dropdownNivelAbierto = true;
+  }
+
+  seleccionarNivel(id: number, nombre: string) {
+    this.nuevaMicrocredencialDatos.nivelId = id;
+    this.nuevaMicrocredencialDatos.nivelNombre = nombre;
+    this.dropdownNivelAbierto = false;
+    this.nivelesFiltrados = [...this.niveles];
+    this.errores['nivel'] = '';
+  }
+
+  validarNivel() {
+    setTimeout(() => {
+      const termino = this.nuevaMicrocredencialDatos.nivelNombre?.toLowerCase().trim() || '';
+      const coincidencia = this.niveles.find(n => n.nombre.toLowerCase() === termino);
+      if (coincidencia) {
+        this.nuevaMicrocredencialDatos.nivelId = coincidencia.id_nivel;
+        this.nuevaMicrocredencialDatos.nivelNombre = coincidencia.nombre;
+      } else {
+        this.nuevaMicrocredencialDatos.nivelId = null;
+        this.nuevaMicrocredencialDatos.nivelNombre = '';
+      }
+      this.dropdownNivelAbierto = false;
+    }, 200);
+  }
+
+  // Duración Horas (Counter logic)
+  incrementarHoras() {
+    if (this.nuevaMicrocredencialDatos.duracionHoras < 500) {
+      this.nuevaMicrocredencialDatos.duracionHoras++;
+      this.errores['duracionHoras'] = '';
+    }
+  }
+
+  decrementarHoras() {
+    if (this.nuevaMicrocredencialDatos.duracionHoras > 1) {
+      this.nuevaMicrocredencialDatos.duracionHoras--;
+      this.errores['duracionHoras'] = '';
+    }
+  }
+
+  onDuracionClick() {
+    if (!this.nuevaMicrocredencialDatos.duracionHoras || this.nuevaMicrocredencialDatos.duracionHoras < 1) {
+      this.nuevaMicrocredencialDatos.duracionHoras = 1;
+      this.errores['duracionHoras'] = '';
+    }
+  }
+
+  validarDuracionInput(event: any) {
+    const input = event.target as HTMLInputElement;
+    let valorLimpio = input.value.replace(/[^0-9]/g, '');
+    if (valorLimpio.length > 3) {
+      valorLimpio = valorLimpio.slice(0, 3);
+    }
+    const num = valorLimpio ? parseInt(valorLimpio, 10) : 0;
+    this.nuevaMicrocredencialDatos.duracionHoras = num;
+    input.value = valorLimpio;
+    this.errores['duracionHoras'] = '';
+  }
+
+  registrarMicrocredencial() {
+    this.errores = {};
+
+    const { nombre, descripcion, nivelId, areaId, duracionHoras, criteriosEvaluacion, competenciasInput } = this.nuevaMicrocredencialDatos;
+
+    if (!nombre.trim()) this.errores['nombre'] = 'Campo obligatorio';
+    if (!descripcion.trim()) this.errores['descripcion'] = 'Campo obligatorio';
+    if (!nivelId) this.errores['nivel'] = 'Campo obligatorio';
+    if (!areaId) this.errores['area'] = 'Campo obligatorio';
+    if (!criteriosEvaluacion.trim()) this.errores['criteriosEvaluacion'] = 'Campo obligatorio';
+    if (!competenciasInput.trim()) this.errores['competencias'] = 'Campo obligatorio';
+
+    if (!duracionHoras || duracionHoras < 1) {
+      this.errores['duracionHoras'] = 'La duración debe ser de al menos 1 hora';
+    } else if (duracionHoras > 500) {
+      this.errores['duracionHoras'] = 'Supera el máximo de horas establecidas';
+    }
+
+    if (Object.keys(this.errores).length > 0) {
+      return;
+    }
+
+    this.lanzarNotificacion('Formulario válido (Lógica de guardado se implementará después)', 'exito');
   }
 
   abrirModalEstado(item: any) {
