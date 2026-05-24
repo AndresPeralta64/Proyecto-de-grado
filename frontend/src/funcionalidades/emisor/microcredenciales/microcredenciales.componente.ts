@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
 import { MicrocredencialServicio } from '../../../core/servicios/microcredencial.servicio';
 import { ServicioToken } from '../../../core/servicios/token.servicio';
 import { Subscription } from 'rxjs';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-emisor-microcredenciales',
@@ -14,6 +15,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./microcredenciales.componente.css']
 })
 export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
+  @ViewChildren('contenedorInsigniaDesign') contenedorInsigniaDesign!: QueryList<ElementRef>;
+
   opcionesExpandidas = true;
   menuMostrarAbierto = false;
   menuOrdenarAbierto = false;
@@ -75,15 +78,87 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
   microcredencialAEditarEstado: any = null;
   nuevoEstado: 'ACTIVO' | 'INACTIVO' = 'ACTIVO';
 
+  // Set para habilitar edición tras ver info
+  microcredencialesRechazadasVistas: Set<number> = new Set();
+
   // Estado del modal de registro de microcredenciales
   modalRegistroAbierto = false;
   dropdownAreaAbierto = false;
   dropdownNivelAbierto = false;
+  dropdownTipoLineaAbierto = false;
 
   areasConocimiento: any[] = [];
   areasFiltradas: any[] = [];
   niveles: any[] = [];
   nivelesFiltrados: any[] = [];
+
+  // Pestaña activa en Modal de Registro
+  opcionInsignia: 'cargar' | 'disenar' = 'cargar';
+  imagenCargadaURL: string | null = null;
+  modoDisenoGuardado: boolean = false;
+  modoEdicion: boolean = false;
+  idMicrocredencialEditar: number | null = null;
+
+  // Diseño de insignia
+  disenoInsignia = {
+    forma: 'hex-shield',
+    colorFondo: '#10B981',
+    icono: 'ingenieria',
+    colorIcono: '#FFFFFF',
+    tamanoIcono: 100,
+    textoSuperior: 'NUEVA',
+    textoInferior: 'INSIGNIA',
+    colorTexto: '#FFFFFF',
+    cinta: 'basica',
+    colorCinta: '#E53935',
+    colorBorde: '#047857',
+    colorLinea: '#FFFFFF',
+    tipoLinea: 'ninguna',
+    transparenciaLinea: 40,
+    largoCintaSuperior: 110,
+    largoCintaInferior: 100
+  };
+
+  // Getters para el tamaño dinámico de las cintas
+  get strokeDasharray(): string | null {
+    if (this.disenoInsignia.tipoLinea === 'punteada') return '2,4';
+    if (this.disenoInsignia.tipoLinea === 'lineas') return '6,4';
+    return null;
+  }
+
+  get topRibbonPath(): string {
+    const halfWidth = 90 * (this.disenoInsignia.largoCintaSuperior / 100);
+    const l = 100 - halfWidth;
+    const r = 100 + halfWidth;
+    return `M${l} 40 L${r} 40 L${r} 65 L${l} 65 Z`;
+  }
+
+  get topRibbonFoldLeft(): string {
+    const l = 100 - 90 * (this.disenoInsignia.largoCintaSuperior / 100);
+    return `M${l} 65 L${l + 10} 75 L${l + 10} 65 Z`;
+  }
+
+  get topRibbonFoldRight(): string {
+    const r = 100 + 90 * (this.disenoInsignia.largoCintaSuperior / 100);
+    return `M${r} 65 L${r - 10} 75 L${r - 10} 65 Z`;
+  }
+
+  get bottomRibbonPath(): string {
+    const halfWidth = 75 * (this.disenoInsignia.largoCintaInferior / 100);
+    const l = 100 - halfWidth;
+    const r = 100 + halfWidth;
+    return `M${l} 135 L${r} 135 L${r} 160 L${l} 160 Z`;
+  }
+
+  get bottomRibbonFoldLeft(): string {
+    const l = 100 - 75 * (this.disenoInsignia.largoCintaInferior / 100);
+    return `M${l} 160 L${l + 10} 170 L${l + 10} 160 Z`;
+  }
+
+  get bottomRibbonFoldRight(): string {
+    const r = 100 + 75 * (this.disenoInsignia.largoCintaInferior / 100);
+    return `M${r} 160 L${r - 10} 170 L${r - 10} 160 Z`;
+  }
 
   // Datos del formulario de registro
   nuevaMicrocredencialDatos = {
@@ -95,7 +170,8 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     areaNombre: '',
     duracionHoras: 0,
     criteriosEvaluacion: '',
-    competenciasInput: ''
+    competenciasInput: '',
+    competenciasLista: [] as string[]
   };
 
   // Errores de campo
@@ -117,6 +193,28 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     );
 
     this.cargarMicrocredenciales();
+
+    // Precargar áreas y niveles
+    if (this.niveles.length === 0) {
+      this.subscription.add(
+        this.microcredencialServicio.obtenerNiveles().subscribe({
+          next: (res: any) => {
+            this.niveles = res.datos || [];
+            this.nivelesFiltrados = [...this.niveles];
+          }
+        })
+      );
+    }
+    if (this.areasConocimiento.length === 0) {
+      this.subscription.add(
+        this.microcredencialServicio.obtenerAreasConocimiento().subscribe({
+          next: (res: any) => {
+            this.areasConocimiento = res.datos || [];
+            this.areasFiltradas = [...this.areasConocimiento];
+          }
+        })
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -145,7 +243,8 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
             area_conocimiento: item.area_conocimiento,
             duracion: `${item.duracion_horas}H`,
             estado: item.estado.toUpperCase(),
-            aprobado_por: item.aprobado_por,
+            evaluado_por: item.evaluado_por,
+            inactivado_por: item.inactivado_por,
             aprobado_en: item.aprobado_en,
             justificacion_rechazo: item.justificacion_rechazo,
             ultima_actualizacion: item.ultima_actualizacion,
@@ -180,6 +279,7 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
             .replace(/[\u0300-\u036f]/g, '');
 
         const cleanQuery = cleanString(this.terminoBusqueda);
+        const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 0);
         const cleanItem = cleanString(
           (item.id || '') + ' ' +
           (item.nombre || '') + ' ' +
@@ -188,7 +288,7 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
           (item.duracion || '') + ' ' +
           (item.estado || '')
         );
-        matchesSearch = cleanItem.includes(cleanQuery);
+        matchesSearch = queryWords.every(word => cleanItem.includes(word));
       }
 
       return matchesEstado && matchesSearch;
@@ -297,6 +397,26 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     }
   }
 
+  get mostrarTextoOrdenamiento(): boolean {
+    const activeFilters = Object.keys(this.ordenarPor).filter(k => (this.ordenarPor as any)[k]);
+    if (activeFilters.length === 1 && (activeFilters[0] === 'fecha_creacion' || activeFilters[0] === 'ultima_actualizacion')) return true;
+    return false;
+  }
+
+  toggleFechaCreacion() {
+    this.ordenarPor.fecha_creacion = !this.ordenarPor.fecha_creacion;
+    if (this.ordenarPor.fecha_creacion) {
+      this.ordenarPor.ultima_actualizacion = false;
+    }
+  }
+
+  toggleUltimaActualizacion() {
+    this.ordenarPor.ultima_actualizacion = !this.ordenarPor.ultima_actualizacion;
+    if (this.ordenarPor.ultima_actualizacion) {
+      this.ordenarPor.fecha_creacion = false;
+    }
+  }
+
   toggleOpciones() {
     this.menuMostrarAbierto = false;
     this.menuOrdenarAbierto = false;
@@ -326,6 +446,7 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.dropdownAreaAbierto = false;
     this.dropdownNivelAbierto = false;
     this.errores = {};
+    this.modoDisenoGuardado = false;
     this.resetFormularioRegistro();
 
     // Cargar niveles
@@ -383,8 +504,57 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
       areaNombre: '',
       duracionHoras: 0,
       criteriosEvaluacion: '',
-      competenciasInput: ''
+      competenciasInput: '',
+      competenciasLista: []
     };
+
+    // Restablecer el estado de la insignia cargada y del diseño
+    this.opcionInsignia = 'cargar';
+    this.imagenCargadaURL = null;
+    (this as any).archivoInsigniaCargada = null;
+    this.modoDisenoGuardado = false;
+    this.modoEdicion = false;
+    this.idMicrocredencialEditar = null;
+    this.disenoInsignia = {
+      forma: 'hex-shield',
+      colorFondo: '#10B981',
+      icono: 'ingenieria',
+      colorIcono: '#FFFFFF',
+      tamanoIcono: 100,
+      textoSuperior: 'NUEVA',
+      textoInferior: 'INSIGNIA',
+      colorTexto: '#FFFFFF',
+      cinta: 'basica',
+      colorCinta: '#E53935',
+      colorBorde: '#047857',
+      colorLinea: '#FFFFFF',
+      tipoLinea: 'ninguna',
+      transparenciaLinea: 40,
+      largoCintaSuperior: 110,
+      largoCintaInferior: 100
+    };
+  }
+
+  // Competencias
+  agregarCompetencia(event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
+    const val = this.nuevaMicrocredencialDatos.competenciasInput.trim();
+    if (val) {
+      const isDuplicate = this.nuevaMicrocredencialDatos.competenciasLista.some(
+        c => c.toLowerCase() === val.toLowerCase()
+      );
+      if (!isDuplicate) {
+        this.nuevaMicrocredencialDatos.competenciasLista.push(val);
+      }
+    }
+    this.nuevaMicrocredencialDatos.competenciasInput = '';
+    this.errores['competencias'] = '';
+  }
+
+  eliminarCompetencia(index: number) {
+    this.nuevaMicrocredencialDatos.competenciasLista.splice(index, 1);
   }
 
   // Helper: elimina tildes para búsqueda sin acentos
@@ -500,17 +670,19 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.errores['duracionHoras'] = '';
   }
 
-  registrarMicrocredencial() {
+  async registrarMicrocredencial() {
     this.errores = {};
 
-    const { nombre, descripcion, nivelId, areaId, duracionHoras, criteriosEvaluacion, competenciasInput } = this.nuevaMicrocredencialDatos;
+    const { nombre, descripcion, nivelId, areaId, duracionHoras, criteriosEvaluacion, competenciasLista } = this.nuevaMicrocredencialDatos;
 
-    if (!nombre.trim()) this.errores['nombre'] = 'Campo obligatorio';
+    if (!nombre.trim()) {
+      this.errores['nombre'] = 'Campo obligatorio';
+    }
     if (!descripcion.trim()) this.errores['descripcion'] = 'Campo obligatorio';
     if (!nivelId) this.errores['nivel'] = 'Campo obligatorio';
     if (!areaId) this.errores['area'] = 'Campo obligatorio';
     if (!criteriosEvaluacion.trim()) this.errores['criteriosEvaluacion'] = 'Campo obligatorio';
-    if (!competenciasInput.trim()) this.errores['competencias'] = 'Campo obligatorio';
+    if (competenciasLista.length === 0) this.errores['competencias'] = 'Campo obligatorio';
 
     if (!duracionHoras || duracionHoras < 1) {
       this.errores['duracionHoras'] = 'La duración debe ser de al menos 1 hora';
@@ -518,11 +690,134 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
       this.errores['duracionHoras'] = 'Supera el máximo de horas establecidas';
     }
 
+    if (this.opcionInsignia === 'cargar' && !this.archivoInsigniaCargada && !this.modoEdicion) {
+      this.errores['insignia'] = 'Campo obligatorio';
+    }
+    if (this.opcionInsignia === 'disenar' && !this.modoDisenoGuardado) {
+      this.lanzarNotificacion('Debe guardar el diseño de la insignia antes de registrar', 'advertencia');
+      return;
+    }
+
     if (Object.keys(this.errores).length > 0) {
       return;
     }
 
-    this.lanzarNotificacion('Formulario válido (Lógica de guardado se implementará después)', 'exito');
+    const nombreEnUso = this.microcredenciales.some(
+      m => m.nombre.toLowerCase() === nombre.trim().toLowerCase() && m.id !== this.idMicrocredencialEditar
+    );
+    if (nombreEnUso) {
+      this.lanzarNotificacion('El nombre de la microcredencial ya está registrado', 'error');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('nombre', nombre.trim());
+    formData.append('descripcion', descripcion.trim());
+    formData.append('nivel', nivelId!.toString());
+    formData.append('area_conocimiento', areaId!.toString());
+    formData.append('duracion_horas', duracionHoras.toString());
+    formData.append('criterios_evaluacion', criteriosEvaluacion.trim());
+    formData.append('competencias', JSON.stringify(competenciasLista));
+
+    if (this.opcionInsignia === 'cargar') {
+      if (this.archivoInsigniaCargada) {
+        formData.append('insignia', this.archivoInsigniaCargada);
+      }
+    } else if (this.opcionInsignia === 'disenar') {
+      try {
+        const contenedor = this.contenedorInsigniaDesign.first;
+        if (!contenedor) {
+            this.lanzarNotificacion('No se encontró el contenedor de la insignia en el DOM', 'error');
+            return;
+        }
+
+        const svgElement = contenedor.nativeElement.querySelector('svg');
+        if (!svgElement) {
+          this.lanzarNotificacion('No se encontró el diseño de la insignia', 'error');
+          return;
+        }
+
+        // Clonar el SVG
+        const svgClone = svgElement.cloneNode(true) as SVGSVGElement;
+
+        // Ajustar tamaño fijo para la exportación (512x512 para buena calidad)
+        const exportSize = 512;
+        svgClone.setAttribute('width', exportSize.toString());
+        svgClone.setAttribute('height', exportSize.toString());
+
+        const svgString = new XMLSerializer().serializeToString(svgClone);
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const URL = window.URL || window.webkitURL || window;
+        const blobURL = URL.createObjectURL(svgBlob);
+
+        const image = new Image();
+
+        const blobGenerado = await new Promise<Blob | null>((resolve, reject) => {
+          image.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = exportSize;
+            canvas.height = exportSize;
+            const ctx = canvas.getContext('2d');
+            // ctx es transparente por defecto
+            if (ctx) {
+              ctx.drawImage(image, 0, 0, exportSize, exportSize);
+            }
+
+            canvas.toBlob((b) => {
+              resolve(b);
+            }, 'image/png');
+          };
+          image.onerror = () => reject(new Error('Error al cargar SVG en la imagen'));
+          image.src = blobURL;
+        });
+
+        if (blobGenerado) {
+          const file = new File([blobGenerado], 'insignia-diseno.png', { type: 'image/png' });
+          formData.append('insignia', file);
+        } else {
+          this.lanzarNotificacion('Error al generar la imagen del diseño', 'error');
+          return;
+        }
+      } catch (error) {
+        console.error('Error capturando el canvas:', error);
+        this.lanzarNotificacion('Error al capturar el diseño de la insignia', 'error');
+        return;
+      }
+    }
+
+    if (this.modoEdicion && this.idMicrocredencialEditar) {
+      this.microcredencialServicio.actualizarMicrocredencial(this.idMicrocredencialEditar, formData).subscribe({
+        next: (res) => {
+          if (res && res.exito) {
+            this.lanzarNotificacion('Microcredencial actualizada correctamente. Un administrador la revisará en breve para su aprobación', 'exito');
+            this.cerrarModalRegistro();
+            this.cargarMicrocredenciales();
+          } else {
+            this.lanzarNotificacion(res.mensaje || 'Error al actualizar microcredencial', 'error');
+          }
+        },
+        error: (err) => {
+          console.error('Error al actualizar microcredencial:', err);
+          this.lanzarNotificacion(err.error?.mensaje || 'Ha ocurrido un error al actualizar la microcredencial', 'error');
+        }
+      });
+    } else {
+      this.microcredencialServicio.registrarMicrocredencial(formData).subscribe({
+        next: (res) => {
+          if (res && res.exito) {
+            this.lanzarNotificacion('Microcredencial registrada correctamente. Un administrador la revisará en breve para su aprobación', 'exito');
+            this.cerrarModalRegistro();
+            this.cargarMicrocredenciales();
+          } else {
+            this.lanzarNotificacion(res.mensaje || 'Error al registrar microcredencial', 'error');
+          }
+        },
+        error: (err) => {
+          console.error('Error al registrar microcredencial:', err);
+          this.lanzarNotificacion(err.error?.mensaje || 'Ha ocurrido un error al registrar la microcredencial', 'error');
+        }
+      });
+    }
   }
 
   abrirModalEstado(item: any) {
@@ -534,9 +829,52 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
   accionBotonEstado(item: any) {
     if (item.estado === 'APROBADA') {
       this.abrirModalEstado(item);
+    } else if (item.estado === 'RECHAZADA') {
+      if (!this.microcredencialesRechazadasVistas.has(item.id)) {
+        this.lanzarNotificacion('Debe revisar primero los motivos del rechazo en Información para realizar esta acción', 'advertencia');
+      } else {
+        // Lógica de edición
+        this.modoEdicion = true;
+        this.idMicrocredencialEditar = item.id;
+        
+        let comps = [];
+        if (item.competencias) {
+          try {
+            comps = Array.isArray(item.competencias) ? item.competencias : JSON.parse(item.competencias);
+          } catch (e) {
+            comps = item.competencias.split(',').map((c: string) => c.trim());
+          }
+        }
+
+        this.nuevaMicrocredencialDatos = {
+          nombre: item.nombre,
+          descripcion: item.descripcion,
+          nivelId: this.niveles.find(n => n.nombre === item.nivel)?.id_nivel || null,
+          nivelNombre: item.nivel,
+          areaId: this.areasConocimiento.find(a => a.nombre === item.area_conocimiento)?.id_area || null,
+          areaNombre: item.area_conocimiento,
+          duracionHoras: parseInt(item.duracion_horas, 10) || 0,
+          criteriosEvaluacion: item.criterios_evaluacion,
+          competenciasInput: '',
+          competenciasLista: comps
+        };
+        
+        this.opcionInsignia = 'cargar';
+        this.imagenCargadaURL = item.imagen_url;
+        (this as any).archivoInsigniaCargada = null;
+        this.modoDisenoGuardado = false;
+        
+        // Abrir el modal sin llamar a resetFormularioRegistro
+        this.errores = {};
+        this.dropdownAreaAbierto = false;
+        this.dropdownNivelAbierto = false;
+        
+        if (this.nivelesFiltrados.length === 0) this.nivelesFiltrados = [...this.niveles];
+        if (this.areasFiltradas.length === 0) this.areasFiltradas = [...this.areasConocimiento];
+
+        this.modalRegistroAbierto = true;
+      }
     }
-    // Para RECHAZADA el botón permanece activo solo como estilo visual.
-    // No se ejecuta la lógica del modal ni se cambia el estado en backend.
   }
 
   cerrarModalEstado() {
@@ -571,7 +909,16 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
 
   abrirModalInfo(item: any) {
     this.microcredencialAEvaluar = item;
+    if (item.estado === 'RECHAZADA') {
+      this.microcredencialesRechazadasVistas.add(item.id);
+    }
     this.modalEvaluarAbierto = true;
+  }
+
+  puedeEditarOEstado(item: any): boolean {
+    if (item.estado === 'APROBADA') return true;
+    if (item.estado === 'RECHAZADA' && this.microcredencialesRechazadasVistas.has(item.id)) return true;
+    return false;
   }
 
   aprobarMicrocredencial(item: any) {
@@ -688,5 +1035,49 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.tipoToast = tipo;
     this.mostrarToast = true;
     setTimeout(() => { this.mostrarToast = false; }, 3500);
+  }
+
+  archivoInsigniaCargada: File | null = null;
+
+  // --- Subida de imagen para insignia digital (1:1) ---
+  subirImagenInsignia(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      this.errores['insignia'] = 'El archivo seleccionado debe ser una imagen.';
+      event.target.value = '';
+      return;
+    }
+
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      img.onload = () => {
+        // Validar proporción 1:1
+        if (img.width !== img.height) {
+          this.errores['insignia'] = 'La imagen debe tener una proporción exactamente cuadrada (1:1), por ejemplo 512x512.';
+          this.archivoInsigniaCargada = null;
+        } else {
+          this.errores['insignia'] = '';
+          this.imagenCargadaURL = e.target.result;
+          this.archivoInsigniaCargada = file;
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Limpiar input
+    event.target.value = '';
+  }
+
+  guardarDiseno() {
+    this.modoDisenoGuardado = true;
+  }
+
+  editarDiseno() {
+    this.modoDisenoGuardado = false;
   }
 }

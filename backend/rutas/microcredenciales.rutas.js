@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const autenticacion = require('../intermediarios/autenticacion');
 const autorizacion = require('../intermediarios/autorizacion');
+const subidaInsignia = require('../intermediarios/subida_insignia');
 
 const {
   listarMicrocredenciales,
@@ -9,7 +10,9 @@ const {
   cambiarEstado,
   eliminarMicrocredencial,
   obtenerNiveles,
-  obtenerAreasConocimiento
+  obtenerAreasConocimiento,
+  registrarMicrocredencial,
+  actualizarMicrocredencial
 } = require('../controladores/controlador_microcredencial');
 
 // Todas las rutas requieren autenticación
@@ -23,6 +26,12 @@ router.get('/areas', autorizacion(['Administrador', 'Emisor']), obtenerAreasCono
 
 // Obtener listado completo de microcredenciales (Administrador y Emisor)
 router.get('/', autorizacion(['Administrador', 'Emisor']), listarMicrocredenciales);
+
+// Registrar una nueva microcredencial (Administrador y Emisor)
+router.post('/', autorizacion(['Administrador', 'Emisor']), subidaInsignia.single('insignia'), registrarMicrocredencial);
+
+// Actualizar una microcredencial existente (Administrador y Emisor)
+router.put('/:id', autorizacion(['Administrador', 'Emisor']), subidaInsignia.single('insignia'), actualizarMicrocredencial);
 
 // Aprobar una microcredencial pendiente (Solo Administrador)
 router.patch('/:id/aprobar', autorizacion(['Administrador']), aprobarMicrocredencial);

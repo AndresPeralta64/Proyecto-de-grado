@@ -214,7 +214,7 @@
           </label>
 
           <!-- Fecha de creación -->
-          <label (click)="ordenarPor.fecha_creacion = !ordenarPor.fecha_creacion"
+          <label (click)="toggleFechaCreacion()"
             class="flex items-center gap-2.5 cursor-pointer group select-none">
             <div
               [ngClass]="ordenarPor.fecha_creacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
@@ -230,7 +230,7 @@
           </label>
 
           <!-- Última actualización -->
-          <label (click)="ordenarPor.ultima_actualizacion = !ordenarPor.ultima_actualizacion"
+          <label (click)="toggleUltimaActualizacion()"
             class="flex items-center gap-2.5 cursor-pointer group select-none">
             <div
               [ngClass]="ordenarPor.ultima_actualizacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
@@ -271,6 +271,10 @@
 
       </button>
 
+      <span *ngIf="mostrarTextoOrdenamiento" class="text-[13px] text-[#64748b] ml-1.5 font-medium select-none">
+        Mostrando registros más {{ opcionesExpandidas ? 'antiguos' : 'recientes' }} primero
+      </span>
+
     </div>
 
   </div>
@@ -298,7 +302,7 @@
         <tr *ngFor="let item of microcredencialesPaginadas; let i = index; trackBy: trackByMicrocredencialId"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- # ID -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ opcionesExpandidas ? ((paginaActual - 1) * limiteRegistros + i + 1) : (microcredencialesFiltradas.length - ((paginaActual - 1) * limiteRegistros + i)) }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
           <!-- Microcredencial -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium text-left pl-4">{{ item.nombre }}</td>
           <!-- Emisor (Nombres + Apellidos) -->
@@ -396,7 +400,7 @@
                   stroke-width="1.5"
                   d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
               </svg>
-              <span class="text-[13px] font-medium">No se encontraron microcredenciales con los parámetros establecidos.</span>
+              <span class="text-[13px] font-medium">Aún no se han registrado microcredenciales en el sistema</span>
             </div>
           </td>
         </tr>
@@ -564,10 +568,19 @@
     class="relative bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl w-full max-w-4xl mx-4 z-10 overflow-hidden flex flex-col max-h-[85vh]">
 
     <!-- Título -->
-    <div class="px-12 pt-7 pb-5 flex-shrink-0">
+    <div class="px-12 pt-7 pb-5 flex-shrink-0 flex items-center justify-between">
       <h2 class="text-[21px] font-semibold text-[#334155]">
         {{ microcredencialAEvaluar?.estado === 'PENDIENTE' ? 'Evaluar microcredencial' : 'Datos de la microcredencial' }}
       </h2>
+      <span [ngClass]="{
+          'text-[#30A32C] bg-[#DCFFDB]': microcredencialAEvaluar?.estado === 'APROBADA',
+          'text-[#A32C2E] bg-[#FFDBDC]': microcredencialAEvaluar?.estado === 'RECHAZADA',
+          'text-[#A3872C] bg-[#FFFBDB]': microcredencialAEvaluar?.estado === 'PENDIENTE',
+          'text-[#8B8B8B] bg-[#E5E5E5]': microcredencialAEvaluar?.estado === 'INACTIVA'
+        }"
+        class="px-2 py-1 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
+        {{ microcredencialAEvaluar?.estado }}
+      </span>
     </div>
 
     <!-- Cuerpo -->
@@ -575,79 +588,103 @@
 
       <!-- Columna Izquierda: Imagen de la Insignia -->
       <div class="flex flex-col items-center justify-center pr-9 border-r border-[#CBD5E1] min-w-[240px] flex-shrink-0">
-        <div class="w-48 h-56 flex items-center justify-center overflow-hidden mb-4 border border-[#E2E8F0] bg-[#F8FAFC]">
+        <div class="w-56 h-56 flex items-center justify-center overflow-hidden mb-4 border border-[#E2E8F0] bg-[#F8FAFC]">
           <img *ngIf="microcredencialAEvaluar?.imagen_url" [src]="microcredencialAEvaluar.imagen_url" class="w-full h-full object-cover" alt="Insignia digital">
           <div *ngIf="!microcredencialAEvaluar?.imagen_url" class="w-full h-full bg-[#E2E8F0] flex items-center justify-center text-[#64748B] text-xs font-semibold">Sin imagen</div>
         </div>
-        <span class="text-[14px] text-[#334155] font-semibold">Insignia digital</span>
+        <span class="text-[14px] text-[#334155] font-semibold mb-6">Insignia digital</span>
+
+        <div class="flex flex-col gap-3 w-full px-4 text-[#334155] text-[13px]">
+          <div class="flex items-center justify-center gap-1.5">
+            <span>[</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="#334155" stroke-linecap="round" stroke-width="1.5">
+                <path stroke-miterlimit="10" d="m15.172 15.172l-3.167-3.167V5.672" />
+                <path stroke-linejoin="round" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19" />
+              </g>
+            </svg>
+            <span>{{ microcredencialAEvaluar?.duracion_horas }} Horas</span>
+            <span>]</span>
+          </div>
+          <div class="flex items-center justify-center gap-1.5">
+            <span>[</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M6 12H4.125c-.6 0-1.087.487-1.087 1.087v7.076c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087v-7.076c0-.6-.487-1.087-1.087-1.087m6.939-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v11.701c0 .6.486 1.087 1.086 1.087h1.874c.6 0 1.087-.487 1.087-1.087V8.462c0-.6-.487-1.087-1.087-1.087m6.937-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v16.326c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087V3.837c0-.6-.487-1.087-1.087-1.087" />
+            </svg>
+            <span>{{ microcredencialAEvaluar?.nivel }}</span>
+            <span>]</span>
+          </div>
+        </div>
       </div>
 
       <!-- Columna Derecha: Información detallada -->
-      <div class="flex-1 pl-9 flex flex-col gap-4 text-[#334155] overflow-y-auto pr-15 modal-scrollbar">
-        <div class="grid grid-cols-[180px_1fr] gap-x-4 gap-y-3.5 text-[13px]">
+      <div class="flex-1 pl-9 flex flex-col gap-5 text-[#334155] overflow-y-auto pr-15 modal-scrollbar">
+        
+        <div class="font-bold text-[14px] text-[#334155] uppercase">{{ microcredencialAEvaluar?.nombre }}</div>
 
-          <div class="font-bold uppercase">Estado:</div>
-          <div>
-            <span [ngClass]="{
-                'text-[#30A32C] bg-[#DCFFDB]': microcredencialAEvaluar?.estado === 'APROBADA',
-                'text-[#A32C2E] bg-[#FFDBDC]': microcredencialAEvaluar?.estado === 'RECHAZADA',
-                'text-[#A3872C] bg-[#FFFBDB]': microcredencialAEvaluar?.estado === 'PENDIENTE',
-                'text-[#8B8B8B] bg-[#E5E5E5]': microcredencialAEvaluar?.estado === 'INACTIVA'
-              }"
-              class="px-1.5 py-0.5 rounded font-bold text-[11px] uppercase tracking-wider inline-block">
-              {{ microcredencialAEvaluar?.estado }}
-            </span>
-          </div>
-
-          <div class="font-bold uppercase">Creado en:</div>
-          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.creado_en | date:'dd/MM/yyyy HH:mm' }}</div>
-
-          <div class="font-bold uppercase">Emisor:</div>
-          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.emisor }}</div>
-
-          <div class="font-bold uppercase">Nombre:</div>
-          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.nombre }}</div>
-
-          <div class="font-bold uppercase">Descripción:</div>
-          <div class="font-normal uppercase text-[#334155] leading-relaxed text-left">{{ microcredencialAEvaluar?.descripcion }}</div>
-
-          <div class="font-bold uppercase">Criterios de Evaluación:</div>
-          <div class="font-normal uppercase text-[#334155] leading-relaxed text-left">{{ microcredencialAEvaluar?.criterios_evaluacion }}</div>
-
-          <div class="font-bold uppercase">Nivel:</div>
-          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.nivel }}</div>
-
-          <div class="font-bold uppercase">Duración (H):</div>
-          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.duracion_horas }} HORAS</div>
-
-          <div class="font-bold uppercase">Área de Conocimiento:</div>
-          <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.area_conocimiento }}</div>
-
-          <div class="font-bold uppercase">Competencias:</div>
-          <div class="font-normal uppercase text-[#334155] leading-relaxed">{{ microcredencialAEvaluar?.competencias }}</div>
-
-          <ng-container *ngIf="microcredencialAEvaluar?.estado === 'APROBADA'">
-            <div class="font-bold uppercase">Aprobado por:</div>
-            <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.aprobado_por || 'N/A' }}</div>
-
-            <div class="font-bold uppercase">Fecha de Aprobación:</div>
-            <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.aprobado_en | date:'dd/MM/yyyy HH:mm' }}</div>
-          </ng-container>
-
-          <ng-container *ngIf="microcredencialAEvaluar?.estado === 'INACTIVA'">
-            <div class="font-bold uppercase">Fecha de inactivación:</div>
-            <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</div>
-          </ng-container>
-
-          <ng-container *ngIf="microcredencialAEvaluar?.estado === 'RECHAZADA'">
-            <div class="font-bold uppercase">Motivos:</div>
-            <div class="font-normal uppercase text-[#334155] leading-relaxed text-left">{{ microcredencialAEvaluar?.justificacion_rechazo || 'SIN ESPECIFICAR' }}</div>
-
-            <div class="font-bold uppercase">Fecha de Evaluación:</div>
-            <div class="font-normal uppercase text-[#334155]">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</div>
-          </ng-container>
-
+        <div class="text-[13px] text-[#334155]">
+          <span class="font-bold uppercase mr-1.5">Emisor:</span> <span class="font-normal">{{ microcredencialAEvaluar?.emisor }}</span>
         </div>
+
+        <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+          <span class="font-bold uppercase">Descripción:</span>
+          <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.descripcion }}</span>
+        </div>
+
+        <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+          <span class="font-bold uppercase">Criterios de Evaluación:</span>
+          <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.criterios_evaluacion }}</span>
+        </div>
+
+        <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+          <span class="font-bold uppercase">Área de Conocimiento:</span>
+          <span class="font-normal">{{ microcredencialAEvaluar?.area_conocimiento }}</span>
+        </div>
+
+        <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+          <span class="font-bold uppercase">Competencias:</span>
+          <span class="font-normal leading-relaxed">{{ microcredencialAEvaluar?.competencias }}</span>
+        </div>
+
+        <!-- Información adicional según el estado -->
+
+        <div class="text-[13px] text-[#334155]">
+          <span class="font-bold uppercase mr-1.5">Creado en:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.creado_en | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+
+        <ng-container *ngIf="microcredencialAEvaluar?.estado === 'APROBADA'">
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Aprobado por:</span> <span class="font-normal">{{ microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
+          </div>
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Fecha de Aprobación:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.aprobado_en | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="microcredencialAEvaluar?.estado === 'INACTIVA'">
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Inactivado por:</span> <span class="font-normal">{{ microcredencialAEvaluar?.inactivado_por || 'N/A' }}</span>
+          </div>
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Fecha de inactivación:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="microcredencialAEvaluar?.estado === 'RECHAZADA'">
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Evaluado por:</span> <span class="font-normal">{{ microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
+          </div>
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+            <span class="font-bold uppercase">Motivos:</span>
+            <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.justificacion_rechazo || 'SIN ESPECIFICAR' }}</span>
+          </div>
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Fecha de Evaluación:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </ng-container>
+
       </div>
 
     </div>

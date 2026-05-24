@@ -70,7 +70,8 @@ create table microcredencial (
 	metadata_ob3 jsonb,
 	estado int references estado_microcredencial(id_estado) not null default 1,
 	justificacion_rechazo text,
-	aprobado_por int references usuario(id_usuario),
+	evaluado_por int references usuario(id_usuario),
+	inactivado_por int references usuario(id_usuario),
 	aprobado_en timestamp,
 	eliminado boolean not null default false,
 	creado_en timestamp not null default now(),
@@ -131,10 +132,6 @@ create table configuracion_sistema (
 	clave_privada text not null
 );
 
---Credenciales del admin del sistema, cambiar contraseña por una real | Contraseña: 1234567890
-insert into usuario(cedula, nombres, apellidos, correo, contrasenia) values 
-('1234567890', 'Admin', 'Primario', 'admin@espoch.edu.ec', '$2b$10$68r5GkkH3zeGawDAiUwjJuKkhez9U6Z0QRuM6jueSDO.hF5p4GTMa');
-
 insert into facultad (nombre) values 
 ('Administración de Empresas'),
 ('Ciencias'),
@@ -191,6 +188,12 @@ insert into rol (nombre, descripcion) values
 ('Emisor', 'Es la autoridad académica o el docente responsable de diseñar y otorgar los reconocimientos.'),
 ('Receptor', 'Es el usuario final que adquiere las competencias y es el dueño de las insignias digitales otorgadas.');
 
+--Credenciales del admin del sistema, cambiar contraseña por una real | Contraseña: 1234567890
+insert into usuario(cedula, nombres, apellidos, correo, contrasenia) values 
+('1234567890', 'Admin', 'Primario', 'admin@espoch.edu.ec', '$2b$10$68r5GkkH3zeGawDAiUwjJuKkhez9U6Z0QRuM6jueSDO.hF5p4GTMa');
+
+insert into usuario_rol (usuario, rol) values (1, 1), (1, 2), (1, 3);
+
 insert into nivel_microcredencial (nombre) values
 ('Básico'),
 ('Intermedio'),
@@ -220,4 +223,3 @@ insert into estado_insignia (nombre) values
 ('Activa'), 
 ('Revocada');
 
-insert into usuario_rol (usuario, rol) values (1, 1);

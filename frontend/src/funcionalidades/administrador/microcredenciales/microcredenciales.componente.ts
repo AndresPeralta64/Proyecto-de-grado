@@ -113,7 +113,8 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
             area_conocimiento: item.area_conocimiento,
             duracion: `${item.duracion_horas}H`,
             estado: item.estado.toUpperCase(),
-            aprobado_por: item.aprobado_por,
+            evaluado_por: item.evaluado_por,
+            inactivado_por: item.inactivado_por,
             aprobado_en: item.aprobado_en,
             justificacion_rechazo: item.justificacion_rechazo,
             ultima_actualizacion: item.ultima_actualizacion,
@@ -148,6 +149,7 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
             .replace(/[\u0300-\u036f]/g, '');
 
         const cleanQuery = cleanString(this.terminoBusqueda);
+        const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 0);
         const cleanItem = cleanString(
           (item.id || '') + ' ' +
           (item.nombre || '') + ' ' +
@@ -156,7 +158,7 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
           (item.duracion || '') + ' ' +
           (item.estado || '')
         );
-        matchesSearch = cleanItem.includes(cleanQuery);
+        matchesSearch = queryWords.every(word => cleanItem.includes(word));
       }
 
       return matchesEstado && matchesSearch;
@@ -262,6 +264,26 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
   irAUltimaPagina() {
     if (this.paginaActual < this.totalPaginas) {
       this.paginaActual = this.totalPaginas;
+    }
+  }
+
+  get mostrarTextoOrdenamiento(): boolean {
+    const activeFilters = Object.keys(this.ordenarPor).filter(k => (this.ordenarPor as any)[k]);
+    if (activeFilters.length === 1 && (activeFilters[0] === 'fecha_creacion' || activeFilters[0] === 'ultima_actualizacion')) return true;
+    return false;
+  }
+
+  toggleFechaCreacion() {
+    this.ordenarPor.fecha_creacion = !this.ordenarPor.fecha_creacion;
+    if (this.ordenarPor.fecha_creacion) {
+      this.ordenarPor.ultima_actualizacion = false;
+    }
+  }
+
+  toggleUltimaActualizacion() {
+    this.ordenarPor.ultima_actualizacion = !this.ordenarPor.ultima_actualizacion;
+    if (this.ordenarPor.ultima_actualizacion) {
+      this.ordenarPor.fecha_creacion = false;
     }
   }
 

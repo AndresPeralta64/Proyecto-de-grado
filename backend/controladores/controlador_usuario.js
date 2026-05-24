@@ -174,17 +174,9 @@ const registrarUsuario = async (req, res) => {
       }
     }
 
-    // Guardar foto de perfil si se subió
-    let fotoUrl = null;
-    if (req.file) {
-      const puerto = process.env.PORT || 3000;
-      const host = process.env.URL_BACKEND || `http://localhost:${puerto}`;
-      fotoUrl = `${host}/recursos/perfiles/${req.file.filename}`;
-    }
-
     const insertUsuario = `
-      INSERT INTO usuario (cedula, nombres, apellidos, correo, contrasenia, carrera, telefono, foto_url)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      INSERT INTO usuario (cedula, nombres, apellidos, correo, contrasenia, carrera, telefono)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id_usuario
     `;
     const resultado = await consultar(insertUsuario, [
@@ -194,10 +186,28 @@ const registrarUsuario = async (req, res) => {
       correo.toLowerCase().trim(), 
       contrasenaHash, 
       carrera || null, 
-      telefono || null,
-      fotoUrl
+      telefono || null
     ]);
     const idNuevoUsuario = resultado.rows[0].id_usuario;
+
+    // Renombrar archivo de foto si se subió y actualizar URL en BD
+    if (req.file) {
+      const nombreViejo = req.file.filename; // ej. foto-perfil-nuevo-idEditor-fecha-timestamp.ext
+      const nombreNuevo = nombreViejo.replace('nuevo', idNuevoUsuario);
+      
+      const rutaVieja = path.join(__dirname, '..', 'recursos', 'perfiles', nombreViejo);
+      const rutaNueva = path.join(__dirname, '..', 'recursos', 'perfiles', nombreNuevo);
+      
+      if (fs.existsSync(rutaVieja)) {
+        fs.renameSync(rutaVieja, rutaNueva);
+        
+        const puerto = process.env.PORT || 3000;
+        const host = process.env.URL_BACKEND || `http://localhost:${puerto}`;
+        const fotoUrl = `${host}/recursos/perfiles/${nombreNuevo}`;
+        
+        await consultar('UPDATE usuario SET foto_url = $1 WHERE id_usuario = $2', [fotoUrl, idNuevoUsuario]);
+      }
+    }
 
     for (const idRol of rolesIds) {
       await consultar(

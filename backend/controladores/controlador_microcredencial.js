@@ -1,4 +1,162 @@
 const { consultar } = require('../servicios/base_datos');
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Registra una nueva microcredencial
+ */
+const registrarMicrocredencial = async (req, res) => {
+  const { nombre, descripcion, nivel, area_conocimiento, duracion_horas, criterios_evaluacion, competencias } = req.body;
+  const idEmisor = req.usuario.id;
+
+  try {
+    if (!nombre || !descripcion || !nivel || !area_conocimiento || !duracion_horas || !criterios_evaluacion || !competencias) {
+      return res.status(400).json({ exito: false, mensaje: 'Todos los campos obligatorios deben ser completados.' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ exito: false, mensaje: 'La imagen de la insignia es obligatoria.' });
+    }
+
+    // Verificar si el nombre ya existe
+    const existeNombre = await consultar('SELECT id_microcredencial FROM microcredencial WHERE LOWER(nombre) = LOWER($1) AND eliminado = false', [nombre.trim()]);
+    if (existeNombre.rows.length > 0) {
+      return res.status(409).json({ exito: false, mensaje: 'El nombre de la microcredencial ya está en uso.' });
+    }
+
+    const puerto = process.env.PORT || 3000;
+    const host = process.env.URL_BACKEND || `http://localhost:${puerto}`;
+    const fotoUrl = `${host}/recursos/insignias/${req.file.filename}`;
+
+    const insertMicrocredencial = `
+      INSERT INTO microcredencial (
+        nombre, descripcion, criterios_evaluacion, duracion_horas, 
+        competencias, imagen_url, emisor, nivel, area_conocimiento, estado
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1)
+      RETURNING id_microcredencial
+    `;
+
+    const resultado = await consultar(insertMicrocredencial, [
+      nombre.trim(),
+      descripcion.trim(),
+      criterios_evaluacion.trim(),
+      parseInt(duracion_horas, 10),
+      JSON.parse(competencias), // Parsear el array stringificado para que pg lo envíe como array a PostgreSQL
+      fotoUrl, // Inicialmente se inserta la url temporal
+      idEmisor,
+      parseInt(nivel, 10),
+      parseInt(area_conocimiento, 10)
+    ]);
+
+    const idMicrocredencial = resultado.rows[0].id_microcredencial;
+
+    // Renombrar la foto para incluir el id de la microcredencial
+    const nombreViejo = req.file.filename;
+    // El nombre temporal es: insignia-digital-[idEditor]-temp-[fecha]-[timestamp].ext
+    // Lo cambiaremos a: insignia-digital-[idEditor]-[idMicrocredencial]-[fecha]-[timestamp].ext
+    const nombreNuevo = nombreViejo.replace('-temp-', `-${idMicrocredencial}-`);
+    
+    const rutaVieja = path.join(__dirname, '..', 'recursos', 'insignias', nombreViejo);
+    const rutaNueva = path.join(__dirname, '..', 'recursos', 'insignias', nombreNuevo);
+    
+    if (fs.existsSync(rutaVieja)) {
+      fs.renameSync(rutaVieja, rutaNueva);
+      
+      // Actualizar la URL en la base de datos
+      const fotoUrlNueva = `${host}/recursos/insignias/${nombreNuevo}`;
+      await consultar('UPDATE microcredencial SET imagen_url = $1 WHERE id_microcredencial = $2', [fotoUrlNueva, idMicrocredencial]);
+    }
+
+    return res.status(201).json({
+      exito: true,
+      mensaje: 'Insignia registrada correctamente. Un administrador la revisará en breve',
+      datos: { id_microcredencial: idMicrocredencial }
+    });
+  } catch (error) {
+    console.error('Error en registrarMicrocredencial:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al registrar la microcredencial.' });
+  }
+};
+
+/**
+ * Actualiza una microcredencial existente (para emisores, típicamente al subsanar un rechazo)
+ */
+const actualizarMicrocredencial = async (req, res) => {
+  const { id } = req.params;
+  const { nombre, descripcion, nivel, area_conocimiento, duracion_horas, criterios_evaluacion, competencias } = req.body;
+  const idEmisor = req.usuario.id;
+
+  try {
+    if (!nombre || !descripcion || !nivel || !area_conocimiento || !duracion_horas || !criterios_evaluacion || !competencias) {
+      return res.status(400).json({ exito: false, mensaje: 'Todos los campos obligatorios deben ser completados.' });
+    }
+
+    // Verificar si la microcredencial existe y pertenece al emisor
+    const consultaMicro = await consultar('SELECT * FROM microcredencial WHERE id_microcredencial = $1 AND eliminado = false', [id]);
+    if (consultaMicro.rows.length === 0) {
+      return res.status(404).json({ exito: false, mensaje: 'La microcredencial no existe.' });
+    }
+
+    const micro = consultaMicro.rows[0];
+    if (micro.emisor !== idEmisor && req.usuario.nombre_rol === 'Emisor') {
+      return res.status(403).json({ exito: false, mensaje: 'No tiene permisos para modificar esta microcredencial.' });
+    }
+
+    // Verificar si el nombre ya está en uso por otra microcredencial
+    const existeNombre = await consultar('SELECT id_microcredencial FROM microcredencial WHERE LOWER(nombre) = LOWER($1) AND id_microcredencial != $2 AND eliminado = false', [nombre.trim(), id]);
+    if (existeNombre.rows.length > 0) {
+      return res.status(409).json({ exito: false, mensaje: 'El nombre de la microcredencial ya está en uso.' });
+    }
+
+    let fotoUrlFinal = micro.imagen_url;
+    if (req.file) {
+      const puerto = process.env.PORT || 3000;
+      const host = process.env.URL_BACKEND || `http://localhost:${puerto}`;
+      
+      const nombreViejo = req.file.filename;
+      const nombreNuevo = nombreViejo.replace('-temp-', `-${id}-`);
+      
+      const rutaVieja = path.join(__dirname, '..', 'recursos', 'insignias', nombreViejo);
+      const rutaNueva = path.join(__dirname, '..', 'recursos', 'insignias', nombreNuevo);
+      
+      if (fs.existsSync(rutaVieja)) {
+        fs.renameSync(rutaVieja, rutaNueva);
+        fotoUrlFinal = `${host}/recursos/insignias/${nombreNuevo}`;
+      }
+    }
+
+    // Actualizar la microcredencial: volver el estado a Pendiente (1), limpiar evaluado_por y justificacion_rechazo
+    const updateMicrocredencial = `
+      UPDATE microcredencial 
+      SET nombre = $1, descripcion = $2, criterios_evaluacion = $3, duracion_horas = $4,
+          competencias = $5, imagen_url = $6, nivel = $7, area_conocimiento = $8,
+          estado = 1, evaluado_por = NULL, justificacion_rechazo = NULL, aprobado_en = NULL, ultima_actualizacion = NOW()
+      WHERE id_microcredencial = $9
+    `;
+
+    await consultar(updateMicrocredencial, [
+      nombre.trim(),
+      descripcion.trim(),
+      criterios_evaluacion.trim(),
+      parseInt(duracion_horas, 10),
+      JSON.parse(competencias),
+      fotoUrlFinal,
+      parseInt(nivel, 10),
+      parseInt(area_conocimiento, 10),
+      id
+    ]);
+
+    return res.status(200).json({
+      exito: true,
+      mensaje: 'Microcredencial actualizada correctamente. Un administrador la revisará en breve para su aprobación.',
+      datos: { id_microcredencial: id }
+    });
+  } catch (error) {
+    console.error('Error en actualizarMicrocredencial:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al actualizar la microcredencial.' });
+  }
+};
 
 /**
  * Obtiene la lista completa de microcredenciales (para administradores)
@@ -20,13 +178,15 @@ const listarMicrocredenciales = async (req, res) => {
         m.ultima_actualizacion,
         m.emisor AS id_emisor,
         CONCAT(u_emisor.nombres, ' ', u_emisor.apellidos) AS emisor,
-        CONCAT(u_aprobador.nombres, ' ', u_aprobador.apellidos) AS aprobado_por,
+        CONCAT(u_aprobador.nombres, ' ', u_aprobador.apellidos) AS evaluado_por,
+        CONCAT(u_inactivador.nombres, ' ', u_inactivador.apellidos) AS inactivado_por,
         n.nombre AS nivel,
         a.nombre AS area_conocimiento,
         e.nombre AS estado
       FROM microcredencial m
       JOIN usuario u_emisor ON m.emisor = u_emisor.id_usuario
-      LEFT JOIN usuario u_aprobador ON m.aprobado_por = u_aprobador.id_usuario
+      LEFT JOIN usuario u_aprobador ON m.evaluado_por = u_aprobador.id_usuario
+      LEFT JOIN usuario u_inactivador ON m.inactivado_por = u_inactivador.id_usuario
       JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
       JOIN area_conocimiento a ON m.area_conocimiento = a.id_area
       JOIN estado_microcredencial e ON m.estado = e.id_estado
@@ -53,7 +213,7 @@ const aprobarMicrocredencial = async (req, res) => {
   try {
     const consulta = `
       UPDATE microcredencial 
-      SET estado = 2, aprobado_por = $1, aprobado_en = NOW(), justificacion_rechazo = NULL, ultima_actualizacion = NOW()
+      SET estado = 2, evaluado_por = COALESCE(evaluado_por, $1), inactivado_por = NULL, aprobado_en = COALESCE(aprobado_en, NOW()), justificacion_rechazo = NULL, ultima_actualizacion = NOW()
       WHERE id_microcredencial = $2 AND eliminado = false
     `;
     await consultar(consulta, [idAprobador, id]);
@@ -98,21 +258,28 @@ const cambiarEstado = async (req, res) => {
     if (Number(id_estado) === 2) { // Aprobada
       consulta = `
         UPDATE microcredencial 
-        SET estado = $1, aprobado_por = $2, aprobado_en = NOW(), justificacion_rechazo = NULL, ultima_actualizacion = NOW()
+        SET estado = $1, evaluado_por = COALESCE(evaluado_por, $2), inactivado_por = NULL, aprobado_en = COALESCE(aprobado_en, NOW()), justificacion_rechazo = NULL, ultima_actualizacion = NOW()
         WHERE id_microcredencial = $3 AND eliminado = false
       `;
       valores = [id_estado, idUsuario, id];
     } else if (Number(id_estado) === 3) { // Rechazada
       consulta = `
         UPDATE microcredencial 
-        SET estado = $1, aprobado_por = NULL, aprobado_en = NULL, justificacion_rechazo = $2, ultima_actualizacion = NOW()
+        SET estado = $1, evaluado_por = $4, inactivado_por = NULL, aprobado_en = NULL, justificacion_rechazo = $2, ultima_actualizacion = NOW()
         WHERE id_microcredencial = $3 AND eliminado = false
       `;
-      valores = [id_estado, justificacion_rechazo || null, id];
-    } else { // Pendiente / Inactiva
+      valores = [id_estado, justificacion_rechazo || null, id, idUsuario];
+    } else if (Number(id_estado) === 4) { // Inactiva
       consulta = `
         UPDATE microcredencial 
-        SET estado = $1, aprobado_por = NULL, aprobado_en = NULL, justificacion_rechazo = NULL, ultima_actualizacion = NOW()
+        SET estado = $1, inactivado_por = $2, ultima_actualizacion = NOW()
+        WHERE id_microcredencial = $3 AND eliminado = false
+      `;
+      valores = [id_estado, idUsuario, id];
+    } else { // Pendiente
+      consulta = `
+        UPDATE microcredencial 
+        SET estado = $1, evaluado_por = NULL, inactivado_por = NULL, aprobado_en = NULL, justificacion_rechazo = NULL, ultima_actualizacion = NOW()
         WHERE id_microcredencial = $2 AND eliminado = false
       `;
       valores = [id_estado, id];
@@ -215,6 +382,8 @@ const obtenerAreasConocimiento = async (req, res) => {
 };
 
 module.exports = {
+  registrarMicrocredencial,
+  actualizarMicrocredencial,
   listarMicrocredenciales,
   aprobarMicrocredencial,
   cambiarEstado,

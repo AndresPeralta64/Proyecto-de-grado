@@ -63,6 +63,7 @@ export class UsuariosComponente implements OnInit, OnDestroy {
             .replace(/[\u0300-\u036f]/g, '');
 
         const cleanQuery = cleanString(this.terminoBusqueda);
+        const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 0);
         const cleanUser = cleanString(
           (usuario.id_usuario || '') + ' ' +
           (usuario.nombres || '') + ' ' +
@@ -70,7 +71,7 @@ export class UsuariosComponente implements OnInit, OnDestroy {
           (usuario.cedula || '') + ' ' +
           (usuario.correo || '')
         );
-        matchesSearch = cleanUser.includes(cleanQuery);
+        matchesSearch = queryWords.every(word => cleanUser.includes(word));
       }
 
       return matchesEstado && matchesRol && matchesSearch;
@@ -284,6 +285,26 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     fecha_creacion: false,
     ultima_actualizacion: false
   };
+
+  get mostrarTextoOrdenamiento(): boolean {
+    const activeFilters = Object.keys(this.ordenarPor).filter(k => (this.ordenarPor as any)[k]);
+    if (activeFilters.length === 1 && (activeFilters[0] === 'fecha_creacion' || activeFilters[0] === 'ultima_actualizacion')) return true;
+    return false;
+  }
+
+  toggleFechaCreacion() {
+    this.ordenarPor.fecha_creacion = !this.ordenarPor.fecha_creacion;
+    if (this.ordenarPor.fecha_creacion) {
+      this.ordenarPor.ultima_actualizacion = false;
+    }
+  }
+
+  toggleUltimaActualizacion() {
+    this.ordenarPor.ultima_actualizacion = !this.ordenarPor.ultima_actualizacion;
+    if (this.ordenarPor.ultima_actualizacion) {
+      this.ordenarPor.fecha_creacion = false;
+    }
+  }
 
   toggleOpciones() {
     this.menuMostrarAbierto = false;

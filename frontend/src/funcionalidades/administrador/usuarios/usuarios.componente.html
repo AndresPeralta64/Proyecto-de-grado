@@ -254,7 +254,7 @@
           </label>
 
           <!-- Fecha de creación -->
-          <label (click)="ordenarPor.fecha_creacion = !ordenarPor.fecha_creacion"
+          <label (click)="toggleFechaCreacion()"
             class="flex items-center gap-2.5 cursor-pointer group">
             <div
               [ngClass]="ordenarPor.fecha_creacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
@@ -270,7 +270,7 @@
           </label>
 
           <!-- Última actualización -->
-          <label (click)="ordenarPor.ultima_actualizacion = !ordenarPor.ultima_actualizacion"
+          <label (click)="toggleUltimaActualizacion()"
             class="flex items-center gap-2.5 cursor-pointer group">
             <div
               [ngClass]="ordenarPor.ultima_actualizacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
@@ -310,6 +310,10 @@
         </svg>
 
       </button>
+
+      <span *ngIf="mostrarTextoOrdenamiento" class="text-[13px] text-[#64748b] ml-1.5 font-medium select-none">
+        Mostrando registros más {{ opcionesExpandidas ? 'antiguos' : 'recientes' }} primero
+      </span>
 
     </div>
 
@@ -353,9 +357,7 @@
         <tr *ngFor="let usuario of usuariosPaginados; let i = index; trackBy: trackByUsuarioId"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- ID -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ opcionesExpandidas ?
-            ((paginaActual - 1) * limiteRegistros + i + 1) : (usuariosFiltrados.length - ((paginaActual - 1) *
-            limiteRegistros + i)) }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
           <!-- Usuario (Nombres y Apellidos) -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ usuario.nombres }} {{
             usuario.apellidos }}</td>
@@ -765,7 +767,7 @@
       </div>
 
       <!-- Columna Derecha: Formulario -->
-      <div class="flex-1 pl-9 flex flex-col gap-5">
+      <div class="flex-1 pl-9 flex flex-col gap-5 modal-scrollbar">
 
         <!-- Nombres y Apellidos -->
         <div class="grid grid-cols-2 gap-4">
@@ -863,36 +865,31 @@
                 <input type="text" [(ngModel)]="nuevoUsuario.carreraNombre" name="carrera" autocomplete="off"
                   (input)="filtrarCarreras(false)" (focus)="filtrarCarreras(true)" (click)="filtrarCarreras(true)" (blur)="validarCarrera()"
                   class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] outline-none transition-colors bg-white text-left placeholder:text-[#94A3B8]"
+                  [class.border-[#E53935]]="errores['carrera']"
                   [ngClass]="(nuevoUsuario.carreraNombre && nuevoUsuario.carreraNombre !== 'Sin especificar') ? 'text-[#334155]' : 'text-[#94A3B8]'"
                   placeholder="Sin especificar">
-
                 <!-- Flecha arriba/abajo -->
                 <div class="absolute right-3.5 flex items-center pointer-events-none">
-                  <svg *ngIf="dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                    viewBox="0 0 24 24">
+                  <svg *ngIf="!dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
                   </svg>
-                  <svg *ngIf="!dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                    viewBox="0 0 24 24">
+                  <svg *ngIf="dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
                   </svg>
                 </div>
               </div>
-
               <!-- Lista de carreras -->
-              <div *ngIf="dropdownCarreraAbierto && carrerasFiltradas.length > 0"
+              <div *ngIf="dropdownCarreraAbierto"
                 class="absolute top-full left-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-20 mt-1 max-h-48 overflow-y-auto">
-                <!-- Sin especificar (opcional, se puede dejar que el blur lo haga) -->
                 <div (mousedown)="seleccionarCarrera(null, 'Sin especificar')"
                   class="px-3.5 py-2.5 text-[14px] text-[#94A3B8] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
                   [ngClass]="{'bg-[#DAE0E5]': !nuevoUsuario.carreraId || nuevoUsuario.carreraNombre === 'Sin especificar'}">
                   Sin especificar
                 </div>
-                <!-- Carreras filtradas -->
                 <div *ngFor="let carrera of carrerasFiltradas"
                   (mousedown)="seleccionarCarrera(carrera.id_carrera, carrera.nombre)"
                   class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
@@ -900,8 +897,8 @@
                   {{ carrera.nombre }}
                 </div>
               </div>
-
             </div>
+            <span *ngIf="errores['carrera']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['carrera'] }}</span>
           </div>
         </div>
 

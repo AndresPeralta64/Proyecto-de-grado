@@ -37,4 +37,12 @@ export class MicrocredencialServicio {
   obtenerAreasConocimiento(): Observable<any> {
     return this.http.get(`${this.apiUrl}/areas`);
   }
+
+  registrarMicrocredencial(datos: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, datos);
+  }
+
+  actualizarMicrocredencial(id: number, datos: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, datos);
+  }
 }
