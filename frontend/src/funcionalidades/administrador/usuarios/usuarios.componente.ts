@@ -98,7 +98,21 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     const direction = this.opcionesExpandidas ? 1 : -1;
 
     baseList.sort((a, b) => {
-      // Secuencia: Nombres -> Apellidos -> Cédula -> Correo -> Estado -> Rol
+      // Secuencia: Fecha de creación -> Última actualización -> Nombres -> Apellidos -> Cédula -> Correo -> Estado -> Rol
+
+      if (this.ordenarPor.fecha_creacion) {
+        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
+        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
+      if (this.ordenarPor.ultima_actualizacion) {
+        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
+        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
 
       if (this.ordenarPor.nombres) {
         const comp = (a.nombres || '').localeCompare(b.nombres || '', 'es', { sensitivity: 'base' });
@@ -134,19 +148,6 @@ export class UsuariosComponente implements OnInit, OnDestroy {
         if (diff !== 0) return diff * direction;
       }
 
-      if (this.ordenarPor.fecha_creacion) {
-        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
-        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
-        const diff = fechaA - fechaB;
-        if (diff !== 0) return diff * direction;
-      }
-
-      if (this.ordenarPor.ultima_actualizacion) {
-        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
-        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
-        const diff = fechaA - fechaB;
-        if (diff !== 0) return diff * direction;
-      }
 
       // Fallback: orden de inserción de la base de datos
       return (a._index - b._index) * direction;
@@ -283,7 +284,7 @@ export class UsuariosComponente implements OnInit, OnDestroy {
     estado: false,
     rol: false,
     fecha_creacion: false,
-    ultima_actualizacion: false
+    ultima_actualizacion: true
   };
 
   get mostrarTextoOrdenamiento(): boolean {

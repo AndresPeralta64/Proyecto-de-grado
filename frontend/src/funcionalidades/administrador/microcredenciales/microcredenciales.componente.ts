@@ -45,7 +45,7 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
     duracion: false,
     estado: false,
     fecha_creacion: false,
-    ultima_actualizacion: false
+    ultima_actualizacion: true
   };
 
   // Listado de microcredenciales reales obtenidas de la base de datos
@@ -168,6 +168,20 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
     const direction = this.opcionesExpandidas ? 1 : -1;
 
     baseList.sort((a, b) => {
+      if (this.ordenarPor.fecha_creacion) {
+        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
+        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
+      if (this.ordenarPor.ultima_actualizacion) {
+        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
+        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
+        const diff = fechaA - fechaB;
+        if (diff !== 0) return diff * direction;
+      }
+
       if (this.ordenarPor.microcredencial) {
         const comp = (a.nombre || '').localeCompare(b.nombre || '', 'es', { sensitivity: 'base' });
         if (comp !== 0) return comp * direction;
@@ -201,19 +215,6 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
         if (diff !== 0) return diff * direction;
       }
 
-      if (this.ordenarPor.fecha_creacion) {
-        const fechaA = a.creado_en ? new Date(a.creado_en).getTime() : 0;
-        const fechaB = b.creado_en ? new Date(b.creado_en).getTime() : 0;
-        const diff = fechaA - fechaB;
-        if (diff !== 0) return diff * direction;
-      }
-
-      if (this.ordenarPor.ultima_actualizacion) {
-        const fechaA = a.ultima_actualizacion ? new Date(a.ultima_actualizacion).getTime() : 0;
-        const fechaB = b.ultima_actualizacion ? new Date(b.ultima_actualizacion).getTime() : 0;
-        const diff = fechaA - fechaB;
-        if (diff !== 0) return diff * direction;
-      }
 
       return (a._index - b._index) * direction;
     });
