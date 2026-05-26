@@ -58,7 +58,7 @@
                       d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
                   </svg>
                 </div>
-                <span class="text-[11px] text-[#334155]">Activo</span>
+                <span class="text-[11px] text-[#334155]">Activos</span>
               </label>
               <!-- Inactivo -->
               <label (click)="filtros.estados.inactivo = !filtros.estados.inactivo"
@@ -73,7 +73,7 @@
                       d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
                   </svg>
                 </div>
-                <span class="text-[11px] text-[#334155]">Inactivo</span>
+                <span class="text-[11px] text-[#334155]">Inactivos</span>
               </label>
             </div>
           </div>
@@ -95,7 +95,7 @@
                       d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
                   </svg>
                 </div>
-                <span class="text-[11px] text-[#334155]">Administrador</span>
+                <span class="text-[11px] text-[#334155]">Administradores</span>
               </label>
               <!-- Emisor -->
               <label (click)="filtros.roles.emisor = !filtros.roles.emisor"
@@ -110,7 +110,7 @@
                       d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
                   </svg>
                 </div>
-                <span class="text-[11px] text-[#334155]">Emisor</span>
+                <span class="text-[11px] text-[#334155]">Emisores</span>
               </label>
               <!-- Receptor -->
               <label (click)="filtros.roles.receptor = !filtros.roles.receptor"
@@ -125,7 +125,7 @@
                       d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
                   </svg>
                 </div>
-                <span class="text-[11px] text-[#334155]">Receptor</span>
+                <span class="text-[11px] text-[#334155]">Receptores</span>
               </label>
             </div>
           </div>
@@ -159,8 +159,7 @@
 
 
           <!-- Fecha de creación -->
-          <label (click)="toggleFechaCreacion()"
-            class="flex items-center gap-2.5 cursor-pointer group">
+          <label (click)="toggleFechaCreacion()" class="flex items-center gap-2.5 cursor-pointer group">
             <div
               [ngClass]="ordenarPor.fecha_creacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
               class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
@@ -175,8 +174,7 @@
           </label>
 
           <!-- Última actualización -->
-          <label (click)="toggleUltimaActualizacion()"
-            class="flex items-center gap-2.5 cursor-pointer group">
+          <label (click)="toggleUltimaActualizacion()" class="flex items-center gap-2.5 cursor-pointer group">
             <div
               [ngClass]="ordenarPor.ultima_actualizacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
               class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
@@ -357,7 +355,8 @@
         <tr *ngFor="let usuario of usuariosPaginados; let i = index; trackBy: trackByUsuarioId"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- ID -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) *
+            limiteRegistros + i + 1 }}</td>
           <!-- Usuario (Nombres y Apellidos) -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ usuario.nombres }} {{
             usuario.apellidos }}</td>
@@ -463,12 +462,14 @@
                     </div>
 
                     <!-- Si no tiene ninguno de los dos roles ni es administrador -->
-                    <div *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador')"
+                    <div
+                      *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador')"
                       class="text-[#94A3B8] italic">
                       Sin actividad registrada
                     </div>
 
-                    <div [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
+                    <div
+                      [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
                       <div class="mb-1">
                         <span class="font-semibold text-[#1E293B]">Creado en: </span>
                         <span class="font-normal">{{ usuario.creado_en ? (usuario.creado_en | date:'dd/MM/yyyy HH:mm') :
@@ -560,12 +561,14 @@
                     </div>
 
                     <!-- Si no tiene ninguno de los dos roles ni es administrador -->
-                    <div *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador')"
+                    <div
+                      *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador')"
                       class="text-[#94A3B8] italic">
                       Sin actividad registrada
                     </div>
 
-                    <div [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
+                    <div
+                      [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
                       <div class="text-[12px] mb-1">
                         <span class="font-semibold text-[#1E293B]">Creado en: </span>
                         <span class="font-normal">{{ usuario.creado_en ? (usuario.creado_en | date:'dd/MM/yyyy HH:mm') :
@@ -863,19 +866,22 @@
             <div class="relative">
               <div class="relative flex items-center">
                 <input type="text" [(ngModel)]="nuevoUsuario.carreraNombre" name="carrera" autocomplete="off"
-                  (input)="filtrarCarreras(false)" (focus)="filtrarCarreras(true)" (click)="filtrarCarreras(true)" (blur)="validarCarrera()"
+                  (input)="filtrarCarreras(false)" (focus)="filtrarCarreras(true)" (click)="filtrarCarreras(true)"
+                  (blur)="validarCarrera()"
                   class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] outline-none transition-colors bg-white text-left placeholder:text-[#94A3B8]"
                   [class.border-[#E53935]]="errores['carrera']"
                   [ngClass]="(nuevoUsuario.carreraNombre && nuevoUsuario.carreraNombre !== 'Sin especificar') ? 'text-[#334155]' : 'text-[#94A3B8]'"
                   placeholder="Sin especificar">
                 <!-- Flecha arriba/abajo -->
                 <div class="absolute right-3.5 flex items-center pointer-events-none">
-                  <svg *ngIf="!dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
+                  <svg *ngIf="!dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                    viewBox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
                   </svg>
-                  <svg *ngIf="dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
+                  <svg *ngIf="dropdownCarreraAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                    viewBox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />

@@ -1,0 +1,398 @@
+<div class="flex flex-col">
+  <h1 class="text-[22px] font-semibold text-[#334155] mb-8">Gestión de insignias digitales</h1>
+
+  <!-- Barra de Herramientas -->
+  <div class="flex items-center gap-4 mb-8">
+
+    <!-- Barra de búsqueda -->
+    <div class="relative flex-1 max-w-[300px]">
+      <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M10.783 18.828a8.05 8.05 0 0 0 7.439-4.955a8.03 8.03 0 0 0-1.737-8.765a8.045 8.045 0 0 0-13.735 5.68c0 2.131.846 4.174 2.352 5.681a8.05 8.05 0 0 0 5.68 2.359m5.706-2.337l4.762 4.759" />
+        </svg>
+      </span>
+      <input type="text" [(ngModel)]="terminoBusqueda" (input)="paginaActual = 1"
+        class="w-full pl-10 pr-4 py-2 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#828891] transition-all placeholder-[#CBD5E1]"
+        placeholder="Buscar...">
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="flex items-center gap-3">
+
+      <!-- Botón Mostrar -->
+      <div class="relative">
+        <button (click)="toggleMostrar()" [ngClass]="{
+            'bg-[#C9CED5]': menuMostrarAbierto,
+            'bg-[#E2E8F0]': !menuMostrarAbierto,
+            'z-50': menuMostrarAbierto || menuOrdenarAbierto
+          }"
+          class="relative flex items-center gap-2 px-2.5 py-2 border border-[#CBD5E1] rounded-lg text-[#334155] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path fill="none" stroke="#334155" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"
+              d="M21.25 12H8.895m-4.361 0H2.75m18.5 6.607h-5.748m-4.361 0H2.75m18.5-13.214h-3.105m-4.361 0H2.75m13.214 2.18a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm-9.25 6.607a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm6.607 6.608a2.18 2.18 0 1 0 0-4.361a2.18 2.18 0 0 0 0 4.36Z" />
+          </svg>
+          <span class="text-[14px]">Mostrar</span>
+        </button>
+
+        <!-- Dropdown Mostrar -->
+        <div *ngIf="menuMostrarAbierto"
+          class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-[98px]">
+
+          <!-- Aprobadas -->
+          <label (click)="filtros.estados.aprobada = !filtros.estados.aprobada"
+            class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="filtros.estados.aprobada ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="filtros.estados.aprobada" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Aprobadas</span>
+          </label>
+
+          <!-- Revocadas -->
+          <label (click)="filtros.estados.revocada = !filtros.estados.revocada"
+            class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="filtros.estados.revocada ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="filtros.estados.revocada" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Revocadas</span>
+          </label>
+
+        </div>
+
+        <!-- Backdrop -->
+        <div *ngIf="menuMostrarAbierto" class="fixed inset-0 z-40" (click)="menuMostrarAbierto = false"></div>
+      </div>
+
+      <!-- Botón Ordenar por -->
+      <div class="relative">
+        <button (click)="toggleOrdenar()" [ngClass]="{
+            'bg-[#C9CED5]': menuOrdenarAbierto,
+            'bg-[#E2E8F0]': !menuOrdenarAbierto,
+            'z-50': menuMostrarAbierto || menuOrdenarAbierto
+          }"
+          class="relative flex items-center gap-2 px-2.5 py-2 border border-[#CBD5E1] rounded-lg text-[#334155] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <g fill="none" stroke="#334155" stroke-linecap="square" stroke-width="2">
+              <path d="m16 17l3 3V4l3 3" opacity=".88" />
+              <path d="M3 19h9M3 5h9m-9 7h9" />
+            </g>
+          </svg>
+          <span class="text-[14px]">Ordenar por</span>
+        </button>
+
+        <!-- Dropdown Ordenar por -->
+        <div *ngIf="menuOrdenarAbierto"
+          class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-47">
+
+          <!-- Receptor -->
+          <label (click)="ordenarPor.receptor = !ordenarPor.receptor" class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.receptor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.receptor" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Receptor</span>
+          </label>
+
+          <!-- Microcredencial -->
+          <label (click)="ordenarPor.microcredencial = !ordenarPor.microcredencial" class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.microcredencial ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.microcredencial" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Microcredencial</span>
+          </label>
+
+          <!-- Duración -->
+          <label (click)="ordenarPor.duracion = !ordenarPor.duracion" class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.duracion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.duracion" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Duración</span>
+          </label>
+
+          <!-- Estado -->
+          <label (click)="ordenarPor.estado = !ordenarPor.estado" class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.estado ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.estado" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Estado</span>
+          </label>
+
+          <!-- Fecha -->
+          <label (click)="ordenarPor.fecha = !ordenarPor.fecha" class="flex items-center gap-2.5 cursor-pointer group select-none">
+            <div
+              [ngClass]="ordenarPor.fecha ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.fecha" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Fecha</span>
+          </label>
+
+        </div>
+
+        <!-- Backdrop -->
+        <div *ngIf="menuOrdenarAbierto" class="fixed inset-0 z-40" (click)="menuOrdenarAbierto = false"></div>
+      </div>
+
+      <!-- Botón Flecha -->
+      <button (click)="toggleOpciones()" [ngClass]="{'z-50': menuMostrarAbierto || menuOrdenarAbierto}"
+        class="relative flex items-center justify-center w-[38.5px] h-[38.5px] bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] hover:bg-[#C9CED5] cursor-pointer transition-all">
+
+        <!-- Flecha hacia arriba -->
+        <svg *ngIf="opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#64748b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+        </svg>
+
+        <!-- Flecha hacia abajo -->
+        <svg *ngIf="!opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#64748b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+        </svg>
+
+      </button>
+
+      <span *ngIf="ordenarPor.fecha" class="text-[13px] text-[#64748b] ml-1.5 font-medium select-none">
+        Mostrando registros más {{ opcionesExpandidas ? 'antiguos' : 'recientes' }} primero
+      </span>
+
+    </div>
+
+    <div class="ml-auto">
+      <button type="button" (click)="emitirInsignia()"
+        [ngClass]="{'z-50': menuMostrarAbierto || menuOrdenarAbierto}"
+        class="relative flex items-center gap-2 px-2.5 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white font-medium hover:bg-[#43A5C2] cursor-pointer transition-all shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <g fill="none">
+            <path fill="#fff" d="m15 22l-.555.832A1 1 0 0 0 16 22zm-3-2l.555-.832a1 1 0 0 0-1.11 0zm-3 2H8a1 1 0 0 0 1.555.832zM8.75 3.537l-.08.997zm1.685-.697l-.762-.648zM6.532 5.686l-.997.08zm2.154-2.154l.08-.997zM5.84 7.435l.648.761zm.697-1.684l.997-.08zm-.747 4.772l-.648.762zm0-3.046l-.648-.762zm.747 4.772l-.997-.08zm-.697-1.684l.648-.761zm2.846 3.903l.08.997zm-2.154-2.154l.997.08zm3.903 2.846l.761-.648zm-1.684-.697l-.08-.997zm4.772.747l.762.648zm-3.046 0l-.762.648zm4.772-.747l.08-.997zm-1.684.697l-.761-.648zm3.903-2.846l.997-.08zm-2.154 2.154l-.08.997zm2.846-3.903l.648.762zm-.697 1.684l-.997.08zm.747-4.772l.648-.762zm0 3.046l-.648-.761zm-.747-4.772l-.997-.08zm.697 1.684l-.648.761zm-2.846-3.903l-.08-.997zm2.154 2.154l.997.08zM13.565 2.84l.762-.648zm1.684.697l.08.997zm-1.726-.747l-.761.648zm-3.046 0l.761.648zM9 14.458l.044-.999zm6.555 6.71l-3-2l-1.11 1.664l3 2zm-4.11-2l-3 2l1.11 1.664l3-2zm1.317-15.73l.042.05l1.523-1.296l-.042-.05zm2.567 1.096l.065-.005l-.16-1.994l-.065.005zm1.142 1.072l-.005.065l1.994.16l.005-.065zm1.041 2.59l.05.042l1.296-1.523l-.05-.042zm.05 1.566l-.05.042l1.296 1.523l.05-.042zm-1.096 2.567l.005.065l1.994-.16l-.005-.065zm-1.072 1.142l-.065-.005l-.16 1.994l.065.005zm-2.59 1.041l-.042.05l1.523 1.296l.042-.05zm-1.566.05l-.042-.05l-1.523 1.296l.042.05zm-2.567-1.096l-.065.005l.16 1.994l.065-.005zm-1.142-1.072l.005-.065l-1.994-.16l-.005.065zm-1.041-2.59l-.05-.042l-1.296 1.523l.05.042zm-.05-1.566l.05-.042l-1.296-1.523l-.05.042zm1.096-2.567l-.005-.065l-1.994.16l.005.065zm1.072-1.142l.065.005l.16-1.994l-.065-.005zm2.59-1.041l.042-.05l-1.523-1.296l-.042.05zM8.671 4.534a3 3 0 0 0 2.525-1.046L9.673 2.192a1 1 0 0 1-.842.348zM7.529 5.606a1 1 0 0 1 1.077-1.077l.16-1.994a3 3 0 0 0-3.23 3.231zm-1.041 2.59a3 3 0 0 0 1.046-2.525l-1.994.16a1 1 0 0 1-.348.842zm-.05 1.566a1 1 0 0 1 0-1.524L5.142 6.715a3 3 0 0 0 0 4.57zm1.096 2.567a3 3 0 0 0-1.046-2.525l-1.296 1.523a1 1 0 0 1 .348.842zm1.072 1.142a1 1 0 0 1-1.077-1.077l-1.994-.16a3 3 0 0 0 3.231 3.23zm4.156 1.09a1 1 0 0 1-1.524 0l-1.523 1.297a3 3 0 0 0 4.57 0zm3.71-2.167a1 1 0 0 1-1.078 1.077l-.16 1.994a3 3 0 0 0 3.23-3.231zm1.04-2.59a3 3 0 0 0-1.046 2.525l1.994-.16a1 1 0 0 1 .348-.842zm.05-1.566a1 1 0 0 1 0 1.524l1.296 1.523a3 3 0 0 0 0-4.57zm-1.096-2.567a3 3 0 0 0 1.046 2.525l1.296-1.523a1 1 0 0 1-.348-.842zm-1.072-1.142a1 1 0 0 1 1.077 1.077l1.994.16a3 3 0 0 0-3.231-3.23zm-2.59-1.041a3 3 0 0 0 2.525 1.046l-.16-1.994a1 1 0 0 1-.842-.348zm1.48-1.346a3 3 0 0 0-4.569 0l1.523 1.296a1 1 0 0 1 1.524 0zm-3.088 12.37a3 3 0 0 0-2.152-1.053l-.088 1.998a1 1 0 0 1 .717.351zM9.044 13.46a3 3 0 0 0-.373.007l.16 1.994a1 1 0 0 1 .125-.003zM10 22v-7.542H8V22zm5.33-8.534a3 3 0 0 0-.374-.007l.088 1.998a1 1 0 0 1 .125.003zm-.374-.007a3 3 0 0 0-2.152 1.053l1.523 1.296a1 1 0 0 1 .717-.35zm-.956 1V22h2v-7.542z" />
+            <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14 8l-3 3l-1-1" />
+          </g>
+        </svg>
+        <span class="text-[15px]">Emitir insignia</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Tabla de Insignias Registradas -->
+  <div class="border border-[#EEEEEE] bg-white w-full mb-8">
+    <table class="w-full text-center border-collapse">
+      <thead class="bg-white">
+        <tr class="border-b border-[#EEEEEE]">
+          <th colspan="7" class="py-1.5 text-[13px] font-bold text-[#334155] tracking-wider text-center uppercase">
+            Listado de insignias emitidas
+          </th>
+        </tr>
+        <tr class="bg-white border-b border-[#EEEEEE] text-[11px] font-bold text-[#334155] uppercase">
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[70px]">#</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[220px]">Receptor</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[220px]">Microcredencial</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[110px]">Duración</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[110px]">Estado</th>
+          <th class="py-1.5 px-2 border-r border-[#EEEEEE] w-[180px]">Fecha</th>
+          <th class="py-1.5 px-2 w-[220px]">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#EEEEEE] bg-white">
+        <tr *ngFor="let item of insigniasPaginadas; let i = index; trackBy: trackById"
+          class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
+          <!-- # ID -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
+          <!-- Receptor -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.receptor }}</td>
+          <!-- Microcredencial -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.microcredencial }}</td>
+          <!-- Duración -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.duracion }}</td>
+          <!-- Estado -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE]">
+            <span [ngClass]="{
+                'text-[#30A32C] bg-[#DCFFDB]': item.estado === 'ACTIVA',
+                'text-[#A32C2E] bg-[#FFDBDC]': item.estado === 'REVOCADA'
+              }" class="px-1.5 py-0.5 rounded font-bold text-[11px] uppercase tracking-wider inline-block">
+              {{ item.estado }}
+            </span>
+          </td>
+          <!-- Fecha -->
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.fecha }}</td>
+          <!-- Acciones -->
+          <td class="py-2 px-2">
+            <div class="flex items-center justify-center gap-3">
+              <!-- Botón Información -->
+              <button type="button" (click)="abrirModalInfo(item)"
+                class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                  class="flex-shrink-0">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333" />
+                    <path stroke-width="2" d="M11.956 7.443h.01" />
+                  </g>
+                </svg>
+                Información
+              </button>
+
+              <!-- Botón Revocar -->
+              <button type="button" (click)="revocarInsignia(item)" [disabled]="item.estado === 'REVOCADA'"
+                [ngClass]="item.estado === 'REVOCADA' 
+                  ? 'border-[#E2E8F0] bg-[#F1F5F9] text-[#94A3B8] cursor-not-allowed'
+                  : 'border-[#FDBABB] bg-white text-[#E90E12] hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer'"
+                class="flex items-center gap-1 px-1.75 py-1 border rounded-lg text-[13px] font-medium transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                  class="flex-shrink-0">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path fill="none" [attr.stroke]="item.estado === 'REVOCADA' ? '#94A3B8' : '#e90e12'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m6.713-2.787L5.287 5.287" />
+                </svg>
+                Revocar
+              </button>
+            </div>
+          </td>
+        </tr>
+        <!-- Mensaje si no hay registros o no coinciden los filtros -->
+        <tr *ngIf="insigniasFiltradas.length === 0">
+          <td colspan="7" class="py-8 text-center text-[#64748B] bg-white">
+            <div class="flex flex-col items-center justify-center gap-2 py-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="text-[#94A3B8]">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
+              </svg>
+              <span class="text-[13px] font-medium">Aún no se han emitido insignias o no hay coincidencias</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación y Control de Registros -->
+  <div class="flex items-center justify-center gap-12 mt-4 w-full text-[11px] text-[#64748B] select-none">
+    <!-- Lado Izquierdo: Mostrando n de n registros -->
+    <div class="font-medium">
+      Mostrando {{ insigniasPaginadas.length }} de {{ insigniasFiltradas.length }} registros
+    </div>
+
+    <!-- Centro: Botones de Paginación -->
+    <div class="flex items-center gap-1">
+      <button type="button" (click)="irAPrimeraPagina()" [disabled]="paginaActual === 1"
+        [class]="paginaActual === 1 ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m18.64 19l-5.763-5.763a1.737 1.737 0 0 1 0-2.474L18.64 5m-7 14l-5.763-5.763a1.74 1.74 0 0 1 0-2.474L11.64 5" />
+        </svg>
+      </button>
+
+      <button type="button" (click)="irAPaginaAnterior()" [disabled]="paginaActual === 1"
+        [class]="paginaActual === 1 ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m15.583 4l-6.587 6.587a2.013 2.013 0 0 0 0 2.826L15.583 20" />
+        </svg>
+      </button>
+
+      <div class="w-7 h-7 flex items-center justify-center rounded-full bg-[#ECFDF5] text-[#047857] font-bold">
+        {{ paginaActual }}
+      </div>
+
+      <button type="button" (click)="irAPaginaSiguiente()" [disabled]="paginaActual === totalPaginas"
+        [class]="paginaActual === totalPaginas ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m8.417 20l6.587-6.587a2.013 2.013 0 0 0 0-2.826L8.417 4" />
+        </svg>
+      </button>
+
+      <button type="button" (click)="irAUltimaPagina()" [disabled]="paginaActual === totalPaginas"
+        [class]="paginaActual === totalPaginas ? 'text-[#A1ABB9] cursor-default' : 'text-[#64748B] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DDE1E5] rounded-full'"
+        class="w-7 h-7 flex items-center justify-center transition-all duration-200 focus:outline-none bg-transparent border-0 p-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="flex-shrink-0">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5.36 19l5.763-5.763a1.737 1.737 0 0 0 0-2.474L5.36 5m7 14l5.763-5.763a1.74 1.74 0 0 0 0-2.474L12.36 5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Derecha: Dropdown de límite -->
+    <div class="relative flex items-center gap-2 font-medium">
+      <div class="relative">
+        <button type="button" (click)="toggleLimite()"
+          [ngClass]="{'z-50': dropdownLimiteAbierto}"
+          class="relative flex items-center justify-between w-14 px-2 py-1 bg-white border border-[#CBD5E1] rounded-lg text-[#334155] hover:border-[#828891] focus:outline-none transition-all">
+          <span>{{ limiteRegistros }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            class="text-[#64748B] ml-1">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+          </svg>
+        </button>
+
+        <div *ngIf="dropdownLimiteAbierto"
+          class="absolute bottom-full left-0 mb-1 w-full bg-white border border-[#CBD5E1] rounded-lg shadow-lg z-50 overflow-hidden">
+          <div (click)="cambiarLimite(10)" class="px-2 py-1 hover:bg-[#F1F5F9] cursor-pointer text-center">10</div>
+          <div (click)="cambiarLimite(25)" class="px-2 py-1 hover:bg-[#F1F5F9] cursor-pointer text-center">25</div>
+          <div (click)="cambiarLimite(50)" class="px-2 py-1 hover:bg-[#F1F5F9] cursor-pointer text-center">50</div>
+          <div (click)="cambiarLimite(100)" class="px-2 py-1 hover:bg-[#F1F5F9] cursor-pointer text-center">100</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

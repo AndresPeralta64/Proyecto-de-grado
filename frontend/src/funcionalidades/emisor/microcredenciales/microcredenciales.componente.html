@@ -54,7 +54,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Pendiente</span>
+            <span class="text-[13.5px] text-[#334155]">Pendientes</span>
           </label>
 
           <!-- Aprobada -->
@@ -70,7 +70,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Aprobada</span>
+            <span class="text-[13.5px] text-[#334155]">Aprobadas</span>
           </label>
 
           <!-- Rechazada -->
@@ -86,7 +86,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Rechazada</span>
+            <span class="text-[13.5px] text-[#334155]">Rechazadas</span>
           </label>
 
           <!-- Inactiva -->
@@ -102,7 +102,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Inactiva</span>
+            <span class="text-[13.5px] text-[#334155]">Inactivas</span>
           </label>
 
         </div>
@@ -134,8 +134,7 @@
           class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-47">
 
           <!-- Fecha de creación -->
-          <label (click)="toggleFechaCreacion()"
-            class="flex items-center gap-2.5 cursor-pointer group select-none">
+          <label (click)="toggleFechaCreacion()" class="flex items-center gap-2.5 cursor-pointer group select-none">
             <div
               [ngClass]="ordenarPor.fecha_creacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
               class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
@@ -315,7 +314,8 @@
         <tr *ngFor="let item of microcredencialesPaginadas; let i = index; trackBy: trackByMicrocredencialId"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- # ID -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) *
+            limiteRegistros + i + 1 }}</td>
           <!-- Microcredencial -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium text-left pl-4">{{
             item.nombre }}</td>
@@ -348,9 +348,8 @@
                 class="flex items-center gap-1 px-1.75 py-1 border rounded-lg text-[13px] font-medium transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                   class="flex-shrink-0">
-                  <g fill="none"
-                    [attr.stroke]="puedeEditarOEstado(item) ? '#0ea5e9' : '#94A3B8'"
-                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                  <g fill="none" [attr.stroke]="puedeEditarOEstado(item) ? '#0ea5e9' : '#94A3B8'" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="1.5">
                     <path
                       d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56" />
                     <path
@@ -859,7 +858,8 @@
 
     <!-- Título -->
     <div class="px-12 pt-7 pb-5 flex-shrink-0">
-      <h2 class="text-[21px] font-semibold text-[#334155]">{{ modoEdicion ? 'Editar microcredencial' : 'Registrar microcredencial' }}</h2>
+      <h2 class="text-[21px] font-semibold text-[#334155]">{{ modoEdicion ? 'Editar microcredencial' : 'Registrar
+        microcredencial' }}</h2>
     </div>
 
     <!-- Cuerpo -->
@@ -870,7 +870,7 @@
           <defs>
             <!-- Sombra para darle efecto 3D -->
             <filter id="badge-shadow" x="-10%" y="-10%" width="120%" height="120%">
-              <feDropShadow dx="0" dy="4" stdDeviation="2" flood-color="#000000" flood-opacity="0.25"/>
+              <feDropShadow dx="0" dy="4" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
             </filter>
           </defs>
 
@@ -878,113 +878,218 @@
           <g filter="url(#badge-shadow)">
             <!-- Hexagon Shield -->
             <g *ngIf="disenoInsignia.forma === 'hex-shield'">
-              <path d="M20 25 L180 25 L180 125 L100 185 L20 125 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M20 25 L180 25 L180 125 L100 185 L20 125 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M30 35 L170 35 L170 118 L100 170 L30 118 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="2" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M20 25 L180 25 L180 125 L100 185 L20 125 Z" fill="#000000" stroke="#000000" stroke-width="8"
+                stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <path d="M20 25 L180 25 L180 125 L100 185 L20 125 Z" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M30 35 L170 35 L170 118 L100 170 L30 118 Z"
+                fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="2"
+                [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Classic Shield -->
             <g *ngIf="disenoInsignia.forma === 'classic-shield' || disenoInsignia.forma === 'escudo'">
-              <path d="M20 25 L180 25 L180 105 C180 165 100 185 100 185 C100 185 20 165 20 105 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M20 25 L180 25 L180 105 C180 165 100 185 100 185 C100 185 20 165 20 105 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M30 35 L170 35 L170 102 C170 152 100 170 100 170 C100 170 30 152 30 102 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M20 25 L180 25 L180 105 C180 165 100 185 100 185 C100 185 20 165 20 105 Z" fill="#000000"
+                stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <path d="M20 25 L180 25 L180 105 C180 165 100 185 100 185 C100 185 20 165 20 105 Z"
+                [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8"
+                stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'"
+                d="M30 35 L170 35 L170 102 C170 152 100 170 100 170 C100 170 30 152 30 102 Z" fill="none"
+                [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray"
+                [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Pointed Shield -->
             <g *ngIf="disenoInsignia.forma === 'pointed-shield'">
-              <path d="M100 15 L180 40 L180 125 L100 185 L20 125 L20 40 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M100 15 L180 40 L180 125 L100 185 L20 125 L20 40 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M100 28 L168 49 L168 118 L100 169 L32 118 L32 49 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="2" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M100 15 L180 40 L180 125 L100 185 L20 125 L20 40 Z" fill="#000000" stroke="#000000"
+                stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <path d="M100 15 L180 40 L180 125 L100 185 L20 125 L20 40 Z" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'"
+                d="M100 28 L168 49 L168 118 L100 169 L32 118 L32 49 Z" fill="none"
+                [attr.stroke]="disenoInsignia.colorLinea" stroke-width="2" [attr.stroke-dasharray]="strokeDasharray"
+                [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Arch Shield -->
             <g *ngIf="disenoInsignia.forma === 'arch-shield'">
-              <path d="M 30 20 L 170 20 L 170 110 A 70 70 0 0 1 30 110 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M 30 20 L 170 20 L 170 110 A 70 70 0 0 1 30 110 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M 42 32 L 158 32 L 158 110 A 58 58 0 0 1 42 110 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M 30 20 L 170 20 L 170 110 A 70 70 0 0 1 30 110 Z" fill="#000000" stroke="#000000"
+                stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <path d="M 30 20 L 170 20 L 170 110 A 70 70 0 0 1 30 110 Z" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M 42 32 L 158 32 L 158 110 A 58 58 0 0 1 42 110 Z"
+                fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3"
+                [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Shield Cut -->
             <g *ngIf="disenoInsignia.forma === 'shield-cut'">
-              <path d="M 50 20 L 150 20 L 180 50 L 180 100 C 180 160 100 185 100 185 C 100 185 20 160 20 100 L 20 50 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M 50 20 L 150 20 L 180 50 L 180 100 C 180 160 100 185 100 185 C 100 185 20 160 20 100 L 20 50 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M 56 32 L 144 32 L 168 56 L 168 100 C 168 150 100 170 100 170 C 100 170 32 150 32 100 L 32 56 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M 50 20 L 150 20 L 180 50 L 180 100 C 180 160 100 185 100 185 C 100 185 20 160 20 100 L 20 50 Z"
+                fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15"
+                transform="translate(0, 4)" />
+              <path d="M 50 20 L 150 20 L 180 50 L 180 100 C 180 160 100 185 100 185 C 100 185 20 160 20 100 L 20 50 Z"
+                [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8"
+                stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'"
+                d="M 56 32 L 144 32 L 168 56 L 168 100 C 168 150 100 170 100 170 C 100 170 32 150 32 100 L 32 56 Z"
+                fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3"
+                [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Pentagon Shield -->
             <g *ngIf="disenoInsignia.forma === 'pentagon-shield'">
-              <path d="M 40 15 L 160 15 L 185 105 L 100 185 L 15 105 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M 40 15 L 160 15 L 185 105 L 100 185 L 15 105 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M 48 28 L 152 28 L 172 105 L 100 168 L 28 105 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M 40 15 L 160 15 L 185 105 L 100 185 L 15 105 Z" fill="#000000" stroke="#000000" stroke-width="8"
+                stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <path d="M 40 15 L 160 15 L 185 105 L 100 185 L 15 105 Z" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M 48 28 L 152 28 L 172 105 L 100 168 L 28 105 Z"
+                fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3"
+                [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Circle Border -->
             <g *ngIf="disenoInsignia.forma === 'circle-border' || disenoInsignia.forma === 'circulo'">
-              <circle cx="100" cy="100" r="80" fill="#000000" stroke="#000000" stroke-width="8" opacity="0.15" transform="translate(0, 4)"/>
-              <circle cx="100" cy="100" r="80" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8"/>
-              <circle *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" cx="100" cy="100" r="70" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <circle cx="100" cy="100" r="80" fill="#000000" stroke="#000000" stroke-width="8" opacity="0.15"
+                transform="translate(0, 4)" />
+              <circle cx="100" cy="100" r="80" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" />
+              <circle *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" cx="100" cy="100" r="70" fill="none"
+                [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray"
+                [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <!-- Scalloped -->
             <g *ngIf="disenoInsignia.forma === 'scalloped'">
-              <path d="M 100 15 L 119 28 L 143 26 L 153 47 L 174 58 L 172 81 L 185 100 L 172 119 L 174 143 L 153 153 L 143 174 L 119 172 L 100 185 L 81 172 L 58 174 L 47 153 L 26 143 L 28 119 L 15 100 L 28 81 L 26 58 L 47 47 L 58 26 L 81 28 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M 100 15 L 119 28 L 143 26 L 153 47 L 174 58 L 172 81 L 185 100 L 172 119 L 174 143 L 153 153 L 143 174 L 119 172 L 100 185 L 81 172 L 58 174 L 47 153 L 26 143 L 28 119 L 15 100 L 28 81 L 26 58 L 47 47 L 58 26 L 81 28 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <circle *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" cx="100" cy="100" r="70" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="2" [attr.opacity]="disenoInsignia.transparenciaLinea / 100" [attr.stroke-dasharray]="strokeDasharray"/>
+              <path
+                d="M 100 15 L 119 28 L 143 26 L 153 47 L 174 58 L 172 81 L 185 100 L 172 119 L 174 143 L 153 153 L 143 174 L 119 172 L 100 185 L 81 172 L 58 174 L 47 153 L 26 143 L 28 119 L 15 100 L 28 81 L 26 58 L 47 47 L 58 26 L 81 28 Z"
+                fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15"
+                transform="translate(0, 4)" />
+              <path
+                d="M 100 15 L 119 28 L 143 26 L 153 47 L 174 58 L 172 81 L 185 100 L 172 119 L 174 143 L 153 153 L 143 174 L 119 172 L 100 185 L 81 172 L 58 174 L 47 153 L 26 143 L 28 119 L 15 100 L 28 81 L 26 58 L 47 47 L 58 26 L 81 28 Z"
+                [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8"
+                stroke-linejoin="round" />
+              <circle *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" cx="100" cy="100" r="70" fill="none"
+                [attr.stroke]="disenoInsignia.colorLinea" stroke-width="2"
+                [attr.opacity]="disenoInsignia.transparenciaLinea / 100" [attr.stroke-dasharray]="strokeDasharray" />
             </g>
 
             <!-- Pennant -->
             <g *ngIf="disenoInsignia.forma === 'pennant'">
-              <path d="M30 15 L170 15 L170 185 L100 145 L30 185 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-              <path d="M30 15 L170 15 L170 185 L100 145 L30 185 Z" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
-              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M42 27 L158 27 L158 171 L100 131 L42 171 Z" fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3" [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100"/>
+              <path d="M30 15 L170 15 L170 185 L100 145 L30 185 Z" fill="#000000" stroke="#000000" stroke-width="8"
+                stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <path d="M30 15 L170 15 L170 185 L100 145 L30 185 Z" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round" />
+              <path *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" d="M42 27 L158 27 L158 171 L100 131 L42 171 Z"
+                fill="none" [attr.stroke]="disenoInsignia.colorLinea" stroke-width="3"
+                [attr.stroke-dasharray]="strokeDasharray" [attr.opacity]="disenoInsignia.transparenciaLinea / 100" />
             </g>
 
             <g *ngIf="disenoInsignia.forma === 'hexagono'">
-               <polygon points="100,15 175,55 175,145 100,185 25,145 25,55" fill="#000000" stroke="#000000" stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)"/>
-               <polygon points="100,15 175,55 175,145 100,185 25,145 25,55" [attr.fill]="disenoInsignia.colorFondo" [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round"/>
+              <polygon points="100,15 175,55 175,145 100,185 25,145 25,55" fill="#000000" stroke="#000000"
+                stroke-width="8" stroke-linejoin="round" opacity="0.15" transform="translate(0, 4)" />
+              <polygon points="100,15 175,55 175,145 100,185 25,145 25,55" [attr.fill]="disenoInsignia.colorFondo"
+                [attr.stroke]="disenoInsignia.colorBorde" stroke-width="8" stroke-linejoin="round" />
             </g>
           </g>
 
           <!-- Cinta superior -->
           <g filter="url(#badge-shadow)" *ngIf="disenoInsignia.largoCintaSuperior > 0">
             <!-- Cinta principal -->
-            <path [attr.d]="topRibbonPath" [attr.fill]="disenoInsignia.colorCinta"/>
+            <path [attr.d]="topRibbonPath" [attr.fill]="disenoInsignia.colorCinta" />
             <!-- Dobleces para efecto 3D -->
-            <path [attr.d]="topRibbonFoldLeft" fill="#000000" opacity="0.3"/>
-            <path [attr.d]="topRibbonFoldRight" fill="#000000" opacity="0.3"/>
+            <path [attr.d]="topRibbonFoldLeft" fill="#000000" opacity="0.3" />
+            <path [attr.d]="topRibbonFoldRight" fill="#000000" opacity="0.3" />
           </g>
-          <text x="100" y="54" font-family="sans-serif" font-size="14" font-weight="bold" [attr.fill]="disenoInsignia.colorTexto" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">{{ disenoInsignia.textoSuperior }}</text>
+          <text x="100" y="54" font-family="sans-serif" font-size="14" font-weight="bold"
+            [attr.fill]="disenoInsignia.colorTexto" text-anchor="middle" dominant-baseline="middle"
+            letter-spacing="1">{{ disenoInsignia.textoSuperior }}</text>
 
           <!-- Ícono central -->
           <!-- Ícono central -->
           <svg [attr.x]="100 - (31.2 * disenoInsignia.tamanoIcono / 100)"
-               [attr.y]="100 - (31.2 * disenoInsignia.tamanoIcono / 100)"
-               [attr.width]="62.4 * disenoInsignia.tamanoIcono / 100"
-               [attr.height]="62.4 * disenoInsignia.tamanoIcono / 100"
-               [style.color]="disenoInsignia.colorIcono">
-            <svg *ngIf="disenoInsignia.icono === 'ingenieria'" viewBox="0 0 24 24"><path fill="currentColor" d="M8 10h8v8h-5l-2-2H7v-5m0-7v2h3v2H7l-2 2v3H3v-3H1v8h2v-3h2v3h3l2 2h8v-4h2v3h3V9h-3v3h-2V8h-6V6h3V4z" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'programacion'" viewBox="0 0 20 16"><path fill="currentColor" d="M12.736.064c.52.2.787.805.598 1.353L8.546 15.305c-.19.548-.763.83-1.282.631c-.52-.2-.787-.805-.598-1.353L11.454.695c.19-.548.763-.83 1.282-.631M2.414 8.256L5.95 11.99c.39.412.39 1.08 0 1.492a.963.963 0 0 1-1.414 0L.293 9.003a1.1 1.1 0 0 1 0-1.493l4.243-4.48a.963.963 0 0 1 1.414 0a1.1 1.1 0 0 1 0 1.494zm15.172 0L14.05 4.524a1.1 1.1 0 0 1 0-1.493a.963.963 0 0 1 1.414 0l4.243 4.479c.39.412.39 1.08 0 1.493l-4.243 4.478a.963.963 0 0 1-1.414 0a1.1 1.1 0 0 1 0-1.492z" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'diseno'" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22q-2.05 0-3.875-.788t-3.187-2.15t-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175T8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9t2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.312.125t-.088.275q0 .3.375.863t.375 1.287q0 1.25-.687 1.85T12 22m-4.425-9.425Q8 12.15 8 11.5t-.425-1.075T6.5 10t-1.075.425T5 11.5t.425 1.075T6.5 13t1.075-.425m3-4Q11 8.15 11 7.5t-.425-1.075T9.5 6t-1.075.425T8 7.5t.425 1.075T9.5 9t1.075-.425m5 0Q16 8.15 16 7.5t-.425-1.075T14.5 6t-1.075.425T13 7.5t.425 1.075T14.5 9t1.075-.425m3 4Q19 12.15 19 11.5t-.425-1.075T17.5 10t-1.075.425T16 11.5t.425 1.075T17.5 13t1.075-.425M12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.962T20 11.05q0-3.025-2.312-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.338 5.663T12 20" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'administracion'" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm5-2V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-4 5v.01" /><path d="M3 13a20 20 0 0 0 18 0" /></g></svg>
-            <svg *ngIf="disenoInsignia.icono === 'escuela'" viewBox="0 0 24 24"><path fill="currentColor" d="M6.05 17.775q-.5-.275-.775-.737T5 16v-4.8L2.6 9.875q-.275-.15-.4-.375T2.075 9t.125-.5t.4-.375l8.45-4.6q.225-.125.463-.188T12 3.275t.488.063t.462.187l9.525 5.2q.25.125.388.363T23 9.6V16q0 .425-.288.713T22 17t-.712-.288T21 16v-5.9l-2 1.1V16q0 .575-.275 1.038t-.775.737l-5 2.7q-.225.125-.462.188t-.488.062t-.488-.062t-.462-.188zM12 12.7L18.85 9L12 5.3L5.15 9zm0 6.025l5-2.7V12.25l-4.025 2.225q-.225.125-.475.188t-.5.062t-.5-.062t-.475-.188L7 12.25v3.775zm0-3" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'salud'" viewBox="-2 -2 24 24"><path fill="currentColor" d="M7 12.917v.583a4.5 4.5 0 1 0 9 0v-1.67a3.001 3.001 0 1 1 2 0v1.67a6.5 6.5 0 1 1-13 0v-.583A6 6 0 0 1 0 7V2a2 2 0 0 1 2-2h1a1 1 0 1 1 0 2H2v5a4 4 0 1 0 8 0V2H9a1 1 0 1 1 0-2h1a2 2 0 0 1 2 2v5a6 6 0 0 1-5 5.917M17 10a1 1 0 1 0 0-2a1 1 0 0 0 0 2" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'agricultura'" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 21c.5-4.5 2.5-8 7-10" /><path d="M9 18c6.218 0 10.5-3.288 11-12V4h-4.014c-9 0-11.986 4-12 9c0 1 0 3 2 5z" /></g></svg>
-            <svg *ngIf="disenoInsignia.icono === 'mecanica'" viewBox="0 0 24 24"><path fill="currentColor" d="m21.16 7.86l-1-1.73a1.997 1.997 0 0 0-2.73-.73l-.53.31c-.58-.46-1.22-.83-1.9-1.11V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v.6c-.67.28-1.31.66-1.9 1.11l-.53-.31c-.96-.55-2.18-.22-2.73.73l-1 1.73c-.55.96-.22 2.18.73 2.73l.5.29c-.05.37-.08.74-.08 1.11s.03.74.08 1.11l-.5.29c-.96.55-1.28 1.78-.73 2.73l1 1.73c.55.95 1.78 1.28 2.73.73l.53-.31c.58.46 1.22.83 1.9 1.11v.6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-.6a8.7 8.7 0 0 0 1.9-1.11l.53.31c.96.55 2.18.22 2.73-.73l1-1.73c.55-.96.22-2.18-.73-2.73l-.5-.29c.05-.37.08-.74.08-1.11s-.03-.74-.08-1.11l.5-.29c.96-.55 1.28-1.78.73-2.73M12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'derecho'" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'matematicas'" viewBox="0 0 24 24"><g fill="none"><path stroke="currentColor" stroke-width="1.5" d="M4.318 20.536C5.636 22 7.758 22 12 22s6.364 0 7.682-1.465C21 19.072 21 16.714 21 12s0-7.071-1.318-8.536S16.242 2 12 2S5.636 2 4.318 3.464C3 4.93 3 7.286 3 12s0 7.071 1.318 8.535Z" /><path stroke="currentColor" stroke-width="1.5" d="M7 8c0-.465 0-.697.051-.888a1.5 1.5 0 0 1 1.06-1.06C8.304 6 8.536 6 9 6h6c.465 0 .697 0 .888.051a1.5 1.5 0 0 1 1.06 1.06C17 7.304 17 7.536 17 8s0 .697-.051.888a1.5 1.5 0 0 1-1.06 1.06C15.697 10 15.464 10 15 10H9c-.465 0-.697 0-.888-.051a1.5 1.5 0 0 1-1.06-1.06C7 8.696 7 8.464 7 8Z" /><circle cx="8" cy="13" r="1" fill="currentColor" /><circle cx="8" cy="17" r="1" fill="currentColor" /><circle cx="12" cy="13" r="1" fill="currentColor" /><circle cx="12" cy="17" r="1" fill="currentColor" /><circle cx="16" cy="13" r="1" fill="currentColor" /><circle cx="16" cy="17" r="1" fill="currentColor" /></g></svg>
-            <svg *ngIf="disenoInsignia.icono === 'marketing'" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M14 14V6m0 8l6.102 3.487a.6.6 0 0 0 .898-.52V3.033a.6.6 0 0 0-.898-.521L14 6m0 8H7a4 4 0 1 1 0-8h7M7.757 19.3L7 14h4l.677 4.74a1.98 1.98 0 0 1-3.92.56Z" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'veterinaria'" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" d="M457.74 170.1a30.3 30.3 0 0 0-11.16-2.1h-.4c-20.17.3-42.79 19.19-54.66 47.76c-14.23 34.18-7.68 69.15 14.74 78.14a30.2 30.2 0 0 0 11.15 2.1c20.27 0 43.2-19 55.17-47.76c14.13-34.18 7.48-69.15-14.84-78.14ZM327.6 303.48C299.8 257.35 287.8 240 256 240s-43.9 17.46-71.7 63.48c-23.8 39.36-71.9 42.64-83.9 76.07a50.9 50.9 0 0 0-3.6 19.25c0 27.19 20.8 49.2 46.4 49.2c31.8 0 75.1-25.39 112.9-25.39S337 448 368.8 448c25.6 0 46.3-22 46.3-49.2a51 51 0 0 0-3.7-19.25c-12-33.55-60-36.71-83.8-76.07ZM192.51 196a26.5 26.5 0 0 0 4-.3c23.21-3.37 37.7-35.53 32.44-71.85C224 89.61 203.22 64 181.49 64a26.5 26.5 0 0 0-4 .3c-23.21 3.37-37.7 35.53-32.44 71.85C150 170.29 170.78 196 192.51 196Zm174.41-59.85c5.26-36.32-9.23-68.48-32.44-71.85a26.5 26.5 0 0 0-4-.3c-21.73 0-42.47 25.61-47.43 59.85c-5.26 36.32 9.23 68.48 32.44 71.85a26.5 26.5 0 0 0 4 .3c21.73 0 42.51-25.71 47.43-59.85ZM105.77 293.9c22.39-9 28.93-44 14.72-78.14C108.53 187 85.62 168 65.38 168a30.2 30.2 0 0 0-11.15 2.1c-22.39 9-28.93 44-14.72 78.14C51.47 277 74.38 296 94.62 296a30.2 30.2 0 0 0 11.15-2.1Z" /></svg>
-            <svg *ngIf="disenoInsignia.icono === 'ciencias'" viewBox="0 0 32 32"><path fill="currentColor" d="M20.503 1.972a1.023 1.023 0 0 0-1.403.214l-.494.65l-.102-.072l-.165-.048c-1.663-.484-3.549.262-4.556 1.621l-.006.007l-3.913 5.377a4.91 4.91 0 0 0-.426 5.181l-.087.114a1.98 1.98 0 0 0 .43 2.822a2.075 2.075 0 0 0 2.807-.387c1.993.555 4.218-.126 5.512-1.871l.005-.007l.209-.287c2.334.53 3.582 2.478 3.65 4.631c.038 1.22-.329 2.356-1.025 3.199c-.662.8-1.8 1.557-3.748 1.742a4 4 0 0 0-.458.073L6.461 17.719a1.25 1.25 0 0 0-1.438 2.047L12.48 25H5.2A4.2 4.2 0 0 0 1 29.2A1.8 1.8 0 0 0 2.8 31h26.4a1.8 1.8 0 0 0 1.8-1.8a4.2 4.2 0 0 0-3.077-4.048a12.34 12.34 0 0 0 1.07-5.464c-.13-4.154-2.361-8.394-6.45-10.442c.489-1.235.41-2.696-.362-3.795l-.097-.138l-.176-.126l.48-.631a.977.977 0 0 0-.212-1.393zm3.46 17.882c-.084-2.679-1.587-5.292-4.397-6.288l1.901-2.613c3.493 1.66 5.415 5.22 5.528 8.798c.056 1.8-.34 3.632-1.23 5.249h-3.863q.316-.291.579-.61c1.04-1.26 1.534-2.886 1.482-4.536M28.991 29H3.009A2.2 2.2 0 0 1 5.2 27h21.6a2.2 2.2 0 0 1 2.191 2M17.609 4.581l2.987 2.127c.363.644.314 1.625-.21 2.332l-2.82 3.876l-4.94-3.59l2.788-3.832c.524-.704 1.46-1.052 2.195-.913m-1.224 9.95c-1.014 1.244-2.865 1.505-4.205.55a2.97 2.97 0 0 1-.732-4.137z" /></svg>
+            [attr.y]="100 - (31.2 * disenoInsignia.tamanoIcono / 100)"
+            [attr.width]="62.4 * disenoInsignia.tamanoIcono / 100"
+            [attr.height]="62.4 * disenoInsignia.tamanoIcono / 100" [style.color]="disenoInsignia.colorIcono">
+            <svg *ngIf="disenoInsignia.icono === 'ingenieria'" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M8 10h8v8h-5l-2-2H7v-5m0-7v2h3v2H7l-2 2v3H3v-3H1v8h2v-3h2v3h3l2 2h8v-4h2v3h3V9h-3v3h-2V8h-6V6h3V4z" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'programacion'" viewBox="0 0 20 16">
+              <path fill="currentColor"
+                d="M12.736.064c.52.2.787.805.598 1.353L8.546 15.305c-.19.548-.763.83-1.282.631c-.52-.2-.787-.805-.598-1.353L11.454.695c.19-.548.763-.83 1.282-.631M2.414 8.256L5.95 11.99c.39.412.39 1.08 0 1.492a.963.963 0 0 1-1.414 0L.293 9.003a1.1 1.1 0 0 1 0-1.493l4.243-4.48a.963.963 0 0 1 1.414 0a1.1 1.1 0 0 1 0 1.494zm15.172 0L14.05 4.524a1.1 1.1 0 0 1 0-1.493a.963.963 0 0 1 1.414 0l4.243 4.479c.39.412.39 1.08 0 1.493l-4.243 4.478a.963.963 0 0 1-1.414 0a1.1 1.1 0 0 1 0-1.492z" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'diseno'" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 22q-2.05 0-3.875-.788t-3.187-2.15t-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175T8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9t2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.312.125t-.088.275q0 .3.375.863t.375 1.287q0 1.25-.687 1.85T12 22m-4.425-9.425Q8 12.15 8 11.5t-.425-1.075T6.5 10t-1.075.425T5 11.5t.425 1.075T6.5 13t1.075-.425m3-4Q11 8.15 11 7.5t-.425-1.075T9.5 6t-1.075.425T8 7.5t.425 1.075T9.5 9t1.075-.425m5 0Q16 8.15 16 7.5t-.425-1.075T14.5 6t-1.075.425T13 7.5t.425 1.075T14.5 9t1.075-.425m3 4Q19 12.15 19 11.5t-.425-1.075T17.5 10t-1.075.425T16 11.5t.425 1.075T17.5 13t1.075-.425M12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.962T20 11.05q0-3.025-2.312-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.338 5.663T12 20" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'administracion'" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path
+                  d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm5-2V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-4 5v.01" />
+                <path d="M3 13a20 20 0 0 0 18 0" />
+              </g>
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'escuela'" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M6.05 17.775q-.5-.275-.775-.737T5 16v-4.8L2.6 9.875q-.275-.15-.4-.375T2.075 9t.125-.5t.4-.375l8.45-4.6q.225-.125.463-.188T12 3.275t.488.063t.462.187l9.525 5.2q.25.125.388.363T23 9.6V16q0 .425-.288.713T22 17t-.712-.288T21 16v-5.9l-2 1.1V16q0 .575-.275 1.038t-.775.737l-5 2.7q-.225.125-.462.188t-.488.062t-.488-.062t-.462-.188zM12 12.7L18.85 9L12 5.3L5.15 9zm0 6.025l5-2.7V12.25l-4.025 2.225q-.225.125-.475.188t-.5.062t-.5-.062t-.475-.188L7 12.25v3.775zm0-3" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'salud'" viewBox="-2 -2 24 24">
+              <path fill="currentColor"
+                d="M7 12.917v.583a4.5 4.5 0 1 0 9 0v-1.67a3.001 3.001 0 1 1 2 0v1.67a6.5 6.5 0 1 1-13 0v-.583A6 6 0 0 1 0 7V2a2 2 0 0 1 2-2h1a1 1 0 1 1 0 2H2v5a4 4 0 1 0 8 0V2H9a1 1 0 1 1 0-2h1a2 2 0 0 1 2 2v5a6 6 0 0 1-5 5.917M17 10a1 1 0 1 0 0-2a1 1 0 0 0 0 2" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'agricultura'" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M5 21c.5-4.5 2.5-8 7-10" />
+                <path d="M9 18c6.218 0 10.5-3.288 11-12V4h-4.014c-9 0-11.986 4-12 9c0 1 0 3 2 5z" />
+              </g>
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'mecanica'" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="m21.16 7.86l-1-1.73a1.997 1.997 0 0 0-2.73-.73l-.53.31c-.58-.46-1.22-.83-1.9-1.11V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v.6c-.67.28-1.31.66-1.9 1.11l-.53-.31c-.96-.55-2.18-.22-2.73.73l-1 1.73c-.55.96-.22 2.18.73 2.73l.5.29c-.05.37-.08.74-.08 1.11s.03.74.08 1.11l-.5.29c-.96.55-1.28 1.78-.73 2.73l1 1.73c.55.95 1.78 1.28 2.73.73l.53-.31c.58.46 1.22.83 1.9 1.11v.6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-.6a8.7 8.7 0 0 0 1.9-1.11l.53.31c.96.55 2.18.22 2.73-.73l1-1.73c.55-.96.22-2.18-.73-2.73l-.5-.29c.05-.37.08-.74.08-1.11s-.03-.74-.08-1.11l.5-.29c.96-.55 1.28-1.78.73-2.73M12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'derecho'" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'matematicas'" viewBox="0 0 24 24">
+              <g fill="none">
+                <path stroke="currentColor" stroke-width="1.5"
+                  d="M4.318 20.536C5.636 22 7.758 22 12 22s6.364 0 7.682-1.465C21 19.072 21 16.714 21 12s0-7.071-1.318-8.536S16.242 2 12 2S5.636 2 4.318 3.464C3 4.93 3 7.286 3 12s0 7.071 1.318 8.535Z" />
+                <path stroke="currentColor" stroke-width="1.5"
+                  d="M7 8c0-.465 0-.697.051-.888a1.5 1.5 0 0 1 1.06-1.06C8.304 6 8.536 6 9 6h6c.465 0 .697 0 .888.051a1.5 1.5 0 0 1 1.06 1.06C17 7.304 17 7.536 17 8s0 .697-.051.888a1.5 1.5 0 0 1-1.06 1.06C15.697 10 15.464 10 15 10H9c-.465 0-.697 0-.888-.051a1.5 1.5 0 0 1-1.06-1.06C7 8.696 7 8.464 7 8Z" />
+                <circle cx="8" cy="13" r="1" fill="currentColor" />
+                <circle cx="8" cy="17" r="1" fill="currentColor" />
+                <circle cx="12" cy="13" r="1" fill="currentColor" />
+                <circle cx="12" cy="17" r="1" fill="currentColor" />
+                <circle cx="16" cy="13" r="1" fill="currentColor" />
+                <circle cx="16" cy="17" r="1" fill="currentColor" />
+              </g>
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'marketing'" viewBox="0 0 24 24">
+              <path fill="none" stroke="currentColor" stroke-width="1.5"
+                d="M14 14V6m0 8l6.102 3.487a.6.6 0 0 0 .898-.52V3.033a.6.6 0 0 0-.898-.521L14 6m0 8H7a4 4 0 1 1 0-8h7M7.757 19.3L7 14h4l.677 4.74a1.98 1.98 0 0 1-3.92.56Z" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'veterinaria'" viewBox="0 0 512 512">
+              <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"
+                d="M457.74 170.1a30.3 30.3 0 0 0-11.16-2.1h-.4c-20.17.3-42.79 19.19-54.66 47.76c-14.23 34.18-7.68 69.15 14.74 78.14a30.2 30.2 0 0 0 11.15 2.1c20.27 0 43.2-19 55.17-47.76c14.13-34.18 7.48-69.15-14.84-78.14ZM327.6 303.48C299.8 257.35 287.8 240 256 240s-43.9 17.46-71.7 63.48c-23.8 39.36-71.9 42.64-83.9 76.07a50.9 50.9 0 0 0-3.6 19.25c0 27.19 20.8 49.2 46.4 49.2c31.8 0 75.1-25.39 112.9-25.39S337 448 368.8 448c25.6 0 46.3-22 46.3-49.2a51 51 0 0 0-3.7-19.25c-12-33.55-60-36.71-83.8-76.07ZM192.51 196a26.5 26.5 0 0 0 4-.3c23.21-3.37 37.7-35.53 32.44-71.85C224 89.61 203.22 64 181.49 64a26.5 26.5 0 0 0-4 .3c-23.21 3.37-37.7 35.53-32.44 71.85C150 170.29 170.78 196 192.51 196Zm174.41-59.85c5.26-36.32-9.23-68.48-32.44-71.85a26.5 26.5 0 0 0-4-.3c-21.73 0-42.47 25.61-47.43 59.85c-5.26 36.32 9.23 68.48 32.44 71.85a26.5 26.5 0 0 0 4 .3c21.73 0 42.51-25.71 47.43-59.85ZM105.77 293.9c22.39-9 28.93-44 14.72-78.14C108.53 187 85.62 168 65.38 168a30.2 30.2 0 0 0-11.15 2.1c-22.39 9-28.93 44-14.72 78.14C51.47 277 74.38 296 94.62 296a30.2 30.2 0 0 0 11.15-2.1Z" />
+            </svg>
+            <svg *ngIf="disenoInsignia.icono === 'ciencias'" viewBox="0 0 32 32">
+              <path fill="currentColor"
+                d="M20.503 1.972a1.023 1.023 0 0 0-1.403.214l-.494.65l-.102-.072l-.165-.048c-1.663-.484-3.549.262-4.556 1.621l-.006.007l-3.913 5.377a4.91 4.91 0 0 0-.426 5.181l-.087.114a1.98 1.98 0 0 0 .43 2.822a2.075 2.075 0 0 0 2.807-.387c1.993.555 4.218-.126 5.512-1.871l.005-.007l.209-.287c2.334.53 3.582 2.478 3.65 4.631c.038 1.22-.329 2.356-1.025 3.199c-.662.8-1.8 1.557-3.748 1.742a4 4 0 0 0-.458.073L6.461 17.719a1.25 1.25 0 0 0-1.438 2.047L12.48 25H5.2A4.2 4.2 0 0 0 1 29.2A1.8 1.8 0 0 0 2.8 31h26.4a1.8 1.8 0 0 0 1.8-1.8a4.2 4.2 0 0 0-3.077-4.048a12.34 12.34 0 0 0 1.07-5.464c-.13-4.154-2.361-8.394-6.45-10.442c.489-1.235.41-2.696-.362-3.795l-.097-.138l-.176-.126l.48-.631a.977.977 0 0 0-.212-1.393zm3.46 17.882c-.084-2.679-1.587-5.292-4.397-6.288l1.901-2.613c3.493 1.66 5.415 5.22 5.528 8.798c.056 1.8-.34 3.632-1.23 5.249h-3.863q.316-.291.579-.61c1.04-1.26 1.534-2.886 1.482-4.536M28.991 29H3.009A2.2 2.2 0 0 1 5.2 27h21.6a2.2 2.2 0 0 1 2.191 2M17.609 4.581l2.987 2.127c.363.644.314 1.625-.21 2.332l-2.82 3.876l-4.94-3.59l2.788-3.832c.524-.704 1.46-1.052 2.195-.913m-1.224 9.95c-1.014 1.244-2.865 1.505-4.205.55a2.97 2.97 0 0 1-.732-4.137z" />
+            </svg>
           </svg>
 
           <!-- Cinta inferior -->
           <g filter="url(#badge-shadow)" *ngIf="disenoInsignia.largoCintaInferior > 0">
-            <path [attr.d]="bottomRibbonPath" [attr.fill]="disenoInsignia.colorCinta"/>
+            <path [attr.d]="bottomRibbonPath" [attr.fill]="disenoInsignia.colorCinta" />
             <!-- Dobleces para efecto 3D -->
-            <path [attr.d]="bottomRibbonFoldLeft" fill="#000000" opacity="0.3"/>
-            <path [attr.d]="bottomRibbonFoldRight" fill="#000000" opacity="0.3"/>
+            <path [attr.d]="bottomRibbonFoldLeft" fill="#000000" opacity="0.3" />
+            <path [attr.d]="bottomRibbonFoldRight" fill="#000000" opacity="0.3" />
           </g>
-          <text x="100" y="149" font-family="sans-serif" font-size="12" font-weight="bold" [attr.fill]="disenoInsignia.colorTexto" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">{{ disenoInsignia.textoInferior }}</text>
+          <text x="100" y="149" font-family="sans-serif" font-size="12" font-weight="bold"
+            [attr.fill]="disenoInsignia.colorTexto" text-anchor="middle" dominant-baseline="middle"
+            letter-spacing="1">{{ disenoInsignia.textoInferior }}</text>
         </svg>
       </ng-template>
 
@@ -1011,12 +1116,14 @@
         <!-- MODO CARGAR -->
         <ng-container *ngIf="opcionInsignia === 'cargar'">
           <!-- Imagen de insignia digital -->
-          <div class="relative w-56 h-56 flex flex-col items-center justify-center border bg-[#F8FAFC] mb-3 text-[#94A3B8] overflow-hidden transition-colors"
-               [ngClass]="errores['insignia'] ? 'border-[#E53935]' : 'border-[#E2E8F0]'">
+          <div
+            class="relative w-56 h-56 flex flex-col items-center justify-center border bg-[#F8FAFC] mb-3 text-[#94A3B8] overflow-hidden transition-colors"
+            [ngClass]="errores['insignia'] ? 'border-[#E53935]' : 'border-[#E2E8F0]'">
             <ng-container *ngIf="!imagenCargadaURL">
               <svg class="w-16 h-16 text-[#CBD5E1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M0 0h512v512H0z" fill="none" />
-                <path fill="currentColor" d="m328.375 384l3.698 74.999l-75.862-52.719l-76.287 52.769L183.625 384h-32.039l-5.522 112h36.692l73.413-50.78L329.242 496h36.694l-5.522-112zm87.034-229.086l-2.194-48.054L372.7 80.933l-25.932-40.519l-48.055-2.2L256 16.093l-42.713 22.126l-48.055 2.2L139.3 80.933L98.785 106.86l-2.194 48.054l-22.127 42.714l22.127 42.715l2.2 48.053l40.509 25.927l25.928 40.52l48.055 2.195L256 379.164l42.713-22.126l48.055-2.195l25.928-40.52l40.518-25.923l2.195-48.053l22.127-42.715Zm-31.646 76.949L382 270.377l-32.475 20.78l-20.78 32.475l-38.515 1.76L256 343.125l-34.234-17.733l-38.515-1.76l-20.78-32.475L130 270.377l-1.759-38.514l-17.741-34.235l17.737-34.228L130 124.88l32.471-20.78l20.78-32.474l38.515-1.76L256 52.132l34.234 17.733l38.515 1.76l20.78 32.474L382 124.88l1.759 38.515l17.741 34.233Z" />
+                <path fill="currentColor"
+                  d="m328.375 384l3.698 74.999l-75.862-52.719l-76.287 52.769L183.625 384h-32.039l-5.522 112h36.692l73.413-50.78L329.242 496h36.694l-5.522-112zm87.034-229.086l-2.194-48.054L372.7 80.933l-25.932-40.519l-48.055-2.2L256 16.093l-42.713 22.126l-48.055 2.2L139.3 80.933L98.785 106.86l-2.194 48.054l-22.127 42.714l22.127 42.715l2.2 48.053l40.509 25.927l25.928 40.52l48.055 2.195L256 379.164l42.713-22.126l48.055-2.195l25.928-40.52l40.518-25.923l2.195-48.053l22.127-42.715Zm-31.646 76.949L382 270.377l-32.475 20.78l-20.78 32.475l-38.515 1.76L256 343.125l-34.234-17.733l-38.515-1.76l-20.78-32.475L130 270.377l-1.759-38.514l-17.741-34.235l17.737-34.228L130 124.88l32.471-20.78l20.78-32.474l38.515-1.76L256 52.132l34.234 17.733l38.515 1.76l20.78 32.474L382 124.88l1.759 38.515l17.741 34.233Z" />
               </svg>
             </ng-container>
             <ng-container *ngIf="imagenCargadaURL">
@@ -1024,7 +1131,8 @@
             </ng-container>
           </div>
           <span class="text-[14px] text-[#334155] font-medium mb-1">Insignia digital</span>
-          <span *ngIf="errores['insignia']" class="text-[11px] text-[#E53935] mb-4 text-center max-w-[224px]">{{ errores['insignia'] }}</span>
+          <span *ngIf="errores['insignia']" class="text-[11px] text-[#E53935] mb-4 text-center max-w-[224px]">{{
+            errores['insignia'] }}</span>
           <div *ngIf="!errores['insignia']" class="mb-5"></div>
 
           <input type="file" accept="image/*" class="hidden" (change)="subirImagenInsignia($event)" #fileInputInsignia>
@@ -1034,7 +1142,8 @@
               <path d="M0 0h24v24H0z" fill="none" />
               <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.5">
                 <path stroke-linejoin="round" d="M21.25 13V8.5a5 5 0 0 0-5-5h-8.5a5 5 0 0 0-5 5v7a5 5 0 0 0 5 5h6.26" />
-                <path stroke-linejoin="round" d="m3.01 17l2.74-3.2a2.2 2.2 0 0 1 2.77-.27a2.2 2.2 0 0 0 2.77-.27l2.33-2.33a4 4 0 0 1 5.16-.43l2.47 1.91M8.01 10.17a1.66 1.66 0 1 0-.02-3.32a1.66 1.66 0 0 0 .02 3.32" />
+                <path stroke-linejoin="round"
+                  d="m3.01 17l2.74-3.2a2.2 2.2 0 0 1 2.77-.27a2.2 2.2 0 0 0 2.77-.27l2.33-2.33a4 4 0 0 1 5.16-.43l2.47 1.91M8.01 10.17a1.66 1.66 0 1 0-.02-3.32a1.66 1.66 0 0 0 .02 3.32" />
                 <path stroke-miterlimit="10" d="M18.707 15v5" />
                 <path stroke-linejoin="round" d="m21 17.105l-1.967-1.967a.46.46 0 0 0-.652 0l-1.967 1.967" />
               </g>
@@ -1045,7 +1154,8 @@
 
         <!-- MODO DISEÑAR (Previsualización de diseño guardado) -->
         <ng-container *ngIf="opcionInsignia === 'disenar' && modoDisenoGuardado">
-          <div id="insignia-capture-container" #contenedorInsigniaDesign class="relative w-56 h-56 flex flex-col items-center justify-center border border-[#E2E8F0] bg-[#F8FAFC] mb-3 overflow-hidden transition-colors">
+          <div id="insignia-capture-container" #contenedorInsigniaDesign
+            class="relative w-56 h-56 flex flex-col items-center justify-center border border-[#E2E8F0] bg-[#F8FAFC] mb-3 overflow-hidden transition-colors">
             <ng-container *ngTemplateOutlet="canvasInsignia"></ng-container>
           </div>
           <span class="text-[14px] text-[#334155] font-medium mb-1">Insignia diseñada</span>
@@ -1053,7 +1163,14 @@
 
           <button type="button" (click)="editarDiseno()"
             class="flex items-center gap-2 bg-[#10B981] border border-[#2EC89A] text-white px-2.5 py-2 rounded-lg text-[14px] font-medium hover:bg-[#059669] transition-colors cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56"/><path d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.36 1.36 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.36 1.36 0 0 1-.953.395H8.197a1.36 1.36 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086"/></g></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56" />
+                <path
+                  d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.36 1.36 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.36 1.36 0 0 1-.953.395H8.197a1.36 1.36 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086" />
+              </g>
+            </svg>
             Editar
           </button>
         </ng-container>
@@ -1067,74 +1184,77 @@
               <div class="grid grid-cols-3 gap-2">
                 <!-- Shape 1: Hexagon Shield -->
                 <div (click)="disenoInsignia.forma = 'hex-shield'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'hex-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'hex-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M10 15 L90 15 L90 60 L50 90 L10 60 Z" fill="#94A3B8"/>
+                    <path d="M10 15 L90 15 L90 60 L50 90 L10 60 Z" fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 2: Classic Shield -->
                 <div (click)="disenoInsignia.forma = 'classic-shield'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'classic-shield' || disenoInsignia.forma === 'escudo' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'classic-shield' || disenoInsignia.forma === 'escudo' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M10 15 L90 15 L90 50 C90 85 50 95 50 95 C50 95 10 85 10 50 Z" fill="#94A3B8"/>
+                    <path d="M10 15 L90 15 L90 50 C90 85 50 95 50 95 C50 95 10 85 10 50 Z" fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 3: Pointed Shield -->
                 <div (click)="disenoInsignia.forma = 'pointed-shield'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'pointed-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'pointed-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M50 5 L90 20 L90 60 L50 95 L10 60 L10 20 Z" fill="#94A3B8"/>
+                    <path d="M50 5 L90 20 L90 60 L50 95 L10 60 L10 20 Z" fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 4: Circle -->
                 <div (click)="disenoInsignia.forma = 'circle-border'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'circle-border' || disenoInsignia.forma === 'circulo' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'circle-border' || disenoInsignia.forma === 'circulo' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="#94A3B8"/>
+                    <circle cx="50" cy="50" r="45" fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 5: Scalloped -->
                 <div (click)="disenoInsignia.forma = 'scalloped'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'scalloped' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'scalloped' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M 50 5 L 60 11 L 73 11 L 78 22 L 89 28 L 89 40 L 95 50 L 89 60 L 89 73 L 78 78 L 73 89 L 60 89 L 50 95 L 40 89 L 28 89 L 22 78 L 11 73 L 11 60 L 5 50 L 11 40 L 11 28 L 22 22 L 28 11 L 40 11 Z" fill="#94A3B8"/>
+                    <path
+                      d="M 50 5 L 60 11 L 73 11 L 78 22 L 89 28 L 89 40 L 95 50 L 89 60 L 89 73 L 78 78 L 73 89 L 60 89 L 50 95 L 40 89 L 28 89 L 22 78 L 11 73 L 11 60 L 5 50 L 11 40 L 11 28 L 22 22 L 28 11 L 40 11 Z"
+                      fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 6: Pennant -->
                 <div (click)="disenoInsignia.forma = 'pennant'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'pennant' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'pennant' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M20 5 L80 5 L80 95 L50 75 L20 95 Z" fill="#94A3B8"/>
+                    <path d="M20 5 L80 5 L80 95 L50 75 L20 95 Z" fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 7: Arch Shield -->
                 <div (click)="disenoInsignia.forma = 'arch-shield'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'arch-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'arch-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M 20 10 L 80 10 L 80 60 A 30 30 0 0 1 20 60 Z" fill="#94A3B8"/>
+                    <path d="M 20 10 L 80 10 L 80 60 A 30 30 0 0 1 20 60 Z" fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 8: Shield Cut -->
                 <div (click)="disenoInsignia.forma = 'shield-cut'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'shield-cut' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'shield-cut' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M 25 10 L 75 10 L 90 25 L 90 50 C 90 80 50 95 50 95 C 50 95 10 80 10 50 L 10 25 Z" fill="#94A3B8"/>
+                    <path d="M 25 10 L 75 10 L 90 25 L 90 50 C 90 80 50 95 50 95 C 50 95 10 80 10 50 L 10 25 Z"
+                      fill="#94A3B8" />
                   </svg>
                 </div>
                 <!-- Shape 9: Pentagon Shield -->
                 <div (click)="disenoInsignia.forma = 'pentagon-shield'"
-                     class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
-                     [ngClass]="disenoInsignia.forma === 'pentagon-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-2 transition-all"
+                  [ngClass]="disenoInsignia.forma === 'pentagon-shield' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
                   <svg width="32" height="32" viewBox="0 0 100 100">
-                    <path d="M 25 10 L 75 10 L 95 55 L 50 95 L 5 55 Z" fill="#94A3B8"/>
+                    <path d="M 25 10 L 75 10 L 95 55 L 50 95 L 5 55 Z" fill="#94A3B8" />
                   </svg>
                 </div>
               </div>
@@ -1144,8 +1264,10 @@
             <div class="flex flex-col gap-1.5 w-full">
               <label class="text-[12px] font-semibold text-[#334155]">Color de fondo</label>
               <div class="flex items-center gap-2">
-                <input type="color" [(ngModel)]="disenoInsignia.colorFondo" class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
-                <input type="text" [(ngModel)]="disenoInsignia.colorFondo" class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
+                <input type="color" [(ngModel)]="disenoInsignia.colorFondo"
+                  class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
+                <input type="text" [(ngModel)]="disenoInsignia.colorFondo"
+                  class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
               </div>
             </div>
 
@@ -1153,8 +1275,10 @@
             <div class="flex flex-col gap-1.5 w-full">
               <label class="text-[12px] font-semibold text-[#334155]">Color exterior</label>
               <div class="flex items-center gap-2">
-                <input type="color" [(ngModel)]="disenoInsignia.colorBorde" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
-                <input type="text" [(ngModel)]="disenoInsignia.colorBorde" class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] uppercase outline-none focus:border-[#4AB6D5] transition-colors">
+                <input type="color" [(ngModel)]="disenoInsignia.colorBorde"
+                  class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                <input type="text" [(ngModel)]="disenoInsignia.colorBorde"
+                  class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] uppercase outline-none focus:border-[#4AB6D5] transition-colors">
               </div>
             </div>
 
@@ -1162,26 +1286,29 @@
             <div class="flex flex-col gap-1.5 w-full">
               <label class="text-[12px] font-semibold text-[#334155]">Tipo de línea interna</label>
               <div class="relative">
-                <button type="button" (click)="dropdownTipoLineaAbierto = !dropdownTipoLineaAbierto" (blur)="dropdownTipoLineaAbierto = false"
+                <button type="button" (click)="dropdownTipoLineaAbierto = !dropdownTipoLineaAbierto"
+                  (blur)="dropdownTipoLineaAbierto = false"
                   class="w-full flex items-center justify-between border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors cursor-pointer text-left">
-                  <span>{{ disenoInsignia.tipoLinea === 'ninguna' ? 'Sin línea interna' : 
-                         disenoInsignia.tipoLinea === 'solida' ? 'Sólida' : 
-                         disenoInsignia.tipoLinea === 'punteada' ? 'Punteada' : 
-                         disenoInsignia.tipoLinea === 'lineas' ? 'Líneas segmentadas' : '' }}</span>
+                  <span>{{ disenoInsignia.tipoLinea === 'ninguna' ? 'Sin línea interna' :
+                    disenoInsignia.tipoLinea === 'solida' ? 'Sólida' :
+                    disenoInsignia.tipoLinea === 'punteada' ? 'Punteada' :
+                    disenoInsignia.tipoLinea === 'lineas' ? 'Líneas segmentadas' : '' }}</span>
                   <div class="flex items-center pointer-events-none">
-                    <svg *ngIf="!dropdownTipoLineaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
+                    <svg *ngIf="!dropdownTipoLineaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                      viewBox="0 0 24 24">
                       <path d="M0 0h24v24H0z" fill="none" />
-                      <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+                      <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5" d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
                     </svg>
-                    <svg *ngIf="dropdownTipoLineaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
+                    <svg *ngIf="dropdownTipoLineaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                      viewBox="0 0 24 24">
                       <path d="M0 0h24v24H0z" fill="none" />
-                      <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+                      <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5" d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
                     </svg>
                   </div>
                 </button>
-                
+
                 <!-- Lista de opciones -->
                 <div *ngIf="dropdownTipoLineaAbierto"
                   class="absolute top-full left-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-[60] mt-1 overflow-hidden">
@@ -1216,15 +1343,17 @@
                 <span class="text-[#64748B]">{{ disenoInsignia.transparenciaLinea }}%</span>
               </label>
               <input type="range" min="0" max="100" [(ngModel)]="disenoInsignia.transparenciaLinea"
-                     class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
+                class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
             </div>
 
             <!-- Color de la línea interior -->
             <div *ngIf="disenoInsignia.tipoLinea !== 'ninguna'" class="flex flex-col gap-1.5 w-full">
               <label class="text-[12px] font-semibold text-[#334155]">Color de línea interna</label>
               <div class="flex items-center gap-2">
-                <input type="color" [(ngModel)]="disenoInsignia.colorLinea" class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
-                <input type="text" [(ngModel)]="disenoInsignia.colorLinea" class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
+                <input type="color" [(ngModel)]="disenoInsignia.colorLinea"
+                  class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
+                <input type="text" [(ngModel)]="disenoInsignia.colorLinea"
+                  class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
               </div>
             </div>
 
@@ -1235,7 +1364,7 @@
                 <span class="text-[#64748B]">{{ disenoInsignia.largoCintaSuperior }}%</span>
               </label>
               <input type="range" min="0" max="130" [(ngModel)]="disenoInsignia.largoCintaSuperior"
-                     class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
+                class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
             </div>
 
             <!-- Largo Cinta Inferior -->
@@ -1245,15 +1374,17 @@
                 <span class="text-[#64748B]">{{ disenoInsignia.largoCintaInferior }}%</span>
               </label>
               <input type="range" min="0" max="130" [(ngModel)]="disenoInsignia.largoCintaInferior"
-                     class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
+                class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
             </div>
 
             <!-- Color de cinta -->
             <div class="flex flex-col gap-1.5 w-full">
               <label class="text-[12px] font-semibold text-[#334155]">Color de cinta</label>
               <div class="flex items-center gap-2">
-                <input type="color" [(ngModel)]="disenoInsignia.colorCinta" class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
-                <input type="text" [(ngModel)]="disenoInsignia.colorCinta" class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
+                <input type="color" [(ngModel)]="disenoInsignia.colorCinta"
+                  class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
+                <input type="text" [(ngModel)]="disenoInsignia.colorCinta"
+                  class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
               </div>
             </div>
 
@@ -1263,56 +1394,148 @@
               <label class="text-[12px] font-semibold text-[#334155]">Ícono central</label>
               <div class="grid grid-cols-4 gap-2">
                 <!-- ingeniería -->
-                <div (click)="disenoInsignia.icono = 'ingenieria'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'ingenieria' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8 10h8v8h-5l-2-2H7v-5m0-7v2h3v2H7l-2 2v3H3v-3H1v8h2v-3h2v3h3l2 2h8v-4h2v3h3V9h-3v3h-2V8h-6V6h3V4z" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'ingenieria'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'ingenieria' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="M8 10h8v8h-5l-2-2H7v-5m0-7v2h3v2H7l-2 2v3H3v-3H1v8h2v-3h2v3h3l2 2h8v-4h2v3h3V9h-3v3h-2V8h-6V6h3V4z"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- programación -->
-                <div (click)="disenoInsignia.icono = 'programacion'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'programacion' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="20" height="16" viewBox="0 0 20 16"><path fill="currentColor" d="M12.736.064c.52.2.787.805.598 1.353L8.546 15.305c-.19.548-.763.83-1.282.631c-.52-.2-.787-.805-.598-1.353L11.454.695c.19-.548.763-.83 1.282-.631M2.414 8.256L5.95 11.99c.39.412.39 1.08 0 1.492a.963.963 0 0 1-1.414 0L.293 9.003a1.1 1.1 0 0 1 0-1.493l4.243-4.48a.963.963 0 0 1 1.414 0a1.1 1.1 0 0 1 0 1.494zm15.172 0L14.05 4.524a1.1 1.1 0 0 1 0-1.493a.963.963 0 0 1 1.414 0l4.243 4.479c.39.412.39 1.08 0 1.493l-4.243 4.478a.963.963 0 0 1-1.414 0a1.1 1.1 0 0 1 0-1.492z" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'programacion'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'programacion' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="20" height="16" viewBox="0 0 20 16">
+                    <path fill="currentColor"
+                      d="M12.736.064c.52.2.787.805.598 1.353L8.546 15.305c-.19.548-.763.83-1.282.631c-.52-.2-.787-.805-.598-1.353L11.454.695c.19-.548.763-.83 1.282-.631M2.414 8.256L5.95 11.99c.39.412.39 1.08 0 1.492a.963.963 0 0 1-1.414 0L.293 9.003a1.1 1.1 0 0 1 0-1.493l4.243-4.48a.963.963 0 0 1 1.414 0a1.1 1.1 0 0 1 0 1.494zm15.172 0L14.05 4.524a1.1 1.1 0 0 1 0-1.493a.963.963 0 0 1 1.414 0l4.243 4.479c.39.412.39 1.08 0 1.493l-4.243 4.478a.963.963 0 0 1-1.414 0a1.1 1.1 0 0 1 0-1.492z"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- diseño -->
-                <div (click)="disenoInsignia.icono = 'diseno'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'diseno' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22q-2.05 0-3.875-.788t-3.187-2.15t-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175T8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9t2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.312.125t-.088.275q0 .3.375.863t.375 1.287q0 1.25-.687 1.85T12 22m-4.425-9.425Q8 12.15 8 11.5t-.425-1.075T6.5 10t-1.075.425T5 11.5t.425 1.075T6.5 13t1.075-.425m3-4Q11 8.15 11 7.5t-.425-1.075T9.5 6t-1.075.425T8 7.5t.425 1.075T9.5 9t1.075-.425m5 0Q16 8.15 16 7.5t-.425-1.075T14.5 6t-1.075.425T13 7.5t.425 1.075T14.5 9t1.075-.425m3 4Q19 12.15 19 11.5t-.425-1.075T17.5 10t-1.075.425T16 11.5t.425 1.075T17.5 13t1.075-.425M12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.962T20 11.05q0-3.025-2.312-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.338 5.663T12 20" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'diseno'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'diseno' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="M12 22q-2.05 0-3.875-.788t-3.187-2.15t-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175T8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9t2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.312.125t-.088.275q0 .3.375.863t.375 1.287q0 1.25-.687 1.85T12 22m-4.425-9.425Q8 12.15 8 11.5t-.425-1.075T6.5 10t-1.075.425T5 11.5t.425 1.075T6.5 13t1.075-.425m3-4Q11 8.15 11 7.5t-.425-1.075T9.5 6t-1.075.425T8 7.5t.425 1.075T9.5 9t1.075-.425m5 0Q16 8.15 16 7.5t-.425-1.075T14.5 6t-1.075.425T13 7.5t.425 1.075T14.5 9t1.075-.425m3 4Q19 12.15 19 11.5t-.425-1.075T17.5 10t-1.075.425T16 11.5t.425 1.075T17.5 13t1.075-.425M12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.962T20 11.05q0-3.025-2.312-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.338 5.663T12 20"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- administración -->
-                <div (click)="disenoInsignia.icono = 'administracion'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'administracion' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" color="#94A3B8"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm5-2V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-4 5v.01" /><path d="M3 13a20 20 0 0 0 18 0" /></g></svg>
+                <div (click)="disenoInsignia.icono = 'administracion'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'administracion' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      color="#94A3B8">
+                      <path
+                        d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm5-2V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-4 5v.01" />
+                      <path d="M3 13a20 20 0 0 0 18 0" />
+                    </g>
+                  </svg>
                 </div>
                 <!-- escuela -->
-                <div (click)="disenoInsignia.icono = 'escuela'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'escuela' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.05 17.775q-.5-.275-.775-.737T5 16v-4.8L2.6 9.875q-.275-.15-.4-.375T2.075 9t.125-.5t.4-.375l8.45-4.6q.225-.125.463-.188T12 3.275t.488.063t.462.187l9.525 5.2q.25.125.388.363T23 9.6V16q0 .425-.288.713T22 17t-.712-.288T21 16v-5.9l-2 1.1V16q0 .575-.275 1.038t-.775.737l-5 2.7q-.225.125-.462.188t-.488.062t-.488-.062t-.462-.188zM12 12.7L18.85 9L12 5.3L5.15 9zm0 6.025l5-2.7V12.25l-4.025 2.225q-.225.125-.475.188t-.5.062t-.5-.062t-.475-.188L7 12.25v3.775zm0-3" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'escuela'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'escuela' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="M6.05 17.775q-.5-.275-.775-.737T5 16v-4.8L2.6 9.875q-.275-.15-.4-.375T2.075 9t.125-.5t.4-.375l8.45-4.6q.225-.125.463-.188T12 3.275t.488.063t.462.187l9.525 5.2q.25.125.388.363T23 9.6V16q0 .425-.288.713T22 17t-.712-.288T21 16v-5.9l-2 1.1V16q0 .575-.275 1.038t-.775.737l-5 2.7q-.225.125-.462.188t-.488.062t-.488-.062t-.462-.188zM12 12.7L18.85 9L12 5.3L5.15 9zm0 6.025l5-2.7V12.25l-4.025 2.225q-.225.125-.475.188t-.5.062t-.5-.062t-.475-.188L7 12.25v3.775zm0-3"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- salud -->
-                <div (click)="disenoInsignia.icono = 'salud'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'salud' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="-2 -2 24 24"><path fill="currentColor" d="M7 12.917v.583a4.5 4.5 0 1 0 9 0v-1.67a3.001 3.001 0 1 1 2 0v1.67a6.5 6.5 0 1 1-13 0v-.583A6 6 0 0 1 0 7V2a2 2 0 0 1 2-2h1a1 1 0 1 1 0 2H2v5a4 4 0 1 0 8 0V2H9a1 1 0 1 1 0-2h1a2 2 0 0 1 2 2v5a6 6 0 0 1-5 5.917M17 10a1 1 0 1 0 0-2a1 1 0 0 0 0 2" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'salud'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'salud' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="-2 -2 24 24">
+                    <path fill="currentColor"
+                      d="M7 12.917v.583a4.5 4.5 0 1 0 9 0v-1.67a3.001 3.001 0 1 1 2 0v1.67a6.5 6.5 0 1 1-13 0v-.583A6 6 0 0 1 0 7V2a2 2 0 0 1 2-2h1a1 1 0 1 1 0 2H2v5a4 4 0 1 0 8 0V2H9a1 1 0 1 1 0-2h1a2 2 0 0 1 2 2v5a6 6 0 0 1-5 5.917M17 10a1 1 0 1 0 0-2a1 1 0 0 0 0 2"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- agricultura -->
-                <div (click)="disenoInsignia.icono = 'agricultura'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'agricultura' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" color="#94A3B8"><path d="M5 21c.5-4.5 2.5-8 7-10" /><path d="M9 18c6.218 0 10.5-3.288 11-12V4h-4.014c-9 0-11.986 4-12 9c0 1 0 3 2 5z" /></g></svg>
+                <div (click)="disenoInsignia.icono = 'agricultura'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'agricultura' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      color="#94A3B8">
+                      <path d="M5 21c.5-4.5 2.5-8 7-10" />
+                      <path d="M9 18c6.218 0 10.5-3.288 11-12V4h-4.014c-9 0-11.986 4-12 9c0 1 0 3 2 5z" />
+                    </g>
+                  </svg>
                 </div>
                 <!-- mecánica -->
-                <div (click)="disenoInsignia.icono = 'mecanica'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'mecanica' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m21.16 7.86l-1-1.73a1.997 1.997 0 0 0-2.73-.73l-.53.31c-.58-.46-1.22-.83-1.9-1.11V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v.6c-.67.28-1.31.66-1.9 1.11l-.53-.31c-.96-.55-2.18-.22-2.73.73l-1 1.73c-.55.96-.22 2.18.73 2.73l.5.29c-.05.37-.08.74-.08 1.11s.03.74.08 1.11l-.5.29c-.96.55-1.28 1.78-.73 2.73l1 1.73c.55.95 1.78 1.28 2.73.73l.53-.31c.58.46 1.22.83 1.9 1.11v.6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-.6a8.7 8.7 0 0 0 1.9-1.11l.53.31c.96.55 2.18.22 2.73-.73l1-1.73c.55-.96.22-2.18-.73-2.73l-.5-.29c.05-.37.08-.74.08-1.11s-.03-.74-.08-1.11l.5-.29c.96-.55 1.28-1.78.73-2.73M12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'mecanica'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'mecanica' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="m21.16 7.86l-1-1.73a1.997 1.997 0 0 0-2.73-.73l-.53.31c-.58-.46-1.22-.83-1.9-1.11V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v.6c-.67.28-1.31.66-1.9 1.11l-.53-.31c-.96-.55-2.18-.22-2.73.73l-1 1.73c-.55.96-.22 2.18.73 2.73l.5.29c-.05.37-.08.74-.08 1.11s.03.74.08 1.11l-.5.29c-.96.55-1.28 1.78-.73 2.73l1 1.73c.55.95 1.78 1.28 2.73.73l.53-.31c.58.46 1.22.83 1.9 1.11v.6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-.6a8.7 8.7 0 0 0 1.9-1.11l.53.31c.96.55 2.18.22 2.73-.73l1-1.73c.55-.96.22-2.18-.73-2.73l-.5-.29c.05-.37.08-.74.08-1.11s-.03-.74-.08-1.11l.5-.29c.96-.55 1.28-1.78.73-2.73M12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- derecho -->
-                <div (click)="disenoInsignia.icono = 'derecho'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'derecho' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'derecho'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'derecho' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- matemáticas -->
-                <div (click)="disenoInsignia.icono = 'matematicas'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'matematicas' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><g fill="none" color="#94A3B8"><path stroke="currentColor" stroke-width="1.5" d="M4.318 20.536C5.636 22 7.758 22 12 22s6.364 0 7.682-1.465C21 19.072 21 16.714 21 12s0-7.071-1.318-8.536S16.242 2 12 2S5.636 2 4.318 3.464C3 4.93 3 7.286 3 12s0 7.071 1.318 8.535Z" /><path stroke="currentColor" stroke-width="1.5" d="M7 8c0-.465 0-.697.051-.888a1.5 1.5 0 0 1 1.06-1.06C8.304 6 8.536 6 9 6h6c.465 0 .697 0 .888.051a1.5 1.5 0 0 1 1.06 1.06C17 7.304 17 7.536 17 8s0 .697-.051.888a1.5 1.5 0 0 1-1.06 1.06C15.697 10 15.464 10 15 10H9c-.465 0-.697 0-.888-.051a1.5 1.5 0 0 1-1.06-1.06C7 8.696 7 8.464 7 8Z" /><circle cx="8" cy="13" r="1" fill="currentColor" /><circle cx="8" cy="17" r="1" fill="currentColor" /><circle cx="12" cy="13" r="1" fill="currentColor" /><circle cx="12" cy="17" r="1" fill="currentColor" /><circle cx="16" cy="13" r="1" fill="currentColor" /><circle cx="16" cy="17" r="1" fill="currentColor" /></g></svg>
+                <div (click)="disenoInsignia.icono = 'matematicas'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'matematicas' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <g fill="none" color="#94A3B8">
+                      <path stroke="currentColor" stroke-width="1.5"
+                        d="M4.318 20.536C5.636 22 7.758 22 12 22s6.364 0 7.682-1.465C21 19.072 21 16.714 21 12s0-7.071-1.318-8.536S16.242 2 12 2S5.636 2 4.318 3.464C3 4.93 3 7.286 3 12s0 7.071 1.318 8.535Z" />
+                      <path stroke="currentColor" stroke-width="1.5"
+                        d="M7 8c0-.465 0-.697.051-.888a1.5 1.5 0 0 1 1.06-1.06C8.304 6 8.536 6 9 6h6c.465 0 .697 0 .888.051a1.5 1.5 0 0 1 1.06 1.06C17 7.304 17 7.536 17 8s0 .697-.051.888a1.5 1.5 0 0 1-1.06 1.06C15.697 10 15.464 10 15 10H9c-.465 0-.697 0-.888-.051a1.5 1.5 0 0 1-1.06-1.06C7 8.696 7 8.464 7 8Z" />
+                      <circle cx="8" cy="13" r="1" fill="currentColor" />
+                      <circle cx="8" cy="17" r="1" fill="currentColor" />
+                      <circle cx="12" cy="13" r="1" fill="currentColor" />
+                      <circle cx="12" cy="17" r="1" fill="currentColor" />
+                      <circle cx="16" cy="13" r="1" fill="currentColor" />
+                      <circle cx="16" cy="17" r="1" fill="currentColor" />
+                    </g>
+                  </svg>
                 </div>
                 <!-- marketing -->
-                <div (click)="disenoInsignia.icono = 'marketing'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'marketing' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M14 14V6m0 8l6.102 3.487a.6.6 0 0 0 .898-.52V3.033a.6.6 0 0 0-.898-.521L14 6m0 8H7a4 4 0 1 1 0-8h7M7.757 19.3L7 14h4l.677 4.74a1.98 1.98 0 0 1-3.92.56Z" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'marketing'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'marketing' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="none" stroke="currentColor" stroke-width="1.5"
+                      d="M14 14V6m0 8l6.102 3.487a.6.6 0 0 0 .898-.52V3.033a.6.6 0 0 0-.898-.521L14 6m0 8H7a4 4 0 1 1 0-8h7M7.757 19.3L7 14h4l.677 4.74a1.98 1.98 0 0 1-3.92.56Z"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- veterinaria -->
-                <div (click)="disenoInsignia.icono = 'veterinaria'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'veterinaria' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" d="M457.74 170.1a30.3 30.3 0 0 0-11.16-2.1h-.4c-20.17.3-42.79 19.19-54.66 47.76c-14.23 34.18-7.68 69.15 14.74 78.14a30.2 30.2 0 0 0 11.15 2.1c20.27 0 43.2-19 55.17-47.76c14.13-34.18 7.48-69.15-14.84-78.14ZM327.6 303.48C299.8 257.35 287.8 240 256 240s-43.9 17.46-71.7 63.48c-23.8 39.36-71.9 42.64-83.9 76.07a50.9 50.9 0 0 0-3.6 19.25c0 27.19 20.8 49.2 46.4 49.2c31.8 0 75.1-25.39 112.9-25.39S337 448 368.8 448c25.6 0 46.3-22 46.3-49.2a51 51 0 0 0-3.7-19.25c-12-33.55-60-36.71-83.8-76.07ZM192.51 196a26.5 26.5 0 0 0 4-.3c23.21-3.37 37.7-35.53 32.44-71.85C224 89.61 203.22 64 181.49 64a26.5 26.5 0 0 0-4 .3c-23.21 3.37-37.7 35.53-32.44 71.85C150 170.29 170.78 196 192.51 196Zm174.41-59.85c5.26-36.32-9.23-68.48-32.44-71.85a26.5 26.5 0 0 0-4-.3c-21.73 0-42.47 25.61-47.43 59.85c-5.26 36.32 9.23 68.48 32.44 71.85a26.5 26.5 0 0 0 4 .3c21.73 0 42.51-25.71 47.43-59.85ZM105.77 293.9c22.39-9 28.93-44 14.72-78.14C108.53 187 85.62 168 65.38 168a30.2 30.2 0 0 0-11.15 2.1c-22.39 9-28.93 44-14.72 78.14C51.47 277 74.38 296 94.62 296a30.2 30.2 0 0 0 11.15-2.1Z" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'veterinaria'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'veterinaria' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 512 512">
+                    <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"
+                      d="M457.74 170.1a30.3 30.3 0 0 0-11.16-2.1h-.4c-20.17.3-42.79 19.19-54.66 47.76c-14.23 34.18-7.68 69.15 14.74 78.14a30.2 30.2 0 0 0 11.15 2.1c20.27 0 43.2-19 55.17-47.76c14.13-34.18 7.48-69.15-14.84-78.14ZM327.6 303.48C299.8 257.35 287.8 240 256 240s-43.9 17.46-71.7 63.48c-23.8 39.36-71.9 42.64-83.9 76.07a50.9 50.9 0 0 0-3.6 19.25c0 27.19 20.8 49.2 46.4 49.2c31.8 0 75.1-25.39 112.9-25.39S337 448 368.8 448c25.6 0 46.3-22 46.3-49.2a51 51 0 0 0-3.7-19.25c-12-33.55-60-36.71-83.8-76.07ZM192.51 196a26.5 26.5 0 0 0 4-.3c23.21-3.37 37.7-35.53 32.44-71.85C224 89.61 203.22 64 181.49 64a26.5 26.5 0 0 0-4 .3c-23.21 3.37-37.7 35.53-32.44 71.85C150 170.29 170.78 196 192.51 196Zm174.41-59.85c5.26-36.32-9.23-68.48-32.44-71.85a26.5 26.5 0 0 0-4-.3c-21.73 0-42.47 25.61-47.43 59.85c-5.26 36.32 9.23 68.48 32.44 71.85a26.5 26.5 0 0 0 4 .3c21.73 0 42.51-25.71 47.43-59.85ZM105.77 293.9c22.39-9 28.93-44 14.72-78.14C108.53 187 85.62 168 65.38 168a30.2 30.2 0 0 0-11.15 2.1c-22.39 9-28.93 44-14.72 78.14C51.47 277 74.38 296 94.62 296a30.2 30.2 0 0 0 11.15-2.1Z"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
                 <!-- ciencias -->
-                <div (click)="disenoInsignia.icono = 'ciencias'" class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all" [ngClass]="disenoInsignia.icono === 'ciencias' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
-                  <svg width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M20.503 1.972a1.023 1.023 0 0 0-1.403.214l-.494.65l-.102-.072l-.165-.048c-1.663-.484-3.549.262-4.556 1.621l-.006.007l-3.913 5.377a4.91 4.91 0 0 0-.426 5.181l-.087.114a1.98 1.98 0 0 0 .43 2.822a2.075 2.075 0 0 0 2.807-.387c1.993.555 4.218-.126 5.512-1.871l.005-.007l.209-.287c2.334.53 3.582 2.478 3.65 4.631c.038 1.22-.329 2.356-1.025 3.199c-.662.8-1.8 1.557-3.748 1.742a4 4 0 0 0-.458.073L6.461 17.719a1.25 1.25 0 0 0-1.438 2.047L12.48 25H5.2A4.2 4.2 0 0 0 1 29.2A1.8 1.8 0 0 0 2.8 31h26.4a1.8 1.8 0 0 0 1.8-1.8a4.2 4.2 0 0 0-3.077-4.048a12.34 12.34 0 0 0 1.07-5.464c-.13-4.154-2.361-8.394-6.45-10.442c.489-1.235.41-2.696-.362-3.795l-.097-.138l-.176-.126l.48-.631a.977.977 0 0 0-.212-1.393zm3.46 17.882c-.084-2.679-1.587-5.292-4.397-6.288l1.901-2.613c3.493 1.66 5.415 5.22 5.528 8.798c.056 1.8-.34 3.632-1.23 5.249h-3.863q.316-.291.579-.61c1.04-1.26 1.534-2.886 1.482-4.536M28.991 29H3.009A2.2 2.2 0 0 1 5.2 27h21.6a2.2 2.2 0 0 1 2.191 2M17.609 4.581l2.987 2.127c.363.644.314 1.625-.21 2.332l-2.82 3.876l-4.94-3.59l2.788-3.832c.524-.704 1.46-1.052 2.195-.913m-1.224 9.95c-1.014 1.244-2.865 1.505-4.205.55a2.97 2.97 0 0 1-.732-4.137z" color="#94A3B8"/></svg>
+                <div (click)="disenoInsignia.icono = 'ciencias'"
+                  class="cursor-pointer border-2 rounded-lg aspect-square flex items-center justify-center p-1.5 transition-all"
+                  [ngClass]="disenoInsignia.icono === 'ciencias' ? 'border-[#4AB6D5] bg-[#E0F2FE]' : 'border-[#E2E8F0] bg-white hover:border-[#94A3B8]'">
+                  <svg width="24" height="24" viewBox="0 0 32 32">
+                    <path fill="currentColor"
+                      d="M20.503 1.972a1.023 1.023 0 0 0-1.403.214l-.494.65l-.102-.072l-.165-.048c-1.663-.484-3.549.262-4.556 1.621l-.006.007l-3.913 5.377a4.91 4.91 0 0 0-.426 5.181l-.087.114a1.98 1.98 0 0 0 .43 2.822a2.075 2.075 0 0 0 2.807-.387c1.993.555 4.218-.126 5.512-1.871l.005-.007l.209-.287c2.334.53 3.582 2.478 3.65 4.631c.038 1.22-.329 2.356-1.025 3.199c-.662.8-1.8 1.557-3.748 1.742a4 4 0 0 0-.458.073L6.461 17.719a1.25 1.25 0 0 0-1.438 2.047L12.48 25H5.2A4.2 4.2 0 0 0 1 29.2A1.8 1.8 0 0 0 2.8 31h26.4a1.8 1.8 0 0 0 1.8-1.8a4.2 4.2 0 0 0-3.077-4.048a12.34 12.34 0 0 0 1.07-5.464c-.13-4.154-2.361-8.394-6.45-10.442c.489-1.235.41-2.696-.362-3.795l-.097-.138l-.176-.126l.48-.631a.977.977 0 0 0-.212-1.393zm3.46 17.882c-.084-2.679-1.587-5.292-4.397-6.288l1.901-2.613c3.493 1.66 5.415 5.22 5.528 8.798c.056 1.8-.34 3.632-1.23 5.249h-3.863q.316-.291.579-.61c1.04-1.26 1.534-2.886 1.482-4.536M28.991 29H3.009A2.2 2.2 0 0 1 5.2 27h21.6a2.2 2.2 0 0 1 2.191 2M17.609 4.581l2.987 2.127c.363.644.314 1.625-.21 2.332l-2.82 3.876l-4.94-3.59l2.788-3.832c.524-.704 1.46-1.052 2.195-.913m-1.224 9.95c-1.014 1.244-2.865 1.505-4.205.55a2.97 2.97 0 0 1-.732-4.137z"
+                      color="#94A3B8" />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -1321,8 +1544,10 @@
             <div class="flex flex-col gap-1.5 w-full mt-1">
               <label class="text-[12px] font-semibold text-[#334155]">Color del ícono</label>
               <div class="flex items-center gap-2">
-                <input type="color" [(ngModel)]="disenoInsignia.colorIcono" class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
-                <input type="text" [(ngModel)]="disenoInsignia.colorIcono" class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
+                <input type="color" [(ngModel)]="disenoInsignia.colorIcono"
+                  class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
+                <input type="text" [(ngModel)]="disenoInsignia.colorIcono"
+                  class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
               </div>
             </div>
 
@@ -1332,26 +1557,31 @@
                 <label class="text-[12px] font-semibold text-[#334155]">Tamaño del ícono</label>
                 <span class="text-[11px] font-bold text-[#64748B]">{{disenoInsignia.tamanoIcono}}%</span>
               </div>
-              <input type="range" min="30" max="150" [(ngModel)]="disenoInsignia.tamanoIcono" class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
+              <input type="range" min="30" max="150" [(ngModel)]="disenoInsignia.tamanoIcono"
+                class="w-full h-1.5 bg-[#E2E8F0] rounded-lg appearance-none cursor-pointer accent-[#4AB6D5]">
             </div>
 
             <!-- Textos -->
             <div class="flex flex-col gap-1.5 w-full mt-2">
               <label class="text-[12px] font-semibold text-[#334155]">Texto superior</label>
-              <input type="text" [(ngModel)]="disenoInsignia.textoSuperior" maxlength="15" class="border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors w-full">
+              <input type="text" [(ngModel)]="disenoInsignia.textoSuperior" maxlength="15"
+                class="border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors w-full">
             </div>
 
             <div class="flex flex-col gap-1.5 w-full">
               <label class="text-[12px] font-semibold text-[#334155]">Texto inferior</label>
-              <input type="text" [(ngModel)]="disenoInsignia.textoInferior" maxlength="15" class="border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors w-full">
+              <input type="text" [(ngModel)]="disenoInsignia.textoInferior" maxlength="15"
+                class="border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors w-full">
             </div>
 
             <!-- Color del Texto -->
             <div class="flex flex-col gap-1.5 w-full mt-1">
               <label class="text-[12px] font-semibold text-[#334155]">Color de texto</label>
               <div class="flex items-center gap-2">
-                <input type="color" [(ngModel)]="disenoInsignia.colorTexto" class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
-                <input type="text" [(ngModel)]="disenoInsignia.colorTexto" class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
+                <input type="color" [(ngModel)]="disenoInsignia.colorTexto"
+                  class="w-8 h-8 rounded cursor-pointer border border-[#E2E8F0] flex-shrink-0 bg-white p-0.5">
+                <input type="text" [(ngModel)]="disenoInsignia.colorTexto"
+                  class="flex-1 border border-[#E2E8F0] bg-white rounded-lg px-2.5 py-1.5 text-[13px] text-[#334155] outline-none focus:border-[#4AB6D5] uppercase transition-colors">
               </div>
             </div>
 
@@ -1366,95 +1596,52 @@
         <!-- MODO CARGAR: FORMULARIO -->
         <ng-container *ngIf="opcionInsignia === 'cargar' || (opcionInsignia === 'disenar' && modoDisenoGuardado)">
           <!-- INFORMACIÓN GENERAL -->
-        <div class="text-[13px] font-bold text-[#334155] border-b border-[#E2E8F0] tracking-wider pb-1.5 uppercase">
-          INFORMACIÓN GENERAL</div>
+          <div class="text-[13px] font-bold text-[#334155] border-b border-[#E2E8F0] tracking-wider pb-1.5 uppercase">
+            INFORMACIÓN GENERAL</div>
 
-        <!-- Nombre -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[13px] font-semibold text-[#334155]">Nombre de la microcredencial <span
-              class="text-[#F86E6E]">*</span></label>
-          <input [(ngModel)]="nuevaMicrocredencialDatos.nombre" name="nombre" autocomplete="off"
-            (input)="errores['nombre'] = ''" [class.border-[#E53935]]="errores['nombre']"
-            class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors">
-          <span *ngIf="errores['nombre']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['nombre'] }}</span>
-        </div>
-
-        <!-- Descripción -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[13px] font-semibold text-[#334155]">Descripción <span
-              class="text-[#F86E6E]">*</span></label>
-          <textarea [(ngModel)]="nuevaMicrocredencialDatos.descripcion" name="descripcion"
-            (input)="errores['descripcion'] = ''" [class.border-[#E53935]]="errores['descripcion']"
-            class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors h-20 resize-none"></textarea>
-          <span *ngIf="errores['descripcion']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['descripcion']
-            }}</span>
-        </div>
-
-        <!-- Área del conocimiento -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[13px] font-semibold text-[#334155]">Área del conocimiento <span
-              class="text-[#F86E6E]">*</span></label>
-          <div class="relative">
-            <div class="relative flex items-center">
-              <input type="text" [(ngModel)]="nuevaMicrocredencialDatos.areaNombre" name="area" autocomplete="off"
-                (input)="filtrarAreas(false)" (focus)="filtrarAreas(true)" (click)="filtrarAreas(true)"
-                (blur)="validarArea()"
-                class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] outline-none transition-colors bg-white text-left placeholder:text-[#94A3B8]"
-                [class.border-[#E53935]]="errores['area']"
-                [ngClass]="nuevaMicrocredencialDatos.areaNombre ? 'text-[#334155]' : 'text-[#94A3B8]'"
-                placeholder="Seleccione un área">
-              <!-- Flecha arriba/abajo -->
-              <div class="absolute right-3.5 flex items-center pointer-events-none">
-                <svg *ngIf="!dropdownAreaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                  viewBox="0 0 24 24">
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
-                </svg>
-                <svg *ngIf="dropdownAreaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                  viewBox="0 0 24 24">
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
-                </svg>
-              </div>
-            </div>
-            <!-- Lista de áreas -->
-            <div *ngIf="dropdownAreaAbierto && areasFiltradas.length > 0"
-              class="absolute top-full left-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-20 mt-1 max-h-48 overflow-y-auto">
-              <div *ngFor="let area of areasFiltradas" (mousedown)="seleccionarArea(area.id_area, area.nombre)"
-                class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
-                [ngClass]="{'bg-[#DAE0E5]': area.id_area === nuevaMicrocredencialDatos.areaId}">
-                {{ area.nombre }}
-              </div>
-            </div>
-          </div>
-          <span *ngIf="errores['area']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['area'] }}</span>
-        </div>
-
-        <!-- Nivel y Duración -->
-        <div class="grid grid-cols-2 gap-4">
-          <!-- Nivel -->
+          <!-- Nombre -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-[13px] font-semibold text-[#334155]">Nivel <span class="text-[#F86E6E]">*</span></label>
+            <label class="text-[13px] font-semibold text-[#334155]">Nombre de la microcredencial <span
+                class="text-[#F86E6E]">*</span></label>
+            <input [(ngModel)]="nuevaMicrocredencialDatos.nombre" name="nombre" autocomplete="off"
+              (input)="errores['nombre'] = ''" [class.border-[#E53935]]="errores['nombre']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors">
+            <span *ngIf="errores['nombre']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['nombre'] }}</span>
+          </div>
+
+          <!-- Descripción -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Descripción <span
+                class="text-[#F86E6E]">*</span></label>
+            <textarea [(ngModel)]="nuevaMicrocredencialDatos.descripcion" name="descripcion"
+              (input)="errores['descripcion'] = ''" [class.border-[#E53935]]="errores['descripcion']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors h-20 resize-none"></textarea>
+            <span *ngIf="errores['descripcion']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['descripcion']
+              }}</span>
+          </div>
+
+          <!-- Área del conocimiento -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Área del conocimiento <span
+                class="text-[#F86E6E]">*</span></label>
             <div class="relative">
               <div class="relative flex items-center">
-                <input type="text" [(ngModel)]="nuevaMicrocredencialDatos.nivelNombre" name="nivel" autocomplete="off"
-                  (input)="filtrarNiveles(false)" (focus)="filtrarNiveles(true)" (click)="filtrarNiveles(true)"
-                  (blur)="validarNivel()"
+                <input type="text" [(ngModel)]="nuevaMicrocredencialDatos.areaNombre" name="area" autocomplete="off"
+                  (input)="filtrarAreas(false)" (focus)="filtrarAreas(true)" (click)="filtrarAreas(true)"
+                  (blur)="validarArea()"
                   class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] outline-none transition-colors bg-white text-left placeholder:text-[#94A3B8]"
-                  [class.border-[#E53935]]="errores['nivel']"
-                  [ngClass]="nuevaMicrocredencialDatos.nivelNombre ? 'text-[#334155]' : 'text-[#94A3B8]'"
-                  placeholder="Seleccione un nivel">
+                  [class.border-[#E53935]]="errores['area']"
+                  [ngClass]="nuevaMicrocredencialDatos.areaNombre ? 'text-[#334155]' : 'text-[#94A3B8]'"
+                  placeholder="Seleccione un área">
                 <!-- Flecha arriba/abajo -->
                 <div class="absolute right-3.5 flex items-center pointer-events-none">
-                  <svg *ngIf="!dropdownNivelAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                  <svg *ngIf="!dropdownAreaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                     viewBox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
                   </svg>
-                  <svg *ngIf="dropdownNivelAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                  <svg *ngIf="dropdownAreaAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                     viewBox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -1462,92 +1649,139 @@
                   </svg>
                 </div>
               </div>
-              <!-- Lista de niveles -->
-              <div *ngIf="dropdownNivelAbierto && nivelesFiltrados.length > 0"
+              <!-- Lista de áreas -->
+              <div *ngIf="dropdownAreaAbierto && areasFiltradas.length > 0"
                 class="absolute top-full left-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-20 mt-1 max-h-48 overflow-y-auto">
-                <div *ngFor="let nivel of nivelesFiltrados" (mousedown)="seleccionarNivel(nivel.id_nivel, nivel.nombre)"
+                <div *ngFor="let area of areasFiltradas" (mousedown)="seleccionarArea(area.id_area, area.nombre)"
                   class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
-                  [ngClass]="{'bg-[#DAE0E5]': nivel.id_nivel === nuevaMicrocredencialDatos.nivelId}">
-                  {{ nivel.nombre }}
+                  [ngClass]="{'bg-[#DAE0E5]': area.id_area === nuevaMicrocredencialDatos.areaId}">
+                  {{ area.nombre }}
                 </div>
               </div>
             </div>
-            <span *ngIf="errores['nivel']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['nivel'] }}</span>
+            <span *ngIf="errores['area']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['area'] }}</span>
           </div>
 
-          <!-- Duración -->
-          <div class="flex flex-col gap-1.5">
-            <label class="text-[13px] font-semibold text-[#334155]">Duración (Horas) <span
-                class="text-[#F86E6E]">*</span></label>
-            <input type="number" [(ngModel)]="nuevaMicrocredencialDatos.duracionHoras" name="duracion" min="1" max="500"
-              (input)="validarDuracionInput($event)" (wheel)="$event.target.blur()" [class.border-[#E53935]]="errores['duracionHoras']"
-              class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]">
-            <span *ngIf="errores['duracionHoras']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['duracionHoras']
-              }}</span>
-          </div>
-        </div>
-
-        <!-- CRITERIOS Y COMPETENCIAS -->
-        <div
-          class="text-[13px] font-bold text-[#334155] border-b border-[#E2E8F0] tracking-wider pb-1.5 uppercase mt-3">
-          CRITERIOS Y COMPETENCIAS</div>
-
-        <!-- Criterios de Evaluación -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[13px] font-semibold text-[#334155]">Criterios de evaluación <span
-              class="text-[#F86E6E]">*</span></label>
-          <textarea [(ngModel)]="nuevaMicrocredencialDatos.criteriosEvaluacion" name="criteriosEvaluacion"
-            (input)="errores['criteriosEvaluacion'] = ''" [class.border-[#E53935]]="errores['criteriosEvaluacion']"
-            class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors h-20 resize-none"></textarea>
-          <span *ngIf="errores['criteriosEvaluacion']" class="text-[11px] text-[#E53935] mt-0.5">{{
-            errores['criteriosEvaluacion'] }}</span>
-        </div>
-
-        <!-- Competencias -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[13px] font-semibold text-[#334155]">Competencias <span
-              class="text-[#F86E6E]">*</span></label>
-          <div class="flex items-start gap-2">
-            <div
-              class="flex-1 flex flex-wrap items-center gap-2 border border-[#E2E8F0] rounded-lg px-2 py-1.5 focus-within:border-[#4AB6D5] transition-colors bg-white"
-              [class.border-[#E53935]]="errores['competencias']">
-
-              <!-- Chips -->
-              <div *ngFor="let comp of nuevaMicrocredencialDatos.competenciasLista; let i = index"
-                class="flex items-stretch border border-[#9DA5AE] rounded-md text-[13px] text-[#334155] bg-white overflow-hidden">
-                <span class="flex items-center pl-2 pr-1.5 py-0.5">{{ comp }}</span>
-                <button type="button" (click)="eliminarCompetencia(i)"
-                  class="border-l border-[#9DA5AE] px-1.5 flex items-center justify-center text-[#334155] hover:text-[#1e293b] hover:bg-[#E2E8F0] transition-colors cursor-pointer focus:outline-none">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="1.5" d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
-                  </svg>
-                </button>
+          <!-- Nivel y Duración -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Nivel -->
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[13px] font-semibold text-[#334155]">Nivel <span
+                  class="text-[#F86E6E]">*</span></label>
+              <div class="relative">
+                <div class="relative flex items-center">
+                  <input type="text" [(ngModel)]="nuevaMicrocredencialDatos.nivelNombre" name="nivel" autocomplete="off"
+                    (input)="filtrarNiveles(false)" (focus)="filtrarNiveles(true)" (click)="filtrarNiveles(true)"
+                    (blur)="validarNivel()"
+                    class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 pr-10 text-[14px] outline-none transition-colors bg-white text-left placeholder:text-[#94A3B8]"
+                    [class.border-[#E53935]]="errores['nivel']"
+                    [ngClass]="nuevaMicrocredencialDatos.nivelNombre ? 'text-[#334155]' : 'text-[#94A3B8]'"
+                    placeholder="Seleccione un nivel">
+                  <!-- Flecha arriba/abajo -->
+                  <div class="absolute right-3.5 flex items-center pointer-events-none">
+                    <svg *ngIf="!dropdownNivelAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                      viewBox="0 0 24 24">
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5" d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+                    </svg>
+                    <svg *ngIf="dropdownNivelAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                      viewBox="0 0 24 24">
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5" d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+                    </svg>
+                  </div>
+                </div>
+                <!-- Lista de niveles -->
+                <div *ngIf="dropdownNivelAbierto && nivelesFiltrados.length > 0"
+                  class="absolute top-full left-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-20 mt-1 max-h-48 overflow-y-auto">
+                  <div *ngFor="let nivel of nivelesFiltrados"
+                    (mousedown)="seleccionarNivel(nivel.id_nivel, nivel.nombre)"
+                    class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
+                    [ngClass]="{'bg-[#DAE0E5]': nivel.id_nivel === nuevaMicrocredencialDatos.nivelId}">
+                    {{ nivel.nombre }}
+                  </div>
+                </div>
               </div>
-
-              <!-- Input text -->
-              <input #compInput type="text" [(ngModel)]="nuevaMicrocredencialDatos.competenciasInput"
-                name="competencias" autocomplete="off" (keydown.enter)="agregarCompetencia($event)"
-                (input)="errores['competencias'] = ''"
-                class="flex-1 min-w-[140px] text-[14px] text-[#334155] outline-none placeholder:text-[#94A3B8] bg-transparent py-0.5 px-1.5"
-                placeholder="Presione enter para ingresar">
+              <span *ngIf="errores['nivel']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['nivel'] }}</span>
             </div>
 
-            <button type="button" (click)="agregarCompetencia(); compInput.focus()"
-              class="flex items-center gap-1.5 px-3 py-2 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13.5px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] transition-all cursor-pointer focus:outline-none">
-              <!-- Ícono de Suma celeste -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="1.8" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-              Agregar
-            </button>
+            <!-- Duración -->
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[13px] font-semibold text-[#334155]">Duración (Horas) <span
+                  class="text-[#F86E6E]">*</span></label>
+              <input type="number" [(ngModel)]="nuevaMicrocredencialDatos.duracionHoras" name="duracion" min="1"
+                max="500" (input)="validarDuracionInput($event)" (wheel)="$event.target.blur()"
+                [class.border-[#E53935]]="errores['duracionHoras']"
+                class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors placeholder:text-[#94A3B8]">
+              <span *ngIf="errores['duracionHoras']" class="text-[11px] text-[#E53935] mt-0.5">{{
+                errores['duracionHoras']
+                }}</span>
+            </div>
           </div>
-          <span *ngIf="errores['competencias']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['competencias']
-            }}</span>
-        </div>
+
+          <!-- CRITERIOS Y COMPETENCIAS -->
+          <div
+            class="text-[13px] font-bold text-[#334155] border-b border-[#E2E8F0] tracking-wider pb-1.5 uppercase mt-3">
+            CRITERIOS Y COMPETENCIAS</div>
+
+          <!-- Criterios de Evaluación -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Criterios de evaluación <span
+                class="text-[#F86E6E]">*</span></label>
+            <textarea [(ngModel)]="nuevaMicrocredencialDatos.criteriosEvaluacion" name="criteriosEvaluacion"
+              (input)="errores['criteriosEvaluacion'] = ''" [class.border-[#E53935]]="errores['criteriosEvaluacion']"
+              class="border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors h-20 resize-none"></textarea>
+            <span *ngIf="errores['criteriosEvaluacion']" class="text-[11px] text-[#E53935] mt-0.5">{{
+              errores['criteriosEvaluacion'] }}</span>
+          </div>
+
+          <!-- Competencias -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-[#334155]">Competencias <span
+                class="text-[#F86E6E]">*</span></label>
+            <div class="flex items-start gap-2">
+              <div
+                class="flex-1 flex flex-wrap items-center gap-2 border border-[#E2E8F0] rounded-lg px-2 py-1.5 focus-within:border-[#4AB6D5] transition-colors bg-white"
+                [class.border-[#E53935]]="errores['competencias']">
+
+                <!-- Chips -->
+                <div *ngFor="let comp of nuevaMicrocredencialDatos.competenciasLista; let i = index"
+                  class="flex items-stretch border border-[#9DA5AE] rounded-md text-[13px] text-[#334155] bg-white overflow-hidden">
+                  <span class="flex items-center pl-2 pr-1.5 py-0.5">{{ comp }}</span>
+                  <button type="button" (click)="eliminarCompetencia(i)"
+                    class="border-l border-[#9DA5AE] px-1.5 flex items-center justify-center text-[#334155] hover:text-[#1e293b] hover:bg-[#E2E8F0] transition-colors cursor-pointer focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5" d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Input text -->
+                <input #compInput type="text" [(ngModel)]="nuevaMicrocredencialDatos.competenciasInput"
+                  name="competencias" autocomplete="off" (keydown.enter)="agregarCompetencia($event)"
+                  (input)="errores['competencias'] = ''"
+                  class="flex-1 min-w-[140px] text-[14px] text-[#334155] outline-none placeholder:text-[#94A3B8] bg-transparent py-0.5 px-1.5"
+                  placeholder="Presione enter para ingresar">
+              </div>
+
+              <button type="button" (click)="agregarCompetencia(); compInput.focus()"
+                class="flex items-center gap-1.5 px-3 py-2 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13.5px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] transition-all cursor-pointer focus:outline-none">
+                <!-- Ícono de Suma celeste -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="1.8" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Agregar
+              </button>
+            </div>
+            <span *ngIf="errores['competencias']" class="text-[11px] text-[#E53935] mt-0.5">{{ errores['competencias']
+              }}</span>
+          </div>
 
         </ng-container>
 
@@ -1555,18 +1789,30 @@
         <ng-container *ngIf="opcionInsignia === 'disenar' && !modoDisenoGuardado">
           <div class="flex-1 flex flex-col items-center justify-center min-h-[400px]">
             <!-- Contenedor del lienzo -->
-            <div #contenedorInsigniaDesign class="w-[280px] h-[280px] flex items-center justify-center bg-[#F8FAFC] border border-[#E2E8F0] shadow-inner relative overflow-hidden">
-               <ng-container *ngTemplateOutlet="canvasInsignia"></ng-container>
+            <div #contenedorInsigniaDesign
+              class="w-[280px] h-[280px] flex items-center justify-center bg-[#F8FAFC] border border-[#E2E8F0] shadow-inner relative overflow-hidden">
+              <ng-container *ngTemplateOutlet="canvasInsignia"></ng-container>
             </div>
 
             <div class="mt-8 text-[13px] text-[#64748B] text-center max-w-[300px] leading-relaxed">
-              Diseñe su insignia usando las herramientas de la izquierda o puede usar la herramienta de diseño <a href="https://badge.design/" target="_blank" rel="noopener noreferrer" class="hover:underline font-bold text-[#334155]">Badge Design</a>
+              Diseñe su insignia usando las herramientas de la izquierda o puede usar la herramienta de diseño <a
+                href="https://badge.design/" target="_blank" rel="noopener noreferrer"
+                class="hover:underline font-bold text-[#334155]">Badge Design</a>
             </div>
 
             <!-- Botón de Guardar (debajo del texto) -->
             <div class="mt-6">
-              <button type="button" (click)="guardarDiseno()" class="flex items-center gap-2 px-3 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white text-[14px] font-medium hover:bg-[#43A5C2] cursor-pointer transition-all focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M21.25 9.16v7.987a4.1 4.1 0 0 1-1.204 2.901a4.1 4.1 0 0 1-2.906 1.202H6.86a4.1 4.1 0 0 1-2.906-1.202a4.1 4.1 0 0 1-1.204-2.901V6.853a4.1 4.1 0 0 1 1.204-2.901A4.1 4.1 0 0 1 6.86 2.75h8.35a3 3 0 0 1 2.25.998l3 3.415c.501.545.783 1.256.79 1.997"/><path d="M7 21.22v-5.241a1.995 1.995 0 0 1 2-1.997h6a2 2 0 0 1 2 1.997v5.241M15.8 2.81v4.183a1.526 1.526 0 0 1-1.52 1.528H9.72A1.53 1.53 0 0 1 8.2 6.993V2.75m1.946 15.108h3.708"/></g></svg>
+              <button type="button" (click)="guardarDiseno()"
+                class="flex items-center gap-2 px-3 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white text-[14px] font-medium hover:bg-[#43A5C2] cursor-pointer transition-all focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="1.5">
+                    <path
+                      d="M21.25 9.16v7.987a4.1 4.1 0 0 1-1.204 2.901a4.1 4.1 0 0 1-2.906 1.202H6.86a4.1 4.1 0 0 1-2.906-1.202a4.1 4.1 0 0 1-1.204-2.901V6.853a4.1 4.1 0 0 1 1.204-2.901A4.1 4.1 0 0 1 6.86 2.75h8.35a3 3 0 0 1 2.25.998l3 3.415c.501.545.783 1.256.79 1.997" />
+                    <path
+                      d="M7 21.22v-5.241a1.995 1.995 0 0 1 2-1.997h6a2 2 0 0 1 2 1.997v5.241M15.8 2.81v4.183a1.526 1.526 0 0 1-1.52 1.528H9.72A1.53 1.53 0 0 1 8.2 6.993V2.75m1.946 15.108h3.708" />
+                  </g>
+                </svg>
                 Guardar
               </button>
             </div>
@@ -1577,11 +1823,12 @@
     </div>
 
     <!-- Botones de Acción -->
-    <div *ngIf="opcionInsignia === 'cargar' || (opcionInsignia === 'disenar' && modoDisenoGuardado)" class="flex items-center justify-center gap-8 pb-10 pt-6 flex-shrink-0">
+    <div *ngIf="opcionInsignia === 'cargar' || (opcionInsignia === 'disenar' && modoDisenoGuardado)"
+      class="flex items-center justify-center gap-8 pb-10 pt-6 flex-shrink-0">
       <!-- Registrar / Actualizar -->
       <button type="button" (click)="registrarMicrocredencial()"
         class="flex items-center gap-2 px-2.5 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white text-[14px] font-medium hover:bg-[#43A5C2] cursor-pointer transition-all focus:outline-none">
-        
+
         <svg *ngIf="!modoEdicion" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none" />
           <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -1590,11 +1837,13 @@
 
         <svg *ngIf="modoEdicion" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-            <path d="M21.25 9.16v7.987a4.1 4.1 0 0 1-1.204 2.901a4.1 4.1 0 0 1-2.906 1.202H6.86a4.1 4.1 0 0 1-2.906-1.202a4.1 4.1 0 0 1-1.204-2.901V6.853a4.1 4.1 0 0 1 1.204-2.901A4.1 4.1 0 0 1 6.86 2.75h8.35a3 3 0 0 1 2.25.998l3 3.415c.501.545.783 1.256.79 1.997"/>
-            <path d="M7 21.22v-5.241a1.995 1.995 0 0 1 2-1.997h6a2 2 0 0 1 2 1.997v5.241M15.8 2.81v4.183a1.526 1.526 0 0 1-1.52 1.528H9.72A1.53 1.53 0 0 1 8.2 6.993V2.75m1.946 15.108h3.708"/>
+            <path
+              d="M21.25 9.16v7.987a4.1 4.1 0 0 1-1.204 2.901a4.1 4.1 0 0 1-2.906 1.202H6.86a4.1 4.1 0 0 1-2.906-1.202a4.1 4.1 0 0 1-1.204-2.901V6.853a4.1 4.1 0 0 1 1.204-2.901A4.1 4.1 0 0 1 6.86 2.75h8.35a3 3 0 0 1 2.25.998l3 3.415c.501.545.783 1.256.79 1.997" />
+            <path
+              d="M7 21.22v-5.241a1.995 1.995 0 0 1 2-1.997h6a2 2 0 0 1 2 1.997v5.241M15.8 2.81v4.183a1.526 1.526 0 0 1-1.52 1.528H9.72A1.53 1.53 0 0 1 8.2 6.993V2.75m1.946 15.108h3.708" />
           </g>
         </svg>
-        
+
         {{ modoEdicion ? 'Actualizar' : 'Registrar' }}
       </button>
 

@@ -54,7 +54,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Pendiente</span>
+            <span class="text-[13.5px] text-[#334155]">Pendientes</span>
           </label>
 
           <!-- Aprobada -->
@@ -70,7 +70,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Aprobada</span>
+            <span class="text-[13.5px] text-[#334155]">Aprobadas</span>
           </label>
 
           <!-- Rechazada -->
@@ -86,7 +86,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Rechazada</span>
+            <span class="text-[13.5px] text-[#334155]">Rechazadas</span>
           </label>
 
           <!-- Inactiva -->
@@ -102,7 +102,7 @@
                   d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
               </svg>
             </div>
-            <span class="text-[13.5px] text-[#334155]">Inactiva</span>
+            <span class="text-[13.5px] text-[#334155]">Inactivas</span>
           </label>
 
         </div>
@@ -134,8 +134,7 @@
           class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-43">
 
           <!-- Fecha de creación -->
-          <label (click)="toggleFechaCreacion()"
-            class="flex items-center gap-2.5 cursor-pointer group select-none">
+          <label (click)="toggleFechaCreacion()" class="flex items-center gap-2.5 cursor-pointer group select-none">
             <div
               [ngClass]="ordenarPor.fecha_creacion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
               class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
@@ -302,9 +301,11 @@
         <tr *ngFor="let item of microcredencialesPaginadas; let i = index; trackBy: trackByMicrocredencialId"
           class="hover:bg-[#F8FAFC] transition-colors text-[11px] text-[#334155]">
           <!-- # ID -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) * limiteRegistros + i + 1 }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] font-semibold text-[#334155]">{{ (paginaActual - 1) *
+            limiteRegistros + i + 1 }}</td>
           <!-- Microcredencial -->
-          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium text-left pl-4">{{ item.nombre }}</td>
+          <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium text-left pl-4">{{
+            item.nombre }}</td>
           <!-- Emisor (Nombres + Apellidos) -->
           <td class="py-2 px-2 border-r border-[#EEEEEE] text-[#334155] uppercase font-medium">{{ item.emisor }}</td>
           <!-- Nivel -->
@@ -318,8 +319,7 @@
                 'text-[#A32C2E] bg-[#FFDBDC]': item.estado === 'RECHAZADA',
                 'text-[#A3872C] bg-[#FFFBDB]': item.estado === 'PENDIENTE',
                 'text-[#8B8B8B] bg-[#E5E5E5]': item.estado === 'INACTIVA'
-              }"
-              class="px-1.5 py-0.5 rounded font-bold text-[11px] uppercase tracking-wider inline-block">
+              }" class="px-1.5 py-0.5 rounded font-bold text-[11px] uppercase tracking-wider inline-block">
               {{ item.estado }}
             </span>
           </td>
@@ -328,12 +328,12 @@
             <div class="flex items-center justify-center gap-3">
               <!-- Botón Estado -->
               <button type="button" (click)="abrirModalEstado(item)"
-                [disabled]="item.estado !== 'APROBADA' && item.estado !== 'INACTIVA'"
-                [ngClass]="(item.estado === 'APROBADA' || item.estado === 'INACTIVA')
+                [disabled]="item.estado !== 'APROBADA' && item.estado !== 'INACTIVA'" [ngClass]="(item.estado === 'APROBADA' || item.estado === 'INACTIVA')
                   ? 'border-[#BAE6FD] bg-white text-[#0EA5E9] hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer'
                   : 'border-[#E2E8F0] bg-[#F1F5F9] text-[#94A3B8] cursor-not-allowed'"
                 class="flex items-center gap-1 px-1.75 py-1 border rounded-lg text-[13px] font-medium transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                  class="flex-shrink-0">
                   <g fill="none"
                     [attr.stroke]="(item.estado === 'APROBADA' || item.estado === 'INACTIVA') ? '#0ea5e9' : '#94A3B8'"
                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
@@ -350,10 +350,12 @@
               <ng-container *ngIf="item.estado === 'PENDIENTE'">
                 <button type="button" (click)="aprobarMicrocredencial(item)"
                   class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <g fill="none" stroke="#0ea5e9" stroke-width="1.5">
-                      <path d="M10.521 2.624a2 2 0 0 1 2.958 0l1.02 1.12a2 2 0 0 0 1.572.651l1.513-.07a2 2 0 0 1 2.092 2.09l-.071 1.514a2 2 0 0 0 .651 1.572l1.12 1.02a2 2 0 0 1 0 2.958l-1.12 1.02a2 2 0 0 0-.651 1.572l.07 1.513a2 2 0 0 1-2.09 2.092l-1.514-.071a2 2 0 0 0-1.572.651l-1.02 1.12a2 2 0 0 1-2.958 0l-1.02-1.12a2 2 0 0 0-1.572-.651l-1.513.07a2 2 0 0 1-2.092-2.09l.071-1.514a2 2 0 0 0-.651-1.572l-1.12-1.02a2 2 0 0 1 0-2.958l1.12-1.02a2 2 0 0 0 .651-1.572l-.07-1.513a2 2 0 0 1 2.09-2.092l1.514.071a2 2 0 0 0 1.572-.651z" />
+                      <path
+                        d="M10.521 2.624a2 2 0 0 1 2.958 0l1.02 1.12a2 2 0 0 0 1.572.651l1.513-.07a2 2 0 0 1 2.092 2.09l-.071 1.514a2 2 0 0 0 .651 1.572l1.12 1.02a2 2 0 0 1 0 2.958l-1.12 1.02a2 2 0 0 0-.651 1.572l.07 1.513a2 2 0 0 1-2.09 2.092l-1.514-.071a2 2 0 0 0-1.572.651l-1.02 1.12a2 2 0 0 1-2.958 0l-1.02-1.12a2 2 0 0 0-1.572-.651l-1.513.07a2 2 0 0 1-2.092-2.09l.071-1.514a2 2 0 0 0-.651-1.572l-1.12-1.02a2 2 0 0 1 0-2.958l1.12-1.02a2 2 0 0 0 .651-1.572l-.07-1.513a2 2 0 0 1 2.09-2.092l1.514.071a2 2 0 0 0 1.572-.651z" />
                       <path stroke-linecap="round" stroke-linejoin="round" d="m9 12l2 2l4-4" />
                     </g>
                   </svg>
@@ -365,7 +367,8 @@
               <ng-container *ngIf="item.estado !== 'PENDIENTE'">
                 <button type="button" (click)="abrirModalInfo(item)"
                   class="flex items-center gap-1 px-1.75 py-1 border border-[#BAE6FD] bg-white rounded-lg text-[#0EA5E9] text-[13px] font-medium hover:bg-[#F0F9FF] active:bg-[#D1E4F1] cursor-pointer transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m.005-4.222v-6.333" />
@@ -379,7 +382,8 @@
               <!-- Botón Eliminar -->
               <button type="button" (click)="abrirModalEliminar(item)"
                 class="flex items-center gap-1 px-1.75 py-1 border border-[#FDBABB] bg-white rounded-lg text-[#E90E12] text-[13px] font-medium hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                  class="flex-shrink-0">
                   <g fill="none" stroke="#E90E12" stroke-width="1">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
                       d="M7.874 8.218v7.908a1.72 1.72 0 0 0 1.72 1.719h4.813a1.72 1.72 0 0 0 1.719-1.72V8.219m-9.627-.001h11.002m-7.564 0V7.187a1.03 1.03 0 0 1 1.032-1.032h2.062a1.03 1.03 0 0 1 1.032 1.032v1.031" />
@@ -513,7 +517,8 @@
   <!-- Fondo oscuro -->
   <div class="absolute inset-0 bg-[#E2E8F0] opacity-50" (click)="cerrarModalEliminar()"></div>
 
-  <div class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col p-6 z-10">
+  <div
+    class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col p-6 z-10">
 
     <!-- Encabezado -->
     <div class="flex items-center mb-10">
@@ -525,7 +530,7 @@
     <!-- Mensaje -->
     <div class="text-[13.5px] text-[#334155] leading-relaxed mb-10">
       <div>Esta acción no se puede deshacer. ¿Está seguro de eliminar la microcredencial <span
-        class="font-semibold text-[#334155]">{{ microcredencialAEliminar?.nombre | uppercase }}</span>?</div>
+          class="font-semibold text-[#334155]">{{ microcredencialAEliminar?.nombre | uppercase }}</span>?</div>
       <div *ngIf="esAprobadaOInactiva(microcredencialAEliminar)" class="mt-5">
         <span class="font-semibold text-[#334155]">ATENCIÓN:</span> Las insignias emitidas serán revocadas
       </div>
@@ -570,15 +575,15 @@
     <!-- Título -->
     <div class="px-12 pt-7 pb-5 flex-shrink-0 flex items-center justify-between">
       <h2 class="text-[21px] font-semibold text-[#334155]">
-        {{ microcredencialAEvaluar?.estado === 'PENDIENTE' ? 'Evaluar microcredencial' : 'Datos de la microcredencial' }}
+        {{ microcredencialAEvaluar?.estado === 'PENDIENTE' ? 'Evaluar microcredencial' : 'Datos de la microcredencial'
+        }}
       </h2>
       <span [ngClass]="{
           'text-[#30A32C] bg-[#DCFFDB]': microcredencialAEvaluar?.estado === 'APROBADA',
           'text-[#A32C2E] bg-[#FFDBDC]': microcredencialAEvaluar?.estado === 'RECHAZADA',
           'text-[#A3872C] bg-[#FFFBDB]': microcredencialAEvaluar?.estado === 'PENDIENTE',
           'text-[#8B8B8B] bg-[#E5E5E5]': microcredencialAEvaluar?.estado === 'INACTIVA'
-        }"
-        class="px-2 py-1 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
+        }" class="px-2 py-1 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
         {{ microcredencialAEvaluar?.estado }}
       </span>
     </div>
@@ -588,9 +593,13 @@
 
       <!-- Columna Izquierda: Imagen de la Insignia -->
       <div class="flex flex-col items-center justify-center pr-9 border-r border-[#CBD5E1] min-w-[240px] flex-shrink-0">
-        <div class="w-56 h-56 flex items-center justify-center overflow-hidden mb-4 border border-[#E2E8F0] bg-[#F8FAFC]">
-          <img *ngIf="microcredencialAEvaluar?.imagen_url" [src]="microcredencialAEvaluar.imagen_url" class="w-full h-full object-cover" alt="Insignia digital">
-          <div *ngIf="!microcredencialAEvaluar?.imagen_url" class="w-full h-full bg-[#E2E8F0] flex items-center justify-center text-[#64748B] text-xs font-semibold">Sin imagen</div>
+        <div
+          class="w-56 h-56 flex items-center justify-center overflow-hidden mb-4 border border-[#E2E8F0] bg-[#F8FAFC]">
+          <img *ngIf="microcredencialAEvaluar?.imagen_url" [src]="microcredencialAEvaluar.imagen_url"
+            class="w-full h-full object-cover" alt="Insignia digital">
+          <div *ngIf="!microcredencialAEvaluar?.imagen_url"
+            class="w-full h-full bg-[#E2E8F0] flex items-center justify-center text-[#64748B] text-xs font-semibold">Sin
+            imagen</div>
         </div>
         <span class="text-[14px] text-[#334155] font-semibold mb-6">Insignia digital</span>
 
@@ -611,7 +620,8 @@
             <span>[</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none" />
-              <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M6 12H4.125c-.6 0-1.087.487-1.087 1.087v7.076c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087v-7.076c0-.6-.487-1.087-1.087-1.087m6.939-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v11.701c0 .6.486 1.087 1.086 1.087h1.874c.6 0 1.087-.487 1.087-1.087V8.462c0-.6-.487-1.087-1.087-1.087m6.937-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v16.326c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087V3.837c0-.6-.487-1.087-1.087-1.087" />
+              <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3"
+                d="M6 12H4.125c-.6 0-1.087.487-1.087 1.087v7.076c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087v-7.076c0-.6-.487-1.087-1.087-1.087m6.939-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v11.701c0 .6.486 1.087 1.086 1.087h1.874c.6 0 1.087-.487 1.087-1.087V8.462c0-.6-.487-1.087-1.087-1.087m6.937-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v16.326c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087V3.837c0-.6-.487-1.087-1.087-1.087" />
             </svg>
             <span>{{ microcredencialAEvaluar?.nivel }}</span>
             <span>]</span>
@@ -621,11 +631,12 @@
 
       <!-- Columna Derecha: Información detallada -->
       <div class="flex-1 pl-9 flex flex-col gap-5 text-[#334155] overflow-y-auto pr-15 modal-scrollbar">
-        
+
         <div class="font-bold text-[14px] text-[#334155] uppercase">{{ microcredencialAEvaluar?.nombre }}</div>
 
         <div class="text-[13px] text-[#334155]">
-          <span class="font-bold uppercase mr-1.5">Emisor:</span> <span class="font-normal">{{ microcredencialAEvaluar?.emisor }}</span>
+          <span class="font-bold uppercase mr-1.5">Emisor:</span> <span class="font-normal">{{
+            microcredencialAEvaluar?.emisor }}</span>
         </div>
 
         <div class="text-[13px] text-[#334155] flex flex-col gap-2">
@@ -651,37 +662,46 @@
         <!-- Información adicional según el estado -->
 
         <div class="text-[13px] text-[#334155]">
-          <span class="font-bold uppercase mr-1.5">Creado en:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.creado_en | date:'dd/MM/yyyy HH:mm' }}</span>
+          <span class="font-bold uppercase mr-1.5">Creado en:</span> <span class="font-normal uppercase">{{
+            microcredencialAEvaluar?.creado_en | date:'dd/MM/yyyy HH:mm' }}</span>
         </div>
 
         <ng-container *ngIf="microcredencialAEvaluar?.estado === 'APROBADA'">
           <div class="text-[13px] text-[#334155]">
-            <span class="font-bold uppercase mr-1.5">Aprobado por:</span> <span class="font-normal">{{ microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
+            <span class="font-bold uppercase mr-1.5">Aprobado por:</span> <span class="font-normal">{{
+              microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
           </div>
           <div class="text-[13px] text-[#334155]">
-            <span class="font-bold uppercase mr-1.5">Fecha de Aprobación:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.aprobado_en | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="font-bold uppercase mr-1.5">Fecha de Aprobación:</span> <span class="font-normal uppercase">{{
+              microcredencialAEvaluar?.aprobado_en | date:'dd/MM/yyyy HH:mm' }}</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="microcredencialAEvaluar?.estado === 'INACTIVA'">
           <div class="text-[13px] text-[#334155]">
-            <span class="font-bold uppercase mr-1.5">Inactivado por:</span> <span class="font-normal">{{ microcredencialAEvaluar?.inactivado_por || 'N/A' }}</span>
+            <span class="font-bold uppercase mr-1.5">Inactivado por:</span> <span class="font-normal">{{
+              microcredencialAEvaluar?.inactivado_por || 'N/A' }}</span>
           </div>
           <div class="text-[13px] text-[#334155]">
-            <span class="font-bold uppercase mr-1.5">Fecha de inactivación:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="font-bold uppercase mr-1.5">Fecha de inactivación:</span> <span
+              class="font-normal uppercase">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm'
+              }}</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="microcredencialAEvaluar?.estado === 'RECHAZADA'">
           <div class="text-[13px] text-[#334155]">
-            <span class="font-bold uppercase mr-1.5">Evaluado por:</span> <span class="font-normal">{{ microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
+            <span class="font-bold uppercase mr-1.5">Evaluado por:</span> <span class="font-normal">{{
+              microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
           </div>
           <div class="text-[13px] text-[#334155] flex flex-col gap-2">
             <span class="font-bold uppercase">Motivos:</span>
-            <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.justificacion_rechazo || 'SIN ESPECIFICAR' }}</span>
+            <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.justificacion_rechazo ||
+              'SIN ESPECIFICAR' }}</span>
           </div>
           <div class="text-[13px] text-[#334155]">
-            <span class="font-bold uppercase mr-1.5">Fecha de Evaluación:</span> <span class="font-normal uppercase">{{ microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="font-bold uppercase mr-1.5">Fecha de Evaluación:</span> <span class="font-normal uppercase">{{
+              microcredencialAEvaluar?.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
           </div>
         </ng-container>
 
@@ -697,7 +717,8 @@
           class="flex items-center gap-2 px-2.5 py-2 bg-[#10B981] border border-[#2EC89A] text-white text-[14px] font-medium hover:bg-[#059669] cursor-pointer transition-all rounded-lg">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
             <path d="M0 0h24v24H0z" fill="none" />
-            <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+            <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
           </svg>
           Aprobar
         </button>
@@ -707,7 +728,8 @@
           class="flex items-center gap-2 px-2.5 py-2 bg-[#E53935] border border-[#C8332E] text-white text-[14px] font-medium hover:bg-[#C62828] cursor-pointer transition-all rounded-lg">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
             <path d="M0 0h24v24H0z" fill="none" />
-            <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m6.713-2.787L5.287 5.287" />
+            <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19m6.713-2.787L5.287 5.287" />
           </svg>
           Rechazar
         </button>
@@ -718,7 +740,8 @@
         class="flex items-center gap-2 px-2.5 py-2 bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all rounded-lg">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none" />
-          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
         </svg>
         {{ microcredencialAEvaluar?.estado === 'PENDIENTE' ? 'Cancelar' : 'Cerrar' }}
       </button>
@@ -732,7 +755,8 @@
   <!-- Fondo oscuro -->
   <div class="absolute inset-0 bg-[#E2E8F0] opacity-50" (click)="cerrarModalRechazar()"></div>
 
-  <div class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col p-6 z-10">
+  <div
+    class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col p-6 z-10">
 
     <!-- Encabezado -->
     <div class="flex items-center mb-6">
@@ -750,11 +774,13 @@
     <!-- Botones de Acción -->
     <div class="flex items-center justify-center gap-8">
       <!-- Aceptar -->
-      <button type="button" (click)="confirmarRechazarMicrocredencial()" [disabled]="!justificacionRechazo || !justificacionRechazo.trim()"
+      <button type="button" (click)="confirmarRechazarMicrocredencial()"
+        [disabled]="!justificacionRechazo || !justificacionRechazo.trim()"
         class="flex items-center gap-2 px-2.5 py-2 bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white text-[14px] font-medium hover:bg-[#43A5C2] cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none" />
-          <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+          <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
         </svg>
         Aceptar
       </button>
@@ -763,7 +789,8 @@
       <button type="button" (click)="cerrarModalRechazar()"
         class="flex items-center gap-2 px-2.5 py-2 bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
         </svg>
         Cancelar
       </button>
@@ -777,7 +804,8 @@
   <!-- Fondo oscuro -->
   <div class="absolute inset-0 bg-[#E2E8F0] opacity-50" (click)="cerrarModalEstado()"></div>
 
-  <div class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col px-[48px] py-[27px] z-10">
+  <div
+    class="relative bg-white border border-[#CBD5E1] rounded-xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col px-[48px] py-[27px] z-10">
 
     <!-- Encabezado -->
     <div class="flex items-center mb-10">
@@ -812,8 +840,10 @@
     </div>
 
     <!-- Advertencia si es INACTIVO -->
-    <div *ngIf="nuevoEstado === 'INACTIVO' && microcredencialAEditarEstado?.estado === 'APROBADA'" class="text-[13.5px] text-[#334155] leading-relaxed mb-10">
-      <span class="font-semibold text-[#334155]">PRECAUCIÓN:</span> Una vez inactiva la microcredencial, el usuario dueño de la misma no podrá emitir nuevas insignias. ¿Desea continuar?
+    <div *ngIf="nuevoEstado === 'INACTIVO' && microcredencialAEditarEstado?.estado === 'APROBADA'"
+      class="text-[13.5px] text-[#334155] leading-relaxed mb-10">
+      <span class="font-semibold text-[#334155]">PRECAUCIÓN:</span> Una vez inactiva la microcredencial, el usuario
+      dueño de la misma no podrá emitir nuevas insignias. ¿Desea continuar?
     </div>
 
     <!-- Botones de Acción -->
@@ -837,7 +867,8 @@
         class="flex items-center gap-2 px-2.5 py-2 bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none" />
-          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m5 19l7-7m0 0l7-7m-7 7L5 5m7 7l7 7" />
         </svg>
         Cancelar
       </button>
