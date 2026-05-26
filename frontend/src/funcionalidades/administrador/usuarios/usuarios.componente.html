@@ -468,7 +468,7 @@
                       Sin actividad registrada
                     </div>
 
-                    <div class="border-t border-[#F1F5F9] mt-2 pt-2">
+                    <div [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
                       <div class="mb-1">
                         <span class="font-semibold text-[#1E293B]">Creado en: </span>
                         <span class="font-normal">{{ usuario.creado_en ? (usuario.creado_en | date:'dd/MM/yyyy HH:mm') :
@@ -559,13 +559,13 @@
                       <span class="font-normal">{{ usuario.insignias_obtenidas ?? 0 }}</span>
                     </div>
 
-                    <!-- Si no tiene ninguno de los dos roles -->
-                    <div *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor')"
+                    <!-- Si no tiene ninguno de los dos roles ni es administrador -->
+                    <div *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador')"
                       class="text-[#94A3B8] italic">
                       Sin actividad registrada
                     </div>
 
-                    <div class="border-t border-[#F1F5F9] mt-2 pt-2">
+                    <div [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
                       <div class="text-[12px] mb-1">
                         <span class="font-semibold text-[#1E293B]">Creado en: </span>
                         <span class="font-normal">{{ usuario.creado_en ? (usuario.creado_en | date:'dd/MM/yyyy HH:mm') :

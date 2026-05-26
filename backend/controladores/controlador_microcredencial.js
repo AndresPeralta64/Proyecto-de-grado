@@ -60,13 +60,38 @@ const registrarMicrocredencial = async (req, res) => {
     const rutaVieja = path.join(__dirname, '..', 'recursos', 'insignias', nombreViejo);
     const rutaNueva = path.join(__dirname, '..', 'recursos', 'insignias', nombreNuevo);
     
+    let fotoUrlFinal = fotoUrl;
     if (fs.existsSync(rutaVieja)) {
       fs.renameSync(rutaVieja, rutaNueva);
-      
-      // Actualizar la URL en la base de datos
-      const fotoUrlNueva = `${host}/recursos/insignias/${nombreNuevo}`;
-      await consultar('UPDATE microcredencial SET imagen_url = $1 WHERE id_microcredencial = $2', [fotoUrlNueva, idMicrocredencial]);
+      fotoUrlFinal = `${host}/recursos/insignias/${nombreNuevo}`;
     }
+
+    const metadataOB3 = {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://purl.imsglobal.org/spec/ob/v3p0/context.json"
+      ],
+      "id": `${host}/api/microcredenciales/${idMicrocredencial}`,
+      "type": ["Achievement"],
+      "name": nombre.trim(),
+      "description": descripcion.trim(),
+      "criteria": {
+        "narrative": criterios_evaluacion.trim()
+      },
+      "image": {
+        "id": fotoUrlFinal,
+        "type": "Image"
+      },
+      "issuer": {
+        "id": `${host}/api/public/issuer`,
+        "type": ["Profile"],
+        "name": "Escuela Superior Politécnica de Chimborazo (ESPOCH)",
+        "url": "https://www.espoch.edu.ec"
+      }
+    };
+
+    // Actualizar la URL y el metadata OB3 en la base de datos
+    await consultar('UPDATE microcredencial SET imagen_url = $1, metadata_ob3 = $2 WHERE id_microcredencial = $3', [fotoUrlFinal, metadataOB3, idMicrocredencial]);
 
     return res.status(201).json({
       exito: true,
@@ -109,11 +134,11 @@ const actualizarMicrocredencial = async (req, res) => {
       return res.status(409).json({ exito: false, mensaje: 'El nombre de la microcredencial ya está en uso.' });
     }
 
+    const puerto = process.env.PORT || 3000;
+    const host = process.env.URL_BACKEND || `http://localhost:${puerto}`;
+
     let fotoUrlFinal = micro.imagen_url;
     if (req.file) {
-      const puerto = process.env.PORT || 3000;
-      const host = process.env.URL_BACKEND || `http://localhost:${puerto}`;
-      
       const nombreViejo = req.file.filename;
       const nombreNuevo = nombreViejo.replace('-temp-', `-${id}-`);
       
@@ -126,12 +151,37 @@ const actualizarMicrocredencial = async (req, res) => {
       }
     }
 
-    // Actualizar la microcredencial: volver el estado a Pendiente (1), limpiar evaluado_por y justificacion_rechazo
+    const metadataOB3 = {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://purl.imsglobal.org/spec/ob/v3p0/context.json"
+      ],
+      "id": `${host}/api/microcredenciales/${id}`,
+      "type": ["Achievement"],
+      "name": nombre.trim(),
+      "description": descripcion.trim(),
+      "criteria": {
+        "narrative": criterios_evaluacion.trim()
+      },
+      "image": {
+        "id": fotoUrlFinal,
+        "type": "Image"
+      },
+      "issuer": {
+        "id": `${host}/api/public/issuer`,
+        "type": ["Profile"],
+        "name": "Escuela Superior Politécnica de Chimborazo (ESPOCH)",
+        "url": "https://www.espoch.edu.ec"
+      }
+    };
+
+    // Actualizar la microcredencial: volver el estado a Pendiente (1), limpiar evaluado_por y justificacion_rechazo, y actualizar metadata
     const updateMicrocredencial = `
       UPDATE microcredencial 
       SET nombre = $1, descripcion = $2, criterios_evaluacion = $3, duracion_horas = $4,
           competencias = $5, imagen_url = $6, nivel = $7, area_conocimiento = $8,
-          estado = 1, evaluado_por = NULL, justificacion_rechazo = NULL, aprobado_en = NULL, ultima_actualizacion = NOW()
+          estado = 1, evaluado_por = NULL, justificacion_rechazo = NULL, aprobado_en = NULL, ultima_actualizacion = NOW(),
+          metadata_ob3 = $10
       WHERE id_microcredencial = $9
     `;
 
@@ -144,7 +194,8 @@ const actualizarMicrocredencial = async (req, res) => {
       fotoUrlFinal,
       parseInt(nivel, 10),
       parseInt(area_conocimiento, 10),
-      id
+      id,
+      metadataOB3
     ]);
 
     return res.status(200).json({
