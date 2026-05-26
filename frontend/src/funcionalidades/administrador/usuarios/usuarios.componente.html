@@ -462,8 +462,8 @@
                       <span class="font-normal">{{ usuario.insignias_obtenidas ?? 0 }}</span>
                     </div>
 
-                    <!-- Si no tiene ninguno de los dos roles -->
-                    <div *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor')"
+                    <!-- Si no tiene ninguno de los dos roles ni es administrador -->
+                    <div *ngIf="!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador')"
                       class="text-[#94A3B8] italic">
                       Sin actividad registrada
                     </div>
