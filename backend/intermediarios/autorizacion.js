@@ -12,7 +12,8 @@ const verificarRoles = (rolesAutorizados) => {
       });
     }
 
-    const tienePermiso = rolesAutorizados.includes(req.usuario.nombre_rol);
+    const userRoles = req.usuario.roles || [req.usuario.nombre_rol];
+    const tienePermiso = userRoles.some(rol => rolesAutorizados.includes(rol));
 
     if (tienePermiso) {
       next();

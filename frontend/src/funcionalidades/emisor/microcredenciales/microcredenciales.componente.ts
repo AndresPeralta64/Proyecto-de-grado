@@ -241,7 +241,7 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
             emisor: item.emisor,
             nivel: item.nivel,
             area_conocimiento: item.area_conocimiento,
-            duracion: `${item.duracion_horas}H`,
+            duracion: `${item.duracion_horas} H`,
             estado: item.estado.toUpperCase(),
             evaluado_por: item.evaluado_por,
             inactivado_por: item.inactivado_por,
@@ -652,10 +652,15 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     }
   }
 
-  onDuracionClick() {
-    if (!this.nuevaMicrocredencialDatos.duracionHoras || this.nuevaMicrocredencialDatos.duracionHoras < 1) {
-      this.nuevaMicrocredencialDatos.duracionHoras = 1;
-      this.errores['duracionHoras'] = '';
+  onDuracionFocus() {
+    if (this.nuevaMicrocredencialDatos.duracionHoras === 0) {
+      this.nuevaMicrocredencialDatos.duracionHoras = null as any;
+    }
+  }
+
+  onDuracionBlur() {
+    if (this.nuevaMicrocredencialDatos.duracionHoras === null || this.nuevaMicrocredencialDatos.duracionHoras === undefined || this.nuevaMicrocredencialDatos.duracionHoras.toString().trim() === '') {
+      this.nuevaMicrocredencialDatos.duracionHoras = 0;
     }
   }
 
@@ -728,8 +733,8 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
       try {
         const contenedor = this.contenedorInsigniaDesign.first;
         if (!contenedor) {
-            this.lanzarNotificacion('No se encontró el contenedor de la insignia en el DOM', 'error');
-            return;
+          this.lanzarNotificacion('No se encontró el contenedor de la insignia en el DOM', 'error');
+          return;
         }
 
         const svgElement = contenedor.nativeElement.querySelector('svg');
@@ -837,7 +842,7 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
         // Lógica de edición
         this.modoEdicion = true;
         this.idMicrocredencialEditar = item.id;
-        
+
         let comps = [];
         if (item.competencias) {
           try {
@@ -859,17 +864,17 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
           competenciasInput: '',
           competenciasLista: comps
         };
-        
+
         this.opcionInsignia = 'cargar';
         this.imagenCargadaURL = item.imagen_url;
         (this as any).archivoInsigniaCargada = null;
         this.modoDisenoGuardado = false;
-        
+
         // Abrir el modal sin llamar a resetFormularioRegistro
         this.errores = {};
         this.dropdownAreaAbierto = false;
         this.dropdownNivelAbierto = false;
-        
+
         if (this.nivelesFiltrados.length === 0) this.nivelesFiltrados = [...this.niveles];
         if (this.areasFiltradas.length === 0) this.areasFiltradas = [...this.areasConocimiento];
 
@@ -1080,5 +1085,21 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
 
   editarDiseno() {
     this.modoDisenoGuardado = false;
+  }
+
+  formatearCompetencias(competencias: any): string {
+    if (!competencias) return '';
+    if (Array.isArray(competencias)) {
+      return competencias.join(', ');
+    }
+    if (typeof competencias === 'string') {
+      try {
+        const parsed = JSON.parse(competencias);
+        if (Array.isArray(parsed)) return parsed.join(', ');
+      } catch (e) {
+        return competencias.split(',').map(c => c.trim()).join(', ');
+      }
+    }
+    return String(competencias);
   }
 }

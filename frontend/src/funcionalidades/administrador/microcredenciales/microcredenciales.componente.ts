@@ -111,7 +111,7 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
             emisor: item.emisor,
             nivel: item.nivel,
             area_conocimiento: item.area_conocimiento,
-            duracion: `${item.duracion_horas}H`,
+            duracion: `${item.duracion_horas} H`,
             estado: item.estado.toUpperCase(),
             evaluado_por: item.evaluado_por,
             inactivado_por: item.inactivado_por,
@@ -463,5 +463,21 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
     this.tipoToast = tipo;
     this.mostrarToast = true;
     setTimeout(() => { this.mostrarToast = false; }, 3500);
+  }
+
+  formatearCompetencias(competencias: any): string {
+    if (!competencias) return '';
+    if (Array.isArray(competencias)) {
+      return competencias.join(', ');
+    }
+    if (typeof competencias === 'string') {
+      try {
+        const parsed = JSON.parse(competencias);
+        if (Array.isArray(parsed)) return parsed.join(', ');
+      } catch (e) {
+        return competencias.split(',').map(c => c.trim()).join(', ');
+      }
+    }
+    return String(competencias);
   }
 }

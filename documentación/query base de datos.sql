@@ -95,8 +95,7 @@ create table insignia_emitida (
 	fecha_emision timestamp not null default now(),
 	png_baked_url text,
 	assertion_jsonld jsonb not null,
-	estado int references estado_insignia(id_estado) not null default 1,
-	unique(microcredencial, receptor)
+	estado int references estado_insignia(id_estado) not null default 1
 );
 
 create table revocacion_insignia (

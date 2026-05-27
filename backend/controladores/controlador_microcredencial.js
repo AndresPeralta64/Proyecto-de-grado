@@ -81,12 +81,6 @@ const registrarMicrocredencial = async (req, res) => {
       "image": {
         "id": fotoUrlFinal,
         "type": "Image"
-      },
-      "issuer": {
-        "id": `${host}/api/public/issuer`,
-        "type": ["Profile"],
-        "name": "Escuela Superior Politécnica de Chimborazo (ESPOCH)",
-        "url": "https://www.espoch.edu.ec"
       }
     };
 
@@ -166,12 +160,6 @@ const actualizarMicrocredencial = async (req, res) => {
       "image": {
         "id": fotoUrlFinal,
         "type": "Image"
-      },
-      "issuer": {
-        "id": `${host}/api/public/issuer`,
-        "type": ["Profile"],
-        "name": "Escuela Superior Politécnica de Chimborazo (ESPOCH)",
-        "url": "https://www.espoch.edu.ec"
       }
     };
 

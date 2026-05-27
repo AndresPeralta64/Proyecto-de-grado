@@ -12,6 +12,7 @@ export const rutasAdministrador: Routes = [
       { path: 'dashboard', component: DashboardComponente },
       { path: 'usuarios', component: UsuariosComponente },
       { path: 'microcredenciales', component: MicrocredencialesComponente },
+      { path: 'insignias', loadComponent: () => import('./insignias/insignias.componente').then(m => m.InsigniasAdminComponente) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

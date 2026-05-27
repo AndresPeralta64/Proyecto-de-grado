@@ -26,12 +26,23 @@ router.delete('/perfil/foto', autenticacion, eliminarFotoPerfil);
 // Obtener lista de carreras para el dropdown
 router.get('/carreras', autenticacion, async (req, res) => {
   try {
-    const resultado = await consultar('SELECT id_carrera, nombre FROM carrera ORDER BY nombre ASC', []);
+    const resultado = await consultar('SELECT id_carrera, nombre, facultad AS id_facultad FROM carrera ORDER BY nombre ASC', []);
     return res.status(200).json({ exito: true, datos: resultado.rows });
   } catch (error) {
     return res.status(500).json({ exito: false, mensaje: 'Error al obtener las carreras.' });
   }
 });
+
+// Obtener lista de facultades para el dropdown
+router.get('/facultades', autenticacion, async (req, res) => {
+  try {
+    const resultado = await consultar('SELECT id_facultad, nombre FROM facultad ORDER BY nombre ASC', []);
+    return res.status(200).json({ exito: true, datos: resultado.rows });
+  } catch (error) {
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener las facultades.' });
+  }
+});
+
 
 // Registrar nuevo usuario (solo Administradores)
 router.post('/', [autenticacion, autorizacion(['Administrador']), subida.single('foto')], registrarUsuario);
@@ -46,7 +57,7 @@ router.get('/', autenticacion, autorizacion(['Administrador']), async (req, res)
   try {
     const consulta = `
       SELECT u.id_usuario, u.cedula, u.nombres, u.apellidos, u.correo, u.telefono, u.activo,
-             u.carrera AS id_carrera, c.nombre AS carrera_nombre, u.foto_url,
+             u.carrera AS id_carrera, c.nombre AS carrera_nombre, c.facultad AS id_facultad, u.foto_url,
              u.creado_en, u.ultima_actualizacion,
              (SELECT COUNT(*)::int FROM microcredencial WHERE emisor = u.id_usuario AND eliminado = false) AS microcredenciales_creadas,
              (SELECT COUNT(*)::int FROM insignia_emitida WHERE emisor = u.id_usuario) AS insignias_emitidas,
@@ -62,7 +73,7 @@ router.get('/', autenticacion, autorizacion(['Administrador']), async (req, res)
       LEFT JOIN carrera c ON u.carrera = c.id_carrera
       LEFT JOIN usuario_rol ur ON u.id_usuario = ur.usuario
       LEFT JOIN rol r ON ur.rol = r.id_rol
-      GROUP BY u.id_usuario, c.id_carrera, c.nombre
+      GROUP BY u.id_usuario, c.id_carrera, c.nombre, c.facultad
       ORDER BY u.id_usuario ASC
     `;
     const resultado = await consultar(consulta, []);

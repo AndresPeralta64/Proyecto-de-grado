@@ -11,6 +11,8 @@ require('dotenv').config();
 const autenticacionRutas = require('./rutas/autenticacion.rutas');
 const usuariosRutas = require('./rutas/usuarios.rutas');
 const microcredencialesRutas = require('./rutas/microcredenciales.rutas');
+const insigniasRutas = require('./rutas/insignias.rutas');
+const publicRutas = require('./rutas/public.rutas');
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use('/recursos', express.static(path.join(__dirname, 'recursos')));
 app.use('/api/autenticacion', autenticacionRutas);
 app.use('/api/usuarios', usuariosRutas);
 app.use('/api/microcredenciales', microcredencialesRutas);
+app.use('/api/insignias', insigniasRutas);
+app.use('/api/public', publicRutas);
 
 /**
  * Manejo de errores

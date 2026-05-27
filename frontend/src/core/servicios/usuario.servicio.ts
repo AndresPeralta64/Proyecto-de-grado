@@ -37,6 +37,11 @@ export class UsuarioServicio {
     return this.http.get(`${this.apiUrl}/carreras`);
   }
 
+  obtenerFacultades(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/facultades`);
+  }
+
+
   registrarUsuario(datos: any): Observable<any> {
     return this.http.post(`${this.apiUrl}`, datos);
   }
