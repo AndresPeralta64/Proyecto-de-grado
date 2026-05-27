@@ -337,10 +337,51 @@ const obtenerHistorialGeneral = async (req, res) => {
   }
 };
 
+const obtenerMisInsignias = async (req, res) => {
+  try {
+    const idReceptor = req.usuario.id;
+    const query = `
+      SELECT 
+        ie.id_insignia AS id,
+        e.nombres || ' ' || e.apellidos AS emisor,
+        e.correo AS emisor_correo,
+        m.nombre AS microcredencial,
+        m.descripcion AS microcredencial_descripcion,
+        m.duracion_horas AS duracion,
+        m.imagen_url,
+        ie.png_baked_url,
+        n.nombre AS nivel,
+        ie.url_externo,
+        ie.fecha_emision AS fecha_completa,
+        ri.revocado_en,
+        ri.justificacion AS motivo_revocacion,
+        CASE 
+          WHEN ie.estado = 1 THEN 'ACTIVA'
+          WHEN ie.estado = 2 THEN 'REVOCADA'
+          ELSE 'DESCONOCIDO'
+        END AS estado,
+        TO_CHAR(ie.fecha_emision, 'DD/MM/YYYY') AS fecha
+      FROM insignia_emitida ie
+      JOIN usuario e ON ie.emisor = e.id_usuario
+      JOIN microcredencial m ON ie.microcredencial = m.id_microcredencial
+      JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
+      LEFT JOIN revocacion_insignia ri ON ie.id_insignia = ri.insignia
+      WHERE ie.receptor = $1
+      ORDER BY ie.fecha_emision DESC
+    `;
+    const result = await consultar(query, [idReceptor]);
+    res.status(200).json({ exito: true, datos: result.rows });
+  } catch (error) {
+    console.error('Error en obtenerMisInsignias:', error);
+    res.status(500).json({ exito: false, mensaje: 'Ha ocurrido un error al obtener las insignias adquiridas.' });
+  }
+};
+
 module.exports = {
   obtenerHistorialGeneral,
   emitirInsignias,
   obtenerHistorial,
   revocarInsignia,
-  obtenerReceptoresConInsignia
+  obtenerReceptoresConInsignia,
+  obtenerMisInsignias
 };

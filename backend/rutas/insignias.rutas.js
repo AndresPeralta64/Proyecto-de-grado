@@ -22,4 +22,7 @@ router.post('/revocar/:idInsignia', autorizacion(['Emisor']), controladorInsigni
 // Receptores que ya tienen la insignia
 router.get('/receptores-con-insignia/:idMicrocredencial', autorizacion(['Emisor', 'Administrador']), controladorInsignias.obtenerReceptoresConInsignia);
 
+// Historial del Receptor
+router.get('/mis-insignias', autorizacion(['Receptor']), controladorInsignias.obtenerMisInsignias);
+
 module.exports = router;

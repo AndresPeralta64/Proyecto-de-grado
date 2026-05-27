@@ -33,4 +33,8 @@ export class InsigniaServicio {
   obtenerReceptoresConInsignia(idMicrocredencial: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/receptores-con-insignia/${idMicrocredencial}`);
   }
+
+  obtenerMisInsignias(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/mis-insignias`);
+  }
 }
