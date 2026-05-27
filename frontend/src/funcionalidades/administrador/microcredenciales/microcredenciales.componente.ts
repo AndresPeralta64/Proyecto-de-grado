@@ -109,6 +109,7 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
             competencias: item.competencias,
             imagen_url: item.imagen_url,
             emisor: item.emisor,
+            emisor_correo: item.emisor_correo,
             nivel: item.nivel,
             area_conocimiento: item.area_conocimiento,
             duracion: `${item.duracion_horas} H`,

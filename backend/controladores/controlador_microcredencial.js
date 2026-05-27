@@ -217,6 +217,7 @@ const listarMicrocredenciales = async (req, res) => {
         m.ultima_actualizacion,
         m.emisor AS id_emisor,
         CONCAT(u_emisor.nombres, ' ', u_emisor.apellidos) AS emisor,
+        u_emisor.correo AS emisor_correo,
         CONCAT(u_aprobador.nombres, ' ', u_aprobador.apellidos) AS evaluado_por,
         CONCAT(u_inactivador.nombres, ' ', u_inactivador.apellidos) AS inactivado_por,
         n.nombre AS nivel,
