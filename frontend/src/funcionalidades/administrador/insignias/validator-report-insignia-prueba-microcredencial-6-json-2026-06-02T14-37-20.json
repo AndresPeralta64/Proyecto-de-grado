@@ -1,0 +1,38 @@
+{
+  "id": "c188bc10-fc4b-4190-b67a-2431a74608bf",
+  "generated": "2026-06-02T14:37:20",
+  "generator": "OB30Inspector",
+  "input": {
+    "name": "insignia-prueba-microcredencial-6.json",
+    "type": "JSON"
+  },
+  "summary": {
+    "outcome": "ERROR",
+    "fatals": 0,
+    "errors": 1,
+    "warnings": 0,
+    "exceptions": 0,
+    "notRun": 0,
+    "totalRun": 13
+  },
+  "specification": {
+    "pid": "ob30.pid",
+    "shortName": "ob",
+    "version": "3.0",
+    "title": "Open Badges 3.0"
+  },
+  "fatals": [],
+  "errors": [
+    {
+      "message": "Invalid verification key URL: java.net.ConnectException: Connection refused",
+      "location": {
+        "resource": "insignia-prueba-microcredencial-6.json"
+      },
+      "generator": "EmbeddedProofProbe",
+      "detailsMessage": null
+    }
+  ],
+  "warnings": [],
+  "exceptions": [],
+  "notRun": []
+}

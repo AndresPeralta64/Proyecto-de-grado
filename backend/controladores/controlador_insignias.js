@@ -7,7 +7,7 @@ const extractChunks = require('png-chunks-extract');
 const encodeChunks = require('png-chunks-encode');
 const textChunk = require('png-chunk-text');
 const bs58 = require('bs58');
-const stringifyDeterministic = require('json-stringify-deterministic');
+const jsonld = require('jsonld');
 const { firmarEd25519 } = require('../servicios/servicio_criptografia');
 const { obtenerClaves } = require('../utilidades/llaves');
 const { v4: uuidv4 } = require('uuid');
@@ -101,19 +101,37 @@ const emitirInsignias = async (req, res) => {
           }
         };
 
-        // e. Firmar criptográficamente (Ed25519 - Linked Data Proofs)
-        const assertionString = stringifyDeterministic(assertion);
-        const firmaBuffer = firmarEd25519(assertionString, claves.clave_privada);
-        // Formato Multibase Base58btc inicia con 'z'
-        const proofValueBase58 = 'z' + bs58.encode(firmaBuffer);
-
-        const finalJsonLd = { ...assertion };
-        finalJsonLd.proof = [{
+        // e. Firmar criptográficamente (Ed25519 con canonización URDNA2015)
+        const proofOptions = {
+          "@context": assertion["@context"],
           "type": "DataIntegrityProof",
           "cryptosuite": "eddsa-rdfc-2022",
           "created": fechaEmision,
           "proofPurpose": "assertionMethod",
-          "verificationMethod": `${host}/api/public/issuer#key-1`,
+          "verificationMethod": `${host}/api/public/issuer#key-1`
+        };
+
+        // Canonizar aserción y proof por separado
+        const docCanon = await jsonld.normalize(assertion, { algorithm: 'URDNA2015', format: 'application/n-quads' });
+        const proofCanon = await jsonld.normalize(proofOptions, { algorithm: 'URDNA2015', format: 'application/n-quads' });
+
+        // Hashear ambos resultados
+        const hashDoc = crypto.createHash('sha256').update(docCanon).digest();
+        const hashProof = crypto.createHash('sha256').update(proofCanon).digest();
+
+        // Concatenar hashes (64 bytes en total)
+        const dataToSign = Buffer.concat([hashProof, hashDoc]);
+        
+        // Firmar
+        const firmaBuffer = firmarEd25519(dataToSign, claves.clave_privada);
+        const proofValueBase58 = 'z' + bs58.encode(firmaBuffer);
+
+        // Remover el contexto local del proof para no duplicar en el JSON final
+        delete proofOptions["@context"];
+
+        const finalJsonLd = { ...assertion };
+        finalJsonLd.proof = [{
+          ...proofOptions,
           "proofValue": proofValueBase58
         }];
 
@@ -168,7 +186,7 @@ const emitirInsignias = async (req, res) => {
           idReceptor,
           idGlobal,
           urlExterno,
-          firmaJWS,
+          proofValueBase58,
           `${host}/api/public/issuer`,
           fechaEmision,
           fotoUrlBaked,
