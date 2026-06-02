@@ -380,11 +380,16 @@
               </ng-container>
 
               <!-- Botón Eliminar -->
-              <button type="button" (click)="abrirModalEliminar(item)"
-                class="flex items-center gap-1 px-1.75 py-1 border border-[#FDBABB] bg-white rounded-lg text-[#E90E12] text-[13px] font-medium hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer transition-all">
+              <button type="button" (click)="!((item.estado === 'APROBADA' || item.estado === 'INACTIVA') && item.num_emisiones >= 1) && abrirModalEliminar(item)"
+                [disabled]="(item.estado === 'APROBADA' || item.estado === 'INACTIVA') && item.num_emisiones >= 1"
+                class="flex items-center gap-1 px-1.75 py-1 border bg-white rounded-lg text-[13px] font-medium transition-all"
+                [ngClass]="{
+                  'border-[#FDBABB] text-[#E90E12] hover:bg-[#FFF0F0] active:bg-[#F1D1D2] cursor-pointer': !((item.estado === 'APROBADA' || item.estado === 'INACTIVA') && item.num_emisiones >= 1),
+                  'border-[#E2E8F0] text-[#94A3B8] opacity-60 cursor-not-allowed': (item.estado === 'APROBADA' || item.estado === 'INACTIVA') && item.num_emisiones >= 1
+                }">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                   class="flex-shrink-0">
-                  <g fill="none" stroke="#E90E12" stroke-width="1">
+                  <g fill="none" [attr.stroke]="((item.estado === 'APROBADA' || item.estado === 'INACTIVA') && item.num_emisiones >= 1) ? '#94A3B8' : '#E90E12'" stroke-width="1">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
                       d="M7.874 8.218v7.908a1.72 1.72 0 0 0 1.72 1.719h4.813a1.72 1.72 0 0 0 1.719-1.72V8.219m-9.627-.001h11.002m-7.564 0V7.187a1.03 1.03 0 0 1 1.032-1.032h2.062a1.03 1.03 0 0 1 1.032 1.032v1.031" />
                     <rect width="18.5" height="18.5" x="2.75" y="2.75" stroke-width="1.5" rx="6" />
@@ -659,6 +664,12 @@
           <span class="font-normal">{{ microcredencialAEvaluar?.emisor_correo }}</span>
         </div>
 
+        <div class="text-[13px] text-[#E90E12] flex flex-col gap-2" *ngIf="microcredencialAEvaluar?.estado === 'RECHAZADA'">
+          <span class="font-bold uppercase">Motivos del rechazo:</span>
+          <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.justificacion_rechazo ||
+            'SIN ESPECIFICAR' }}</span>
+        </div>
+
         <div class="text-[13px] text-[#334155] flex flex-col gap-2">
           <span class="font-bold uppercase">Descripción:</span>
           <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.descripcion }}</span>
@@ -714,11 +725,6 @@
           <div class="text-[13px] text-[#334155]">
             <span class="font-bold uppercase mr-1.5">Evaluado por:</span> <span class="font-normal">{{
               microcredencialAEvaluar?.evaluado_por || 'N/A' }}</span>
-          </div>
-          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
-            <span class="font-bold uppercase">Motivos del rechazo:</span>
-            <span class="font-normal leading-relaxed text-left">{{ microcredencialAEvaluar?.justificacion_rechazo ||
-              'SIN ESPECIFICAR' }}</span>
           </div>
           <div class="text-[13px] text-[#334155]">
             <span class="font-bold uppercase mr-1.5">Fecha de Evaluación:</span> <span class="font-normal uppercase">{{

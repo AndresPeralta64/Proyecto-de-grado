@@ -103,10 +103,35 @@ const verificarRS256 = (datos, firma, clavePublica) => {
   return verificador.verify(llave, firma, 'base64');
 };
 
+const firmarEd25519 = (datos, clavePrivadaJWK) => {
+  const contenido = typeof datos === 'string' ? datos : JSON.stringify(datos);
+  const llavePrivada = crypto.createPrivateKey({ key: clavePrivadaJWK, format: 'jwk' });
+  const firmaBuffer = crypto.sign(null, Buffer.from(contenido), llavePrivada);
+  return firmaBuffer; // Devuelve un Buffer para que el controlador lo codifique como guste (bs58, etc)
+};
+
+const generarParClavesEd25519 = () => {
+  return new Promise((resolver, rechazar) => {
+    crypto.generateKeyPair('ed25519', {
+      publicKeyEncoding: {
+        format: 'jwk'
+      },
+      privateKeyEncoding: {
+        format: 'jwk'
+      }
+    }, (error, clavePublica, clavePrivada) => {
+      if (error) return rechazar(error);
+      resolver({ clavePublica, clavePrivada });
+    });
+  });
+};
+
 module.exports = {
   generarParClavesRSA,
+  generarParClavesEd25519,
   cifrarAES,
   descifrarAES,
   firmarRS256,
-  verificarRS256
+  verificarRS256,
+  firmarEd25519
 };

@@ -53,6 +53,12 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
 
 
 
+  // Estado para revocación de insignias (modal)
+  mostrarModalRevocar = false;
+  insigniaARevocar: any = null;
+  justificacionRevocacion = '';
+  errorRevocacion = false;
+
   // Estado para información de insignia (modal)
   mostrarModalInfo = false;
   insigniaSeleccionada: any = null;
@@ -61,7 +67,10 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
   microcredencialSeleccionada: any = null;
   terminoBusquedaMicrocredencial = '';
   dropdownMicrocredencialAbierto = false;
-  terminoBusquedaReceptor = '';
+  terminoBusquedaReceptor: string = '';
+  
+  formatoDescarga: string = 'PNG';
+  dropdownFormatoAbierto: boolean = false;
   receptores: any[] = [];
   receptoresSeleccionados = new Set<number>();
 
@@ -207,7 +216,7 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
           case 'fecha':
             const timeA = new Date(a.fecha_completa).getTime();
             const timeB = new Date(b.fecha_completa).getTime();
-            cmp = timeB - timeA;
+            cmp = timeA - timeB;
             break;
           case 'emisor':
             cmp = (a.emisor || '').localeCompare(b.emisor || '');
@@ -379,35 +388,126 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
 
 
 
+  revocarInsignia(item: any) {
+    this.insigniaARevocar = item;
+    this.justificacionRevocacion = '';
+    this.errorRevocacion = false;
+    this.mostrarModalRevocar = true;
+  }
+
+  cerrarModalRevocar() {
+    this.mostrarModalRevocar = false;
+    this.insigniaARevocar = null;
+    this.justificacionRevocacion = '';
+    this.errorRevocacion = false;
+  }
+
+  confirmarRevocacion() {
+    if (!this.justificacionRevocacion || !this.justificacionRevocacion.trim()) {
+      this.errorRevocacion = true;
+      return;
+    }
+    this.errorRevocacion = false;
+
+    this.subscription.add(
+      this.insigniaServicio.revocarInsignia(this.insigniaARevocar.id, this.justificacionRevocacion).subscribe({
+        next: (res) => {
+          if (res.exito) {
+            this.lanzarNotificacion('Insignia revocada correctamente', 'exito');
+            this.cerrarModalRevocar();
+            this.cargarInsigniasEmitidas(); // Refrescar historial
+          } else {
+            this.lanzarNotificacion(res.mensaje || 'Error al revocar la insignia', 'error');
+          }
+        },
+        error: (err) => {
+          console.error('Error al revocar insignia:', err);
+          this.lanzarNotificacion(err.error?.mensaje || 'Error al revocar la insignia', 'error');
+        }
+      })
+    );
+  }
+
   abrirModalInfo(item: any) {
     this.insigniaSeleccionada = item;
+    this.formatoDescarga = 'PNG';
+    this.dropdownFormatoAbierto = false;
     this.mostrarModalInfo = true;
   }
 
   cerrarModalInfo() {
     this.mostrarModalInfo = false;
     this.insigniaSeleccionada = null;
+    this.formatoDescarga = 'PNG';
+    this.dropdownFormatoAbierto = false;
+  }
+
+  copiarUrlVerificacion() {
+    const url = this.insigniaSeleccionada?.url_externo;
+    if (!url) return;
+    navigator.clipboard.writeText(url).then(() => {
+      this.lanzarNotificacion('URL copiada al portapapeles', 'exito');
+    }).catch(err => {
+      console.error('Error al copiar URL:', err);
+      this.lanzarNotificacion('Error al copiar la URL', 'error');
+    });
+  }
+
+  toggleFormato() {
+    this.dropdownFormatoAbierto = !this.dropdownFormatoAbierto;
+  }
+
+  seleccionarFormato(formato: string) {
+    this.formatoDescarga = formato;
+    this.dropdownFormatoAbierto = false;
+  }
+
+  cerrarDropdownFormato() {
+    setTimeout(() => {
+      this.dropdownFormatoAbierto = false;
+    }, 200);
   }
 
   descargarInsignia(insignia: any) {
-    if (!insignia || !insignia.png_baked_url) return;
+    if (!insignia) return;
     
-    fetch(insignia.png_baked_url)
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `insignia-${insignia.microcredencial.replace(/\s+/g, '-').toLowerCase()}.png`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
-      })
-      .catch(err => {
-        console.error('Error al descargar la insignia:', err);
-        this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
-      });
+    if (this.formatoDescarga === 'PNG') {
+      if (!insignia.png_baked_url) return;
+      fetch(insignia.png_baked_url)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `insignia-${insignia.microcredencial.replace(/\s+/g, '-').toLowerCase()}.png`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        })
+        .catch(err => {
+          console.error('Error al descargar la insignia:', err);
+          this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
+        });
+    } else if (this.formatoDescarga === 'JSON') {
+      if (!insignia.url_externo) return;
+      fetch(insignia.url_externo)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `insignia-${insignia.microcredencial.replace(/\s+/g, '-').toLowerCase()}.json`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        })
+        .catch(err => {
+          console.error('Error al descargar la insignia:', err);
+          this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
+        });
+    }
   }
 
   cargarMicrocredencialesAprobadas() {

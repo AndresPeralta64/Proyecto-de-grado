@@ -20,10 +20,10 @@ router.get('/issuer', async (req, res) => {
       "url": "https://www.espoch.edu.ec",
       "publicKey": [
         {
-          "id": `${host}/api/public/issuer#key1`,
-          "type": "CryptographicKey",
-          "owner": `${host}/api/public/issuer`,
-          "publicKeyPem": claves.clave_publica
+          "id": `${host}/api/public/issuer#key-1`,
+          "type": "JsonWebKey2020",
+          "controller": `${host}/api/public/issuer`,
+          "publicKeyJwk": claves.clave_publica
         }
       ]
     };

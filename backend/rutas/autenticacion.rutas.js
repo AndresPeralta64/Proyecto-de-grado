@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { 
-  iniciarSesion, 
-  verificarCorreo, 
-  solicitarRestablecimiento, 
-  confirmarRestablecimiento 
+const {
+  iniciarSesion,
+  verificarCorreo,
+  solicitarRestablecimiento,
+  confirmarRestablecimiento
 } = require('../controladores/controlador_autenticacion');
 
 /**
@@ -18,7 +18,7 @@ router.post('/login', iniciarSesion);
 router.post('/verificar-correo', verificarCorreo);
 
 /**
- * [HU-002] Rutas para el restablecimiento de contraseña
+ * Rutas para el restablecimiento de contraseña
  */
 router.post('/solicitar-restablecimiento', solicitarRestablecimiento);
 router.post('/confirmar-restablecimiento', confirmarRestablecimiento);

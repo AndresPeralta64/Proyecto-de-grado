@@ -52,8 +52,8 @@ router.put('/:id', [autenticacion, autorizacion(['Administrador']), subida.singl
 
 
 
-// Listado de usuarios (solo Administradores)
-router.get('/', autenticacion, autorizacion(['Administrador']), async (req, res) => {
+// Listado de usuarios (Administradores y Emisores)
+router.get('/', autenticacion, autorizacion(['Administrador', 'Emisor']), async (req, res) => {
   try {
     const consulta = `
       SELECT u.id_usuario, u.cedula, u.nombres, u.apellidos, u.correo, u.telefono, u.activo,

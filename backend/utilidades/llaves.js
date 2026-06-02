@@ -13,24 +13,25 @@ const obtenerClaves = async () => {
     const config = res.rows[0];
     try {
       // Descifrar la clave privada para uso en memoria
-      config.clave_privada = descifrarAES(config.clave_privada);
+      config.clave_privada = descifrarAES(config.clave_privada, true); // esObjeto = true
+      // Parsea la publica también ya que ahora guardamos stringified JWK
+      if (typeof config.clave_publica === 'string') {
+        config.clave_publica = JSON.parse(config.clave_publica);
+      }
     } catch (e) {
-      console.warn('Advertencia: No se pudo descifrar la clave privada. Quizá no estaba cifrada.');
+      console.warn('Advertencia: No se pudo descifrar la clave privada. Quizá no estaba cifrada o el formato es incorrecto.');
     }
     return config;
   }
 
-  // Si no hay configuración, generar las claves RSA
-  console.log('Generando par de claves RSA (2048) para la firma de insignias...');
-  const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-    modulusLength: 2048,
+  // Si no hay configuración, generar las claves Ed25519
+  console.log('Generando par de claves Ed25519 para la firma de insignias...');
+  const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519', {
     publicKeyEncoding: {
-      type: 'spki',
-      format: 'pem'
+      format: 'jwk'
     },
     privateKeyEncoding: {
-      type: 'pkcs8',
-      format: 'pem'
+      format: 'jwk'
     }
   });
 
@@ -46,7 +47,7 @@ const obtenerClaves = async () => {
     RETURNING emisor_url, clave_publica, clave_privada
   `;
 
-  await consultar(insertQuery, [emisorUrl, publicKey, clavePrivadaCifrada]);
+  await consultar(insertQuery, [emisorUrl, JSON.stringify(publicKey), clavePrivadaCifrada]);
   
   return {
     emisor_url: emisorUrl,

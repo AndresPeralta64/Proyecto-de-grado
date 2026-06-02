@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 const extractChunks = require('png-chunks-extract');
 const encodeChunks = require('png-chunks-encode');
 const textChunk = require('png-chunk-text');
+const bs58 = require('bs58');
+const stringifyDeterministic = require('json-stringify-deterministic');
+const { firmarEd25519 } = require('../servicios/servicio_criptografia');
 const { obtenerClaves } = require('../utilidades/llaves');
 const { v4: uuidv4 } = require('uuid');
 
@@ -67,24 +70,25 @@ const emitirInsignias = async (req, res) => {
         const fechaEmision = new Date().toISOString();
 
         // d. Construir Assertion JSON-LD (Open Badges 3.0)
+        // d. Construir Assertion JSON-LD (Open Badges 3.0)
         const assertion = {
           "@context": [
-            "https://www.w3.org/2018/credentials/v1",
-            "https://purl.imsglobal.org/spec/ob/v3p0/context.json"
+            "https://www.w3.org/ns/credentials/v2",
+            "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.3.json"
           ],
           "id": urlExterno,
           "type": ["VerifiableCredential", "OpenBadgeCredential"],
+          "name": microcredencial.metadata_ob3.name,
           "issuer": {
             "id": `${host}/api/public/issuer`,
             "type": ["Profile"],
             "name": "Escuela Superior Politécnica de Chimborazo (ESPOCH)",
             "url": "https://www.espoch.edu.ec"
           },
-          "issuanceDate": fechaEmision,
-          "name": microcredencial.metadata_ob3.name,
+          "validFrom": fechaEmision,
           "credentialSubject": {
-            "type": ["AchievementSubject"],
             "id": `mailto:${receptor.correo}`,
+            "type": ["AchievementSubject"],
             "achievement": {
               "id": microcredencial.metadata_ob3.id,
               "type": ["Achievement"],
@@ -97,21 +101,21 @@ const emitirInsignias = async (req, res) => {
           }
         };
 
-        // e. Firmar criptográficamente (RS256)
-        // Convertimos el assertion en un JWT de tipo VerifiableCredential
-        const jwtPayload = {
-          vc: assertion,
-          jti: urlExterno,
-          iss: host,
-          sub: receptor.correo
-        };
+        // e. Firmar criptográficamente (Ed25519 - Linked Data Proofs)
+        const assertionString = stringifyDeterministic(assertion);
+        const firmaBuffer = firmarEd25519(assertionString, claves.clave_privada);
+        // Formato Multibase Base58btc inicia con 'z'
+        const proofValueBase58 = 'z' + bs58.encode(firmaBuffer);
 
-        const firmaJWS = jwt.sign(jwtPayload, claves.clave_privada, {
-          algorithm: 'RS256',
-          expiresIn: '10y' // Insignias duran mucho tiempo típicamente
-        });
-
-        const finalJsonLd = assertion;
+        const finalJsonLd = { ...assertion };
+        finalJsonLd.proof = [{
+          "type": "DataIntegrityProof",
+          "cryptosuite": "eddsa-rdfc-2022",
+          "created": fechaEmision,
+          "proofPurpose": "assertionMethod",
+          "verificationMethod": `${host}/api/public/issuer#key-1`,
+          "proofValue": proofValueBase58
+        }];
 
         // f. Badge Baking (PNG)
         // Extraer filename original

@@ -119,7 +119,8 @@ export class MicrocredencialesComponente implements OnInit, OnDestroy {
             aprobado_en: item.aprobado_en,
             justificacion_rechazo: item.justificacion_rechazo,
             ultima_actualizacion: item.ultima_actualizacion,
-            creado_en: item.creado_en
+            creado_en: item.creado_en,
+            num_emisiones: item.num_emisiones
           }));
         }
       },

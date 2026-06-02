@@ -1,9 +1,9 @@
-const { generarParClavesRSA, cifrarAES } = require('../servicios/servicio_criptografia');
+const { generarParClavesEd25519, cifrarAES } = require('../servicios/servicio_criptografia');
 const { consultar, pool } = require('../servicios/base_datos');
 
 /**
  * Script para inicializar las claves criptográficas del sistema
- * Genera un par de claves RSA, cifra la privada y las guarda en la tabla configuracion_sistema
+ * Genera un par de claves Ed25519, cifra la privada y las guarda en la tabla configuracion_sistema
  */
 async function inicializarConfiguracion() {
   try {
@@ -17,8 +17,8 @@ async function inicializarConfiguracion() {
       return;
     }
 
-    console.log('Generando par de claves RSA de 2048 bits en formato JWK...');
-    const { clavePublica, clavePrivada } = await generarParClavesRSA();
+    console.log('Generando par de claves Ed25519 en formato JWK...');
+    const { clavePublica, clavePrivada } = await generarParClavesEd25519();
 
     console.log('Cifrando la clave privada con AES-256 para almacenamiento seguro...');
     const clavePrivadaCifrada = cifrarAES(clavePrivada);

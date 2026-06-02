@@ -71,6 +71,24 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
   receptores: any[] = [];
   receptoresSeleccionados = new Set<number>();
 
+  formatoDescarga: string = 'PNG';
+  dropdownFormatoAbierto: boolean = false;
+
+  toggleFormato() {
+    this.dropdownFormatoAbierto = !this.dropdownFormatoAbierto;
+  }
+
+  seleccionarFormato(formato: string) {
+    this.formatoDescarga = formato;
+    this.dropdownFormatoAbierto = false;
+  }
+
+  cerrarDropdownFormato() {
+    setTimeout(() => {
+      this.dropdownFormatoAbierto = false;
+    }, 200);
+  }
+
   // Facultades
   facultades: any[] = [];
   facultadesSeleccionadas = new Set<number>();
@@ -213,7 +231,7 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
           case 'fecha':
             const timeA = new Date(a.fecha_completa).getTime();
             const timeB = new Date(b.fecha_completa).getTime();
-            cmp = timeB - timeA;
+            cmp = timeA - timeB;
             break;
           case 'receptor':
             cmp = (a.receptor || '').localeCompare(b.receptor || '');
@@ -420,33 +438,69 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
 
   abrirModalInfo(item: any) {
     this.insigniaSeleccionada = item;
+    this.formatoDescarga = 'PNG';
+    this.dropdownFormatoAbierto = false;
     this.mostrarModalInfo = true;
   }
 
   cerrarModalInfo() {
     this.mostrarModalInfo = false;
     this.insigniaSeleccionada = null;
+    this.formatoDescarga = 'PNG';
+    this.dropdownFormatoAbierto = false;
+  }
+
+  copiarUrlVerificacion() {
+    const url = this.insigniaSeleccionada?.url_externo;
+    if (!url) return;
+    navigator.clipboard.writeText(url).then(() => {
+      this.lanzarNotificacion('URL copiada al portapapeles', 'exito');
+    }).catch(err => {
+      console.error('Error al copiar URL:', err);
+      this.lanzarNotificacion('Error al copiar la URL', 'error');
+    });
   }
 
   descargarInsignia(insignia: any) {
-    if (!insignia || !insignia.png_baked_url) return;
+    if (!insignia) return;
     
-    fetch(insignia.png_baked_url)
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `insignia-${insignia.microcredencial.replace(/\s+/g, '-').toLowerCase()}.png`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
-      })
-      .catch(err => {
-        console.error('Error al descargar la insignia:', err);
-        this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
-      });
+    if (this.formatoDescarga === 'PNG') {
+      if (!insignia.png_baked_url) return;
+      fetch(insignia.png_baked_url)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `insignia-${insignia.microcredencial.replace(/\s+/g, '-').toLowerCase()}.png`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        })
+        .catch(err => {
+          console.error('Error al descargar la insignia:', err);
+          this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
+        });
+    } else if (this.formatoDescarga === 'JSON') {
+      if (!insignia.url_externo) return;
+      fetch(insignia.url_externo)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `insignia-${insignia.microcredencial.replace(/\s+/g, '-').toLowerCase()}.json`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        })
+        .catch(err => {
+          console.error('Error al descargar la insignia:', err);
+          this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
+        });
+    }
   }
 
   cargarMicrocredencialesAprobadas() {

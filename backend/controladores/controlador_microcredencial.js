@@ -222,7 +222,8 @@ const listarMicrocredenciales = async (req, res) => {
         CONCAT(u_inactivador.nombres, ' ', u_inactivador.apellidos) AS inactivado_por,
         n.nombre AS nivel,
         a.nombre AS area_conocimiento,
-        e.nombre AS estado
+        e.nombre AS estado,
+        (SELECT COUNT(*)::int FROM insignia_emitida ie WHERE ie.microcredencial = m.id_microcredencial) AS num_emisiones
       FROM microcredencial m
       JOIN usuario u_emisor ON m.emisor = u_emisor.id_usuario
       LEFT JOIN usuario u_aprobador ON m.evaluado_por = u_aprobador.id_usuario
