@@ -49,10 +49,10 @@ const emitirInsignias = async (req, res) => {
 
     for (let idReceptor of receptoresIds) {
       try {
-        // a. Verificar si ya la tiene
-        const checkDuplicado = await consultar('SELECT id_insignia FROM insignia_emitida WHERE microcredencial = $1 AND receptor = $2', [idMicrocredencial, idReceptor]);
+        // a. Verificar si ya la tiene activa (estado = 1)
+        const checkDuplicado = await consultar('SELECT id_insignia FROM insignia_emitida WHERE microcredencial = $1 AND receptor = $2 AND estado = 1', [idMicrocredencial, idReceptor]);
         if (checkDuplicado.rows.length > 0) {
-          resultados.fallidas.push({ idReceptor, razon: 'El Receptor ya tiene esta insignia' });
+          resultados.fallidas.push({ idReceptor, razon: 'El Receptor ya tiene esta insignia activa' });
           continue;
         }
 
@@ -203,7 +203,7 @@ const emitirInsignias = async (req, res) => {
 
     // Si fallaron todas, mostramos un error particular, especialmente si es porque ya las tenían
     if (resultados.emitidas.length === 0 && resultados.fallidas.length > 0) {
-      const unicaRazon = resultados.fallidas.every(f => f.razon === 'El Receptor ya tiene esta insignia');
+      const unicaRazon = resultados.fallidas.every(f => f.razon === 'El Receptor ya tiene esta insignia activa');
       if (unicaRazon) {
          return res.status(409).json({ exito: false, mensaje: 'Los receptores seleccionados ya tienen esta insignia.' });
       }
