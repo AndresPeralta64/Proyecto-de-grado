@@ -68,7 +68,7 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
   terminoBusquedaMicrocredencial = '';
   dropdownMicrocredencialAbierto = false;
   terminoBusquedaReceptor: string = '';
-  
+
   formatoDescarga: string = 'PNG';
   dropdownFormatoAbierto: boolean = false;
   receptores: any[] = [];
@@ -470,7 +470,7 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
 
   descargarInsignia(insignia: any) {
     if (!insignia) return;
-    
+
     if (this.formatoDescarga === 'PNG') {
       if (!insignia.png_baked_url) return;
       fetch(insignia.png_baked_url)
@@ -486,8 +486,8 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
           a.remove();
         })
         .catch(err => {
-          console.error('Error al descargar la insignia:', err);
-          this.lanzarNotificacion('Error al intentar descargar la insignia', 'error');
+          console.error('Ha ocurrido un error al descargar la insignia:', err);
+          this.lanzarNotificacion('Ha ocurrido un error al intentar descargar la insignia', 'error');
         });
     } else if (this.formatoDescarga === 'JSON') {
       if (!insignia.url_externo) return;
