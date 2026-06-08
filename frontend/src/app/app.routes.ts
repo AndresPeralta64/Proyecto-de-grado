@@ -57,6 +57,12 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
 
+  // Insignia Pública (Compartir)
+  {
+    path: 'insignia/:id',
+    loadComponent: () => import('../funcionalidades/publico/insignia-publica/insignia-publica.componente').then(m => m.InsigniaPublicaComponente)
+  },
+
   // No Autorizado
   {
     path: 'no-autorizado',

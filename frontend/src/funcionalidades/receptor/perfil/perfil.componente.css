@@ -1,0 +1,45 @@
+/* Receptores scrollbar styling (wider and more visible) */
+.receptores-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.receptores-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.receptores-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e5e5;
+  border-radius: 5px;
+}
+
+.receptores-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #8b8b8b;
+}
+
+.receptores-scrollbar {
+  scrollbar-color: #e5e5e5 transparent;
+  scrollbar-width: auto;
+}
+
+/* Custom scrollbar styling (modal-scrollbar) */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e5e5;
+  border-radius: 4px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #8b8b8b;
+}
+
+.modal-scrollbar {
+  scrollbar-color: #e5e5e5 transparent;
+  scrollbar-width: thin;
+}

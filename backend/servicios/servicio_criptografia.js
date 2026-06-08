@@ -1,7 +1,5 @@
 const crypto = require('crypto');
 require('dotenv').config();
-const crypto = require('crypto');
-require('dotenv').config();
 
 // Configuración de AES
 const CLAVE_SECRETA_AES = crypto.createHash('sha256').update(process.env.AES_SECRET_KEY || 'clave_por_defecto_32_bytes_minimo_!!').digest();

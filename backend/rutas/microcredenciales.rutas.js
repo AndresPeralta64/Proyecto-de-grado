@@ -21,8 +21,8 @@ router.use(autenticacion);
 // Obtener listado de niveles de microcredenciales (Administrador y Emisor)
 router.get('/niveles', autorizacion(['Administrador', 'Emisor']), obtenerNiveles);
 
-// Obtener listado de áreas de conocimiento (Administrador y Emisor)
-router.get('/areas', autorizacion(['Administrador', 'Emisor']), obtenerAreasConocimiento);
+// Obtener listado de áreas de conocimiento (Administrador, Emisor y Receptor)
+router.get('/areas', autorizacion(['Administrador', 'Emisor', 'Receptor']), obtenerAreasConocimiento);
 
 // Obtener listado completo de microcredenciales (Administrador y Emisor)
 router.get('/', autorizacion(['Administrador', 'Emisor']), listarMicrocredenciales);

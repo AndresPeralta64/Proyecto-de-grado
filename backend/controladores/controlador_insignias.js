@@ -245,6 +245,7 @@ const obtenerHistorial = async (req, res) => {
         ie.fecha_emision AS fecha_completa,
         ri.revocado_en,
         ri.justificacion AS motivo_revocacion,
+        rev_u.nombres || ' ' || rev_u.apellidos AS revocado_por_nombre,
         CASE 
           WHEN ie.estado = 1 THEN 'ACTIVA'
           WHEN ie.estado = 2 THEN 'REVOCADA'
@@ -257,6 +258,7 @@ const obtenerHistorial = async (req, res) => {
       JOIN microcredencial m ON ie.microcredencial = m.id_microcredencial
       JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
       LEFT JOIN revocacion_insignia ri ON ie.id_insignia = ri.insignia
+      LEFT JOIN usuario rev_u ON ri.revocado_por = rev_u.id_usuario
       WHERE ie.emisor = $1
       ORDER BY ie.fecha_emision DESC
     `;
@@ -336,6 +338,7 @@ const obtenerHistorialGeneral = async (req, res) => {
         ie.fecha_emision AS fecha_completa,
         ri.revocado_en,
         ri.justificacion AS motivo_revocacion,
+        rev_u.nombres || ' ' || rev_u.apellidos AS revocado_por_nombre,
         CASE 
           WHEN ie.estado = 1 THEN 'ACTIVA'
           WHEN ie.estado = 2 THEN 'REVOCADA'
@@ -349,6 +352,7 @@ const obtenerHistorialGeneral = async (req, res) => {
       JOIN microcredencial m ON ie.microcredencial = m.id_microcredencial
       JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
       LEFT JOIN revocacion_insignia ri ON ie.id_insignia = ri.insignia
+      LEFT JOIN usuario rev_u ON ri.revocado_por = rev_u.id_usuario
       ORDER BY ie.fecha_emision DESC
     `;
     const result = await consultar(query);
@@ -359,10 +363,112 @@ const obtenerHistorialGeneral = async (req, res) => {
   }
 };
 
+const obtenerHistorialReceptor = async (req, res) => {
+  try {
+    const idReceptor = req.usuario.id;
+    const query = `
+      SELECT 
+        ie.id_insignia AS id,
+        ie.id_global,
+        ue.nombres || ' ' || ue.apellidos AS emisor,
+        ue.correo AS emisor_correo,
+        m.nombre AS microcredencial,
+        m.descripcion AS microcredencial_descripcion,
+        m.criterios_evaluacion,
+        m.competencias,
+        a.nombre AS area_conocimiento,
+        m.duracion_horas AS duracion,
+        m.imagen_url,
+        ie.png_baked_url,
+        n.nombre AS nivel,
+        ie.url_externo,
+        ie.fecha_emision AS fecha_completa,
+        ri.revocado_en,
+        ri.justificacion AS motivo_revocacion,
+        rev_u.nombres || ' ' || rev_u.apellidos AS revocado_por_nombre,
+        CASE 
+          WHEN ie.estado = 1 THEN 'ACTIVA'
+          WHEN ie.estado = 2 THEN 'REVOCADA'
+          ELSE 'DESCONOCIDO'
+        END AS estado,
+        TO_CHAR(ie.fecha_emision, 'DD/MM/YYYY HH24:MI') AS fecha
+      FROM insignia_emitida ie
+      JOIN usuario ue ON ie.emisor = ue.id_usuario
+      JOIN microcredencial m ON ie.microcredencial = m.id_microcredencial
+      JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
+      JOIN area_conocimiento a ON m.area_conocimiento = a.id_area
+      LEFT JOIN revocacion_insignia ri ON ie.id_insignia = ri.insignia
+      LEFT JOIN usuario rev_u ON ri.revocado_por = rev_u.id_usuario
+      WHERE ie.receptor = $1
+      ORDER BY ie.fecha_emision DESC
+    `;
+    const result = await consultar(query, [idReceptor]);
+    return res.status(200).json({ exito: true, datos: result.rows });
+  } catch (error) {
+    console.error('Error en obtenerHistorialReceptor:', error);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener historial.' });
+  }
+};
+
+const obtenerInsigniaPublica = async (req, res) => {
+  try {
+    const { idGlobal } = req.params;
+    const query = `
+      SELECT 
+        ie.id_global,
+        ue.nombres || ' ' || ue.apellidos AS emisor,
+        ue.correo AS emisor_correo,
+        m.nombre AS microcredencial,
+        m.descripcion AS microcredencial_descripcion,
+        m.criterios_evaluacion,
+        m.competencias,
+        a.nombre AS area_conocimiento,
+        m.duracion_horas AS duracion,
+        m.imagen_url,
+        ie.png_baked_url,
+        n.nombre AS nivel,
+        ie.url_externo,
+        ie.fecha_emision AS fecha_completa,
+        ri.revocado_en,
+        ri.justificacion AS motivo_revocacion,
+        rev_u.nombres || ' ' || rev_u.apellidos AS revocado_por_nombre,
+        CASE 
+          WHEN ie.estado = 1 THEN 'ACTIVA'
+          WHEN ie.estado = 2 THEN 'REVOCADA'
+          ELSE 'DESCONOCIDO'
+        END AS estado,
+        TO_CHAR(ie.fecha_emision, 'DD/MM/YYYY HH24:MI') AS fecha
+      FROM insignia_emitida ie
+      JOIN usuario ue ON ie.emisor = ue.id_usuario
+      JOIN microcredencial m ON ie.microcredencial = m.id_microcredencial
+      JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
+      JOIN area_conocimiento a ON m.area_conocimiento = a.id_area
+      LEFT JOIN revocacion_insignia ri ON ie.id_insignia = ri.insignia
+      LEFT JOIN usuario rev_u ON ri.revocado_por = rev_u.id_usuario
+      WHERE ie.id_global = $1
+    `;
+    const result = await consultar(query, [idGlobal]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ exito: false, mensaje: 'Insignia no encontrada' });
+    }
+
+    return res.status(200).json({
+      exito: true,
+      datos: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error en obtenerInsigniaPublica:', error);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener la insignia' });
+  }
+};
+
 module.exports = {
   obtenerHistorialGeneral,
   emitirInsignias,
   obtenerHistorial,
   revocarInsignia,
-  obtenerReceptoresConInsignia
+  obtenerReceptoresConInsignia,
+  obtenerHistorialReceptor,
+  obtenerInsigniaPublica
 };

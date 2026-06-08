@@ -1,0 +1,257 @@
+<div class="flex flex-col h-screen overflow-hidden bg-white font-sans text-[#334155]">
+
+  <!-- Header -->
+  <nav
+    class="w-full h-[64px] min-h-[64px] bg-[#f8f8f8] border-b border-[#EEEEEE] flex items-center justify-between z-[100]">
+    <div class="flex items-center h-full">
+      <!-- Logo y Título -->
+      <button (click)="volverAlInicio()"
+        class="group flex items-center gap-3 px-6 text-[#334155] focus:outline-none cursor-pointer h-full">
+        <img src="espoch-marca.jpeg" alt="Logo ESPOCH"
+          class="h-9 w-9 object-cover rounded-full border border-[#EEEEEE]">
+        <span
+          class="text-[#334155] font-medium text-[15px] hidden sm:inline px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0]">
+          Microcredenciales ESPOCH
+        </span>
+      </button>
+    </div>
+
+    <!-- Parte Derecha: Iniciar sesión -->
+    <div class="relative px-6">
+      <button routerLink="/autenticacion/iniciar-sesion"
+        class="group flex items-center gap-1 text-[#334155] focus:outline-none cursor-pointer">
+        <span
+          class="text-[13px] font-semibold tracking-wide uppercase px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline">
+          Iniciar sesión
+        </span>
+        <div class="p-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
+          </svg>
+        </div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Area (Scrollable) -->
+  <main class="flex-1 min-h-0 overflow-y-auto flex flex-col items-center">
+    <div class="w-full max-w-[1200px] flex-1 py-10 px-6 sm:px-12 flex flex-col gap-6" *ngIf="cargando">
+      <p class="text-center text-gray-500">Cargando datos de la insignia...</p>
+    </div>
+
+    <div class="w-full max-w-[1200px] flex-1 py-10 px-6 sm:px-12 flex flex-col gap-6" *ngIf="error">
+      <p class="text-center text-red-500">La insignia no existe o ha ocurrido un error al cargar los datos.</p>
+    </div>
+
+    <div class="w-full max-w-[1200px] flex-1 py-10 px-6 sm:px-12 flex flex-col" *ngIf="!cargando && !error && insignia">
+
+      <!-- Volver al inicio -->
+      <div class="mb-10 w-fit">
+        <button type="button" (click)="volverAlInicio()"
+          class="group flex items-center gap-2 text-[#334155] focus:outline-none cursor-pointer">
+          <span
+            class="text-[14px] font-medium px-3 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Volver al inicio
+          </span>
+        </button>
+      </div>
+
+      <!-- Contenido en dos columnas -->
+      <div class="flex flex-col md:flex-row gap-16 md:gap-24 w-full mt-4 justify-between">
+
+        <!-- Izquierda: Datos de la microcredencial -->
+        <div class="flex-1 flex flex-col gap-5 max-w-[600px] text-[#334155]">
+
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+            <span class="font-bold uppercase">Microcredencial Asociada:</span>
+            <span class="font-normal leading-relaxed text-left">{{ insignia.microcredencial }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Emisor:</span>
+            <span class="font-normal">{{ insignia.emisor }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155]">
+            <span class="font-bold uppercase mr-1.5">Correo:</span>
+            <span class="font-normal">{{ insignia.emisor_correo }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#E90E12] flex flex-col gap-2"
+            *ngIf="insignia.estado === 'REVOCADA' && insignia.motivo_revocacion">
+            <span class="font-bold uppercase">Motivos de la revocación:</span>
+            <span class="font-normal leading-relaxed text-left">{{ insignia.motivo_revocacion }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+            <span class="font-bold uppercase">Descripción:</span>
+            <span class="font-normal leading-relaxed text-left">{{ insignia.microcredencial_descripcion }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+            <span class="font-bold uppercase">Criterios de Evaluación:</span>
+            <span class="font-normal leading-relaxed text-left">{{ insignia.criterios_evaluacion }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+            <span class="font-bold uppercase">Área de Conocimiento:</span>
+            <span class="font-normal">{{ insignia.area_conocimiento }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2">
+            <span class="font-bold uppercase">Competencias:</span>
+            <span class="font-normal leading-relaxed">{{ formatearCompetencias(insignia.competencias) }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155] flex flex-col gap-2" *ngIf="insignia.url_externo">
+            <span class="font-bold uppercase">Verificación Pública:</span>
+            <div class="flex items-center gap-2 w-full">
+              <a [href]="insignia.url_externo" target="_blank" rel="noopener noreferrer"
+                class="font-normal text-[#0EA5E9] hover:underline truncate">
+                {{ insignia.url_externo }}
+              </a>
+              <button type="button" (click)="copiarUrlVerificacion()" title="Copiar URL" class="text-[#64748B] hover:text-[#0EA5E9] transition-colors cursor-pointer flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="text-[13px] text-[#334155]" *ngIf="insignia.estado !== 'REVOCADA'">
+            <span class="font-bold uppercase mr-1.5">Fecha de Emisión:</span>
+            <span class="font-normal">{{ insignia.fecha_completa | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155]"
+            *ngIf="insignia.estado === 'REVOCADA' && insignia.revocado_por_nombre">
+            <span class="font-bold uppercase mr-1.5">Revocado por:</span>
+            <span class="font-normal">{{ insignia.revocado_por_nombre }}</span>
+          </div>
+
+          <div class="text-[13px] text-[#334155]" *ngIf="insignia.estado === 'REVOCADA'">
+            <span class="font-bold uppercase mr-1.5">Fecha de Revocación:</span>
+            <span class="font-normal">{{ insignia.revocado_en | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+
+        </div>
+
+        <!-- Derecha: La insignia visual (tarjeta) -->
+        <div class="flex flex-col items-center justify-center min-w-[240px] flex-shrink-0">
+          
+          <!-- Etiqueta de estado de la insignia -->
+          <div class="w-full flex justify-center mb-3" *ngIf="insignia.estado === 'REVOCADA'">
+            <span class="text-[#A32C2E] bg-[#FFDBDC] px-2 py-1 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
+              REVOCADA
+            </span>
+          </div>
+
+          <div
+            class="w-56 h-56 flex items-center justify-center overflow-hidden mb-4 border border-[#E2E8F0] bg-[#F8FAFC] relative">
+            
+            <img *ngIf="insignia.imagen_url" [src]="insignia.imagen_url" class="w-full h-full object-contain p-4"
+              alt="Insignia digital">
+            <div *ngIf="!insignia.imagen_url"
+              class="w-full h-full bg-[#E2E8F0] flex items-center justify-center text-[#64748B] text-xs font-semibold">
+              Sin imagen</div>
+          </div>
+
+          <span class="text-[14px] text-[#334155] font-semibold mb-6">Insignia digital</span>
+
+          <div class="flex flex-col gap-3 w-full px-4 text-[#334155] text-[13px]">
+            <div class="flex items-center justify-center gap-1.5">
+              <span>[</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <g fill="none" stroke="#334155" stroke-linecap="round" stroke-width="1.5">
+                  <path stroke-miterlimit="10" d="m15.172 15.172l-3.167-3.167V5.672" />
+                  <path stroke-linejoin="round" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19" />
+                </g>
+              </svg>
+              <span>{{ insignia.duracion }} Horas</span>
+              <span>]</span>
+            </div>
+            <div class="flex items-center justify-center gap-1.5">
+              <span>[</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3"
+                  d="M6 12H4.125c-.6 0-1.087.487-1.087 1.087v7.076c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087v-7.076c0-.6-.487-1.087-1.087-1.087m6.939-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v11.701c0 .6.486 1.087 1.086 1.087h1.874c.6 0 1.087-.487 1.087-1.087V8.462c0-.6-.487-1.087-1.087-1.087m6.937-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v16.326c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087V3.837c0-.6-.487-1.087-1.087-1.087" />
+              </svg>
+              <span>{{ insignia.nivel }}</span>
+              <span>]</span>
+            </div>
+          </div>
+
+          <div class="mt-6 flex items-stretch gap-2 w-full px-4" *ngIf="insignia.png_baked_url || insignia.url_externo">
+
+            <button type="button" (click)="descargarInsignia()"
+              class="flex-1 flex justify-center items-center gap-2 bg-[#10B981] border border-[#2EC89A] text-white px-2.5 py-2 rounded-lg text-[14px] font-medium hover:bg-[#059669] transition-colors cursor-pointer">
+
+              <svg *ngIf="formatoDescarga === 'PNG'" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.5">
+                  <path stroke-linejoin="round"
+                    d="M21.25 13V8.5a5 5 0 0 0-5-5h-8.5a5 5 0 0 0-5 5v7a5 5 0 0 0 5 5h6.26" />
+                  <path stroke-linejoin="round"
+                    d="m3.01 17l2.74-3.2a2.2 2.2 0 0 1 2.77-.27a2.2 2.2 0 0 0 2.77-.27l2.33-2.33a4 4 0 0 1 5.16-.43l2.47 1.91M8.01 10.17a1.66 1.66 0 1 0-.02-3.32a1.66 1.66 0 0 0 .02 3.32" />
+                  <path stroke-miterlimit="10" d="M18.707 20v-5" />
+                  <path stroke-linejoin="round" d="m16.414 17.895l1.967 1.967a.46.46 0 0 0 .652 0L21 17.895" />
+                </g>
+              </svg>
+
+              <svg *ngIf="formatoDescarga === 'JSON'" xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1em"
+                viewBox="0 0 20 16">
+                <path d="M0 0h20v16H0z" fill="none" />
+                <path fill="currentColor"
+                  d="M12.736.064c.52.2.787.805.598 1.353L8.546 15.305c-.19.548-.763.83-1.282.631c-.52-.2-.787-.805-.598-1.353L11.454.695c.19-.548.763-.83 1.282-.631M2.414 8.256L5.95 11.99c.39.412.39 1.08 0 1.492a.963.963 0 0 1-1.414 0L.293 9.003a1.1 1.1 0 0 1 0-1.493l4.243-4.48a.963.963 0 0 1 1.414 0a1.1 1.1 0 0 1 0 1.494zm15.172 0L14.05 4.524a1.1 1.1 0 0 1 0-1.493a.963.963 0 0 1 1.414 0l4.243 4.479c.39.412.39 1.08 0 1.493l-4.243 4.478a.963.963 0 0 1-1.414 0a1.1 1.1 0 0 1 0-1.492z" />
+              </svg>
+
+              Descargar insignia
+            </button>
+
+            <div class="relative w-20">
+              <div class="relative flex items-center h-full">
+                <input type="text" readonly [value]="'.' + formatoDescarga"
+                  (mousedown)="$event.preventDefault(); toggleFormato()" (blur)="cerrarDropdownFormato()"
+                  class="w-full h-full border border-[#E2E8F0] rounded-lg px-2.5 py-2 pr-8 text-[14px] text-[#334155] outline-none transition-colors bg-white cursor-pointer select-none focus:border-[#828891]"
+                  placeholder="Formato">
+                <div class="absolute right-2.5 flex items-center pointer-events-none">
+                  <svg *ngIf="!dropdownFormatoAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                    viewBox="0 0 24 24">
+                    <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+                  </svg>
+                  <svg *ngIf="dropdownFormatoAbierto" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                    viewBox="0 0 24 24">
+                    <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+                  </svg>
+                </div>
+              </div>
+              <div *ngIf="dropdownFormatoAbierto"
+                class="absolute top-full right-0 w-full bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-20 mt-1 overflow-hidden">
+                <div (mousedown)="seleccionarFormato('PNG')"
+                  class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
+                  [ngClass]="{'bg-[#DAE0E5]': formatoDescarga === 'PNG'}">.PNG</div>
+                <div (mousedown)="seleccionarFormato('JSON')"
+                  class="px-3.5 py-2.5 text-[14px] text-[#334155] cursor-pointer hover:bg-[#F1F5F9] active:bg-[#DAE0E5] transition-colors"
+                  [ngClass]="{'bg-[#DAE0E5]': formatoDescarga === 'JSON'}">.JSON</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>

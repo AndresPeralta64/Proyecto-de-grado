@@ -1,15 +1,57 @@
-<div class="min-h-screen bg-gray-100">
-  <header class="bg-white shadow">
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold text-gray-900">Panel de Receptor</h1>
-    </div>
-  </header>
+<app-navegacion></app-navegacion>
 
-  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    <div class="px-4 py-6 sm:px-0">
-      <div class="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
-        <p class="text-gray-500 text-lg">Funcionalidades de receptor próximamente</p>
-      </div>
+<div class="flex h-[calc(100vh-64px)] min-h-[calc(100vh-64px)] bg-[#fffff] relative overflow-hidden">
+
+  <!-- Sidebar -->
+  <app-sidebar>
+    <div class="flex flex-col">
+
+      <!-- Gestionar perfil académico -->
+      <a routerLink="/receptor/perfil"
+        class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+        routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+        <!-- Ícono: mismo ancho fijo que la sidebar contraída -->
+        <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <g fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6.022 20.504c.284-1.394.974-2.138 2.076-3.038a6.17 6.17 0 0 1 7.805 0c1.101.9 1.882 1.644 2.165 3.038M12 13.028a3.31 3.31 0 1 0 0-6.619a3.31 3.31 0 0 0 0 6.619" />
+              <rect width="18.5" height="18.5" x="2.75" y="2.75" rx="6" />
+            </g>
+          </svg>
+        </div>
+        <!-- Etiqueta: solo visible cuando está expandido -->
+        <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+          Gestionar perfil académico
+        </span>
+      </a>
+
+      <!-- Mis insignias digitales -->
+      <a routerLink="/receptor/insignias"
+        class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+        routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+        <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+              <path
+                d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
+              <path
+                d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
+            </g>
+          </svg>
+        </div>
+        <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+          Ver insignias adquiridas
+        </span>
+      </a>
+
     </div>
+  </app-sidebar>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 h-full min-h-0 overflow-y-auto p-20 transition-all duration-250"
+    [style.margin-left]="expandido ? '280px' : '64px'">
+    <router-outlet></router-outlet>
   </main>
 </div>

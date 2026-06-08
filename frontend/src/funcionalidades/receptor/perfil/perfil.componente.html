@@ -1,0 +1,226 @@
+<div class="flex flex-col">
+  <h1 class="text-[22px] font-semibold text-[#334155] mb-8 -mt-10">Perfil académico</h1>
+
+  <div class="flex gap-8">
+    <!-- Solo la parte de la izquierda, la derecha se agregará luego -->
+    <div class="w-[500px] flex flex-col gap-4">
+      <div class="flex flex-col gap-1.5 w-full">
+        <label class="text-[13px] font-semibold text-[#334155]">Insignias digitales obtenidas</label>
+        <div class="flex items-center gap-3.5 w-full">
+          <!-- Barra de búsqueda -->
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M10.783 18.828a8.05 8.05 0 0 0 7.439-4.955a8.03 8.03 0 0 0-1.737-8.765a8.045 8.045 0 0 0-13.735 5.68c0 2.131.846 4.174 2.352 5.681a8.05 8.05 0 0 0 5.68 2.359m5.706-2.337l4.762 4.759" />
+              </svg>
+            </span>
+            <input type="text" [(ngModel)]="terminoBusquedaInsignia" name="buscarInsigniasInput" autocomplete="off"
+              class="w-full pl-10 pr-4 py-2 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#828891] transition-all placeholder-[#CBD5E1] text-[14px]"
+              placeholder="Buscar...">
+          </div>
+
+          <!-- Botón Área -->
+          <div class="relative">
+            <button type="button" (click)="toggleDropdownArea()" [ngClass]="{
+                'bg-[#C9CED5]': dropdownAreaAbierto,
+                'bg-[#E2E8F0]': !dropdownAreaAbierto,
+                'z-50': dropdownAreaAbierto
+              }"
+              class="relative flex items-center gap-2 px-2.5 py-2 border border-[#CBD5E1] rounded-lg text-[#334155] text-[14px] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#334155" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"
+                  d="M21.25 12H8.895m-4.361 0H2.75m18.5 6.607h-5.748m-4.361 0H2.75m18.5-13.214h-3.105m-4.361 0H2.75m13.214 2.18a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm-9.25 6.607a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm6.607 6.608a2.18 2.18 0 1 0 0-4.361a2.18 2.18 0 0 0 0 4.36Z" />
+              </svg>
+              Área
+            </button>
+
+            <!-- Dropdown Área -->
+            <div *ngIf="dropdownAreaAbierto"
+              class="absolute left-0 mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden p-3 gap-2.5 min-w-[300px] max-h-60 overflow-y-auto modal-scrollbar">
+
+              <!-- Áreas -->
+              <label *ngFor="let area of areas" (click)="toggleArea(area.id_area)"
+                class="flex items-center gap-2.5 cursor-pointer group select-none">
+                <div
+                  [ngClass]="estaAreaSeleccionada(area.id_area) ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+                  class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all flex-shrink-0">
+                  <svg *ngIf="estaAreaSeleccionada(area.id_area)" xmlns="http://www.w3.org/2000/svg" width="11"
+                    height="11" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                      d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+                  </svg>
+                </div>
+                <span class="text-[13.5px] text-[#334155]">{{ area.nombre }}</span>
+              </label>
+            </div>
+
+            <!-- Backdrop -->
+            <div *ngIf="dropdownAreaAbierto" class="fixed inset-0 z-40" (click)="dropdownAreaAbierto = false"></div>
+          </div>
+
+          <!-- Botón de Ordenamiento -->
+          <button type="button" (click)="toggleOrdenamiento()" [ngClass]="{'z-50': dropdownAreaAbierto}"
+            class="relative flex items-center justify-center w-[38.5px] h-[38.5px] bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] hover:bg-[#C9CED5] cursor-pointer transition-all">
+
+            <!-- Flecha hacia arriba -->
+            <svg *ngIf="opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+              viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path fill="none" stroke="#64748b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+            </svg>
+
+            <!-- Flecha hacia abajo -->
+            <svg *ngIf="!opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+              viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path fill="none" stroke="#64748b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="m20 8.417l-6.587 6.587a2.013 2.013 0 0 1-2.826 0L4 8.417" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <span class="text-[11px] font-medium text-[#94A3B8]">Mostrando insignias digitales activas</span>
+
+      <!-- Lista de insignias obtenidas -->
+      <div
+        class="w-full bg-white border border-[#CBD5E1] overflow-y-auto receptores-scrollbar px-2 py-3.5 flex flex-col gap-3 h-[420px]">
+
+        <div *ngFor="let insignia of insigniasFiltradas; trackBy: trackById" (click)="toggleInsignia(insignia.id)"
+          class="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-between gap-4 transition-colors hover:bg-[#F8FAFC] hover:border-[#4AB6D5] cursor-pointer select-none">
+          <!-- Información de la insignia -->
+          <div class="flex flex-col items-start gap-1">
+            <span class="text-[14.5px] font-semibold text-[#334155]">
+              {{ insignia.microcredencial }}
+            </span>
+            <span class="text-[12px] text-[#64748B] font-normal">
+              {{ insignia.area_conocimiento || 'Sin especificar' }} | {{ insignia.fecha_completa | date:'dd/MM/yyyy
+              HH:mm' }}
+            </span>
+          </div>
+
+          <!-- Checkbox de Selección -->
+          <div
+            [ngClass]="estaSeleccionada(insignia.id) ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+            class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all flex-shrink-0">
+            <svg *ngIf="estaSeleccionada(insignia.id)" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+              viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+            </svg>
+          </div>
+        </div>
+
+        <div *ngIf="insigniasFiltradas.length === 0"
+          class="flex items-center justify-center h-full text-[#94A3B8] text-[14px]">
+          No se encontraron insignias con los parámetros establecidos.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha (Perfil Académico Preview) -->
+    <div class="flex-1 w-full bg-white border border-[#CBD5E1] rounded-xl flex flex-col overflow-hidden max-h-[640px]">
+      <div class="p-6 flex flex-col h-full overflow-y-auto receptores-scrollbar">
+        <!-- Nombre -->
+        <h2 class="text-[18px] font-bold text-[#334155] mb-4">{{ nombreCompletoReceptor }}</h2>
+
+        <!-- Descripción -->
+        <div class="flex flex-col gap-1.5 mb-6">
+          <label class="text-[13px] font-semibold text-[#334155]">Agregar una descripción (Opcional)</label>
+          <textarea [(ngModel)]="descripcionPerfil"
+            class="w-full border border-[#E2E8F0] rounded-lg px-3.5 py-2 text-[14px] text-[#334155] outline-none focus:border-[#4AB6D5] transition-colors h-20 resize-none bg-white"
+            placeholder="Escriba una descripción personal..."></textarea>
+        </div>
+
+        <!-- Datos + Imagen -->
+        <div class="flex items-start justify-between gap-6 mb-8 border-b border-[#E2E8F0] pb-6">
+          <!-- Datos -->
+          <div class="flex flex-col gap-3 flex-1">
+            <!-- Carrera -->
+            <div *ngIf="datosReceptor?.carrera" class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                class="text-[#334155] flex-shrink-0">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="#334155"
+                  d="M12 2L0 9l12 7l10-5.833V17.5h2V9zM3.999 13.49V18a9.99 9.99 0 0 0 8 4A9.99 9.99 0 0 0 20 18v-4.509l-8 4.667z" />
+              </svg>
+              <span class="text-[#334155] text-[14px]">{{ datosReceptor?.carrera }}</span>
+            </div>
+
+            <!-- Correo -->
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                class="text-[#334155] flex-shrink-0">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="#334155"
+                  d="M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm8.263-7.212q.137-.038.262-.113L19.6 8.25q.2-.125.3-.312t.1-.413q0-.5-.425-.75T18.7 6.8L12 11L5.3 6.8q-.45-.275-.875-.012T4 7.525q0 .25.1.438t.3.287l7.075 4.425q.125.075.263.113t.262.037t.263-.037" />
+              </svg>
+              <span class="text-[#334155] text-[14px]">{{ datosReceptor?.correo }}</span>
+            </div>
+
+            <!-- Cédula -->
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                class="text-[#334155] flex-shrink-0">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="#334155"
+                  d="M14 13h5v-2h-5zm0-3h5V8h-5zm-9 6h8v-.55q0-1.125-1.1-1.787T9 13t-2.9.663T5 15.45zm5.413-4.587Q11 10.825 11 10t-.587-1.412T9 8t-1.412.588T7 10t.588 1.413T9 12t1.413-.587M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20z" />
+              </svg>
+              <span class="text-[#334155] text-[14px]">{{ datosReceptor?.cedula }}</span>
+            </div>
+
+            <!-- Teléfono -->
+            <div *ngIf="datosReceptor?.telefono" class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                class="text-[#334155] flex-shrink-0">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="#334155"
+                  d="M21.963 18.855a2.74 2.74 0 0 1-.898 1.47a5.36 5.36 0 0 1-3.848 1.602h-.358a11.4 11.4 0 0 1-4.287-1.082c-.326-.153-.643-.296-1.02-.47A19.8 19.8 0 0 1 7.253 17.1a18.6 18.6 0 0 1-4.012-5.451A11.9 11.9 0 0 1 2.15 8.106a6.5 6.5 0 0 1 .418-3.808a7 7 0 0 1 1.174-1.48a2.3 2.3 0 0 1 1.634-.745a2.54 2.54 0 0 1 1.725.95c.47.52 1.02 1.02 1.52 1.55l.644.634c.38.333.615.802.653 1.306c.001.464-.17.911-.48 1.256a9 9 0 0 1-.622.694l-.215.225a1.15 1.15 0 0 0-.286.418c-.052.154-.07.318-.05.48c.164.444.421.848.755 1.184c.52.704 1.02 1.317 1.582 2.042a13.3 13.3 0 0 0 3.4 2.807c.123.1.27.167.428.194c.14.021.281 0 .408-.062a3.5 3.5 0 0 0 1.021-.826c.36-.444.882-.726 1.45-.787a2.04 2.04 0 0 1 1.46.623q.35.302.663.643l.306.327l.317.306c.193.194.377.368.56.572q.5.43.93.929c.293.374.441.842.418 1.317" />
+              </svg>
+              <span class="text-[#334155] text-[14px]">{{ datosReceptor?.telefono }}</span>
+            </div>
+          </div>
+
+          <!-- Imagen de perfil -->
+          <div
+            class="w-44 h-53 flex items-center justify-center overflow-hidden border border-[#E2E8F0] bg-[#F8FAFC] flex-shrink-0">
+            <ng-container *ngIf="!datosReceptor?.foto_url">
+              <svg class="text-[#CBD5E1] w-24 h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                  d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
+              </svg>
+            </ng-container>
+            <img *ngIf="datosReceptor?.foto_url" [src]="datosReceptor.foto_url" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <!-- Competencias obtenidas -->
+        <h3 class="text-[15px] font-semibold text-[#334155] mb-4">Competencias obtenidas</h3>
+
+        <!-- Recuadro estático con scroll para insignias -->
+        <div class="h-[220px] bg-white border border-[#CBD5E1] rounded-lg p-4 overflow-y-auto receptores-scrollbar">
+          <div class="flex flex-wrap gap-4">
+            <div *ngFor="let idInsignia of insigniasSeleccionadas" class="flex flex-col items-center gap-2 w-[100px]">
+              <img [src]="obtenerInsigniaPorId(idInsignia)?.png_baked_url" class="w-16 h-16 object-contain">
+              <span class="text-[12px] font-medium text-[#334155] text-center leading-tight">
+                {{ obtenerInsigniaPorId(idInsignia)?.microcredencial }}
+              </span>
+            </div>
+            <div *ngIf="insigniasSeleccionadas.size === 0"
+              class="w-full h-full flex items-center justify-center text-[#94A3B8] text-[13px] italic min-h-[150px]">
+              No has seleccionado ninguna insignia digital
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

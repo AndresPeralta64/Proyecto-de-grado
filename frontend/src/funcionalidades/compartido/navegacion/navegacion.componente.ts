@@ -60,7 +60,7 @@ export class NavegacionComponente implements OnInit {
   }
 
   get esPaginaPerfil(): boolean {
-    return this.router.url.includes('/perfil');
+    return this.router.url === '/perfil';
   }
 
   get esPaginaCambiarRol(): boolean {

@@ -22,6 +22,10 @@ export class InsigniaServicio {
     return this.http.get<any>(`${this.apiUrl}/historial`);
   }
 
+  obtenerHistorialReceptor(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/historial-receptor`);
+  }
+
   obtenerHistorialGeneral(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/historial-general`);
   }
@@ -32,5 +36,9 @@ export class InsigniaServicio {
 
   obtenerReceptoresConInsignia(idMicrocredencial: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/receptores-con-insignia/${idMicrocredencial}`);
+  }
+
+  obtenerInsigniaPublica(idGlobal: string): Observable<any> {
+    return this.http.get<any>(`${environment.urlBackend}/public/insignia/${idGlobal}`);
   }
 }

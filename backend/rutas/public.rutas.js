@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { consultar } = require('../servicios/base_datos');
 const { obtenerClaves } = require('../utilidades/llaves');
+const { obtenerInsigniaPublica } = require('../controladores/controlador_insignias');
 
 // Perfil del Emisor y Llave Pública
 router.get('/issuer', async (req, res) => {
@@ -59,5 +60,8 @@ router.get('/assertions/:idGlobal', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener la aserción' });
   }
 });
+
+// Detalles públicos de la insignia (para la página de compartir)
+router.get('/insignia/:idGlobal', obtenerInsigniaPublica);
 
 module.exports = router;
