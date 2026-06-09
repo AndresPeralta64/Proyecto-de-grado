@@ -6,7 +6,7 @@ const { cifrarAES, descifrarAES } = require('../servicios/servicio_criptografia'
  * Obtiene o genera las claves RSA para la firma de insignias (RS256)
  */
 const obtenerClaves = async () => {
-  const query = 'SELECT emisor_url, clave_publica, clave_privada FROM configuracion_sistema LIMIT 1';
+  const query = 'SELECT emisor_url, clave_publica, clave_privada, creado_en, ultima_actualizacion FROM configuracion_sistema LIMIT 1';
   const res = await consultar(query);
 
   if (res.rows.length > 0) {
@@ -44,15 +44,17 @@ const obtenerClaves = async () => {
   const insertQuery = `
     INSERT INTO configuracion_sistema (emisor_url, clave_publica, clave_privada)
     VALUES ($1, $2, $3)
-    RETURNING emisor_url, clave_publica, clave_privada
+    RETURNING emisor_url, clave_publica, clave_privada, creado_en, ultima_actualizacion
   `;
 
-  await consultar(insertQuery, [emisorUrl, JSON.stringify(publicKey), clavePrivadaCifrada]);
+  const { rows } = await consultar(insertQuery, [emisorUrl, JSON.stringify(publicKey), clavePrivadaCifrada]);
   
   return {
     emisor_url: emisorUrl,
     clave_publica: publicKey,
-    clave_privada: privateKey // En memoria se retorna sin cifrar para poder firmar
+    clave_privada: privateKey, // En memoria se retorna sin cifrar para poder firmar
+    creado_en: rows[0].creado_en,
+    ultima_actualizacion: rows[0].ultima_actualizacion
   };
 };
 

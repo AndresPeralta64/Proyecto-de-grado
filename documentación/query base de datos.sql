@@ -115,10 +115,16 @@ create table token_verificacion (
 	creado_en timestamp not null default now()
 );
 
-create table perfil_academico (
+create table perfil_usuario (
+    receptor int primary key references usuario(id_usuario) on delete cascade,
+    descripcion text,
+    ultima_actualizacion timestamp not null default now()
+);
+
+
+create table insignias_perfil (
 	receptor int not null references usuario(id_usuario) on delete cascade,
 	insignia int not null references insignia_emitida(id_insignia) on delete cascade,
-	visible boolean not null default true,
 	orden int,
 	ultima_actualizacion timestamp not null default now(),
 	primary key (receptor, insignia)
@@ -128,7 +134,9 @@ create table configuracion_sistema (
 	id_config serial primary key,
 	emisor_url text not null unique,
 	clave_publica text not null,
-	clave_privada text not null
+	clave_privada text not null,
+	creado_en timestamp not null default now(),
+	ultima_actualizacion timestamp not null default now()
 );
 
 insert into facultad (nombre) values 
