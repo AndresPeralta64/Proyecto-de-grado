@@ -25,4 +25,7 @@ router.get('/receptores-con-insignia/:idMicrocredencial', autorizacion(['Emisor'
 // Historial para Receptor
 router.get('/historial-receptor', autorizacion(['Receptor']), controladorInsignias.obtenerHistorialReceptor);
 
+// Estado de Emisión (Background)
+router.get('/estado-emision/:idTrabajo', autorizacion(['Emisor', 'Administrador']), controladorInsignias.consultarEstadoEmision);
+
 module.exports = router;

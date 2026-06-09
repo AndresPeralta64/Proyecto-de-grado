@@ -338,9 +338,14 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
       this.insigniaServicio.emitirInsignias(idMicrocredencial, receptoresIds).subscribe({
         next: (response) => {
           if (response.exito) {
-            this.lanzarNotificacion('Insignias digitales emitidas correctamente', 'exito');
+            this.lanzarNotificacion(response.mensaje || 'Las insignias se están emitiendo en segundo plano', 'exito');
             this.cerrarModalEmitirInsignia();
-            this.cargarInsigniasEmitidas(); // Refrescar tabla
+
+            if (response.idTrabajo) {
+              this.iniciarPollingEmision(response.idTrabajo);
+            } else {
+              this.cargarInsigniasEmitidas();
+            }
           } else {
             this.lanzarNotificacion('Ha ocurrido un error al emitir las insignias digitales', 'error');
           }
@@ -356,6 +361,30 @@ export class InsigniasAdminComponente implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  iniciarPollingEmision(idTrabajo: string) {
+    const intervalo = setInterval(() => {
+      this.insigniaServicio.consultarEstadoEmision(idTrabajo).subscribe({
+        next: (res) => {
+          if (res.exito && res.datos) {
+            const estado = res.datos.estado;
+            if (estado === 'completado') {
+              clearInterval(intervalo);
+              this.lanzarNotificacion('Insignias digitales emitidas correctamente', 'exito');
+              this.cargarInsigniasEmitidas();
+            } else if (estado === 'error') {
+              clearInterval(intervalo);
+              this.lanzarNotificacion('Ocurrió un error al procesar las insignias en segundo plano', 'error');
+            }
+          }
+        },
+        error: (err) => {
+          clearInterval(intervalo);
+          console.error('Error al consultar estado de emisión:', err);
+        }
+      });
+    }, 3000);
   }
 
   mostrarToast = false;

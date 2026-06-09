@@ -18,6 +18,10 @@ export class InsigniaServicio {
     });
   }
 
+  consultarEstadoEmision(idTrabajo: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/estado-emision/${idTrabajo}`);
+  }
+
   obtenerHistorial(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/historial`);
   }
