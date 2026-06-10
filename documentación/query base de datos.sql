@@ -118,6 +118,7 @@ create table token_verificacion (
 create table perfil_usuario (
     receptor int primary key references usuario(id_usuario) on delete cascade,
     descripcion text,
+	agrupar_insignias boolean not null default false,
     ultima_actualizacion timestamp not null default now()
 );
 

@@ -43,13 +43,29 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.cargarDatosReceptor();
     this.cargarInsigniasAdquiridas();
     this.cargarAreas();
-    this.cargarDatosReceptor();
+    this.cargarPerfilPublico();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  cargarPerfilPublico() {
+    this.subscription.add(
+      this.usuarioServicio.obtenerPerfilPublico().subscribe({
+        next: (res: any) => {
+          if (res && res.exito && res.datos) {
+            this.descripcionPerfil = res.datos.descripcion || '';
+            this.agruparInsignias = !!res.datos.agrupar_insignias;
+            this.insigniasSeleccionadas = new Set(res.datos.insignias_seleccionadas || []);
+          }
+        },
+        error: (err: any) => console.error('Error al cargar perfil público:', err)
+      })
+    );
   }
 
   cargarInsigniasAdquiridas() {
@@ -145,6 +161,41 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
     return this.insigniasObtenidas.find(ins => ins.id === id);
   }
 
+  todasInsigniasSeleccionadas(): boolean {
+    return this.insigniasFiltradas.length > 0 && this.insigniasSeleccionadas.size === this.insigniasFiltradas.length;
+  }
+
+  toggleSeleccionarTodasInsignias() {
+    if (this.todasInsigniasSeleccionadas()) {
+      this.insigniasSeleccionadas.clear();
+    } else {
+      this.insigniasSeleccionadas.clear();
+      this.insigniasFiltradas.forEach(ins => this.insigniasSeleccionadas.add(ins.id));
+    }
+  }
+
+  // Agrupación de insignias
+  agruparInsignias: boolean = false;
+
+  toggleAgrupar() {
+    this.agruparInsignias = !this.agruparInsignias;
+  }
+
+  get insigniasSeleccionadasPorArea(): { area: string, insignias: number[] }[] {
+    const agrupado = new Map<string, number[]>();
+    for (const id of this.insigniasSeleccionadas) {
+      const ins = this.obtenerInsigniaPorId(id);
+      if (ins) {
+        const area = ins.area_conocimiento || 'Sin área';
+        if (!agrupado.has(area)) {
+          agrupado.set(area, []);
+        }
+        agrupado.get(area)!.push(id);
+      }
+    }
+    return Array.from(agrupado.entries()).map(([area, insignias]) => ({ area, insignias }));
+  }
+
   get insigniasFiltradas(): any[] {
     const buscar = (this.terminoBusquedaInsignia || '')
       .toLowerCase()
@@ -190,6 +241,42 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
     });
 
     return lista;
+  }
+
+  // Notificaciones
+  mensajeToast: string = '';
+  mostrarToast: boolean = false;
+  tipoToast: 'exito' | 'error' = 'exito';
+
+  lanzarNotificacion(mensaje: string, tipo: 'exito' | 'error') {
+    this.mensajeToast = mensaje;
+    this.tipoToast = tipo;
+    this.mostrarToast = true;
+    setTimeout(() => {
+      this.mostrarToast = false;
+    }, 3000);
+  }
+
+  guardarPerfil() {
+    const datos = {
+      descripcion: this.descripcionPerfil,
+      agrupar_insignias: this.agruparInsignias,
+      insignias_seleccionadas: Array.from(this.insigniasSeleccionadas)
+    };
+
+    this.usuarioServicio.actualizarPerfilPublico(datos).subscribe({
+      next: (res: any) => {
+        if (res && res.exito) {
+          this.lanzarNotificacion('Perfil académico guardado correctamente', 'exito');
+        } else {
+          this.lanzarNotificacion('Ha ocurrido un error al guardar el perfil', 'error');
+        }
+      },
+      error: (err: any) => {
+        console.error('Error al guardar el perfil público:', err);
+        this.lanzarNotificacion('Ha ocurrido un error al guardar el perfil', 'error');
+      }
+    });
   }
 
   trackById(index: number, item: any) {

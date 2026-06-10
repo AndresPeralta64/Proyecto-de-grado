@@ -52,7 +52,7 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
 
   // Estado para emisión de insignias (modal)
   mostrarModalEmitirInsignia = false;
-  
+
   // Estado para revocación de insignias (modal)
   mostrarModalRevocar = false;
   insigniaARevocar: any = null;
@@ -348,9 +348,9 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
       this.insigniaServicio.emitirInsignias(idMicrocredencial, receptoresIds).subscribe({
         next: (response) => {
           if (response.exito) {
-            this.lanzarNotificacion(response.mensaje || 'Las insignias se están procesando', 'exito');
+            this.lanzarNotificacion(response.mensaje || 'Las insignias digitales se están emitiendo en segundo plano', 'exito');
             this.cerrarModalEmitirInsignia();
-            
+
             if (response.idTrabajo) {
               this.iniciarPollingEmision(response.idTrabajo);
             } else {
@@ -493,7 +493,7 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
 
   descargarInsignia(insignia: any) {
     if (!insignia) return;
-    
+
     if (this.formatoDescarga === 'PNG') {
       if (!insignia.png_baked_url) return;
       fetch(insignia.png_baked_url)

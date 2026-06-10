@@ -392,12 +392,96 @@ const actualizarUsuario = async (req, res) => {
   }
 };
 
+/**
+ * Actualiza la información pública del perfil del receptor (perfil_usuario, insignias_perfil)
+ */
+const actualizarPerfilPublico = async (req, res) => {
+  const idUsuario = req.usuario.id;
+  const { descripcion, agrupar_insignias, insignias_seleccionadas } = req.body;
+
+  try {
+    await consultar('BEGIN');
+
+    // 1. Upsert en perfil_usuario
+    const consultaPerfil = `
+      INSERT INTO perfil_usuario (receptor, descripcion, agrupar_insignias, ultima_actualizacion)
+      VALUES ($1, $2, $3, NOW())
+      ON CONFLICT (receptor) 
+      DO UPDATE SET descripcion = $2, agrupar_insignias = $3, ultima_actualizacion = NOW()
+    `;
+    await consultar(consultaPerfil, [idUsuario, descripcion || '', agrupar_insignias || false]);
+
+    // 2. Eliminar insignias anteriores
+    await consultar('DELETE FROM insignias_perfil WHERE receptor = $1', [idUsuario]);
+
+    // 3. Insertar las nuevas insignias seleccionadas
+    if (insignias_seleccionadas && Array.isArray(insignias_seleccionadas) && insignias_seleccionadas.length > 0) {
+      for (let i = 0; i < insignias_seleccionadas.length; i++) {
+        const idInsignia = insignias_seleccionadas[i];
+        await consultar(
+          'INSERT INTO insignias_perfil (receptor, insignia, orden) VALUES ($1, $2, $3)',
+          [idUsuario, idInsignia, i + 1]
+        );
+      }
+    }
+
+    await consultar('COMMIT');
+
+    return res.status(200).json({
+      exito: true,
+      mensaje: 'Perfil académico guardado correctamente'
+    });
+  } catch (error) {
+    await consultar('ROLLBACK');
+    console.error('Error en actualizarPerfilPublico:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Ha ocurrido un error al guardar el perfil' });
+  }
+};
+
+/**
+ * Obtiene la información pública del perfil del receptor
+ */
+const obtenerPerfilPublico = async (req, res) => {
+  const idUsuario = req.usuario.id;
+
+  try {
+    const consultaPerfil = `SELECT descripcion, agrupar_insignias FROM perfil_usuario WHERE receptor = $1`;
+    const resultadoPerfil = await consultar(consultaPerfil, [idUsuario]);
+    
+    let descripcion = '';
+    let agrupar_insignias = false;
+    
+    if (resultadoPerfil.rows.length > 0) {
+      descripcion = resultadoPerfil.rows[0].descripcion;
+      agrupar_insignias = resultadoPerfil.rows[0].agrupar_insignias;
+    }
+
+    const consultaInsignias = `SELECT insignia FROM insignias_perfil WHERE receptor = $1 ORDER BY orden ASC`;
+    const resultadoInsignias = await consultar(consultaInsignias, [idUsuario]);
+    const insignias_seleccionadas = resultadoInsignias.rows.map(row => row.insignia);
+
+    return res.status(200).json({
+      exito: true,
+      datos: {
+        descripcion,
+        agrupar_insignias,
+        insignias_seleccionadas
+      }
+    });
+  } catch (error) {
+    console.error('Error en obtenerPerfilPublico:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Ha ocurrido un error al obtener el perfil público' });
+  }
+};
+
 module.exports = {
   obtenerPerfil,
   actualizarPerfil,
   cambiarContrasenia,
   registrarUsuario,
   eliminarFotoPerfil,
-  actualizarUsuario
+  actualizarUsuario,
+  actualizarPerfilPublico,
+  obtenerPerfilPublico
 };
 

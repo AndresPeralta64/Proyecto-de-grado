@@ -3,7 +3,7 @@ const router = express.Router();
 const autenticacion = require('../intermediarios/autenticacion');
 const autorizacion = require('../intermediarios/autorizacion');
 
-const { obtenerPerfil, actualizarPerfil, cambiarContrasenia, registrarUsuario, eliminarFotoPerfil, actualizarUsuario } = require('../controladores/controlador_usuario');
+const { obtenerPerfil, actualizarPerfil, cambiarContrasenia, registrarUsuario, eliminarFotoPerfil, actualizarUsuario, actualizarPerfilPublico, obtenerPerfilPublico } = require('../controladores/controlador_usuario');
 const subida = require('../intermediarios/subida_archivo');
 const { consultar } = require('../servicios/base_datos');
 
@@ -14,8 +14,14 @@ const { consultar } = require('../servicios/base_datos');
 // Obtener perfil del usuario autenticado
 router.get('/perfil', autenticacion, obtenerPerfil);
 
+// Obtener el perfil público del receptor
+router.get('/perfil/publico', autenticacion, obtenerPerfilPublico);
+
 // Actualizar perfil del usuario autenticado (con soporte para imagen)
 router.put('/perfil', [autenticacion, subida.single('foto')], actualizarPerfil);
+
+// Actualizar el perfil público del receptor
+router.put('/perfil/publico', autenticacion, actualizarPerfilPublico);
 
 // Cambiar contraseña del usuario autenticado
 router.put('/cambiar-contrasenia', autenticacion, cambiarContrasenia);

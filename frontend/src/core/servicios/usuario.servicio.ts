@@ -23,6 +23,14 @@ export class UsuarioServicio {
     return this.http.put(`${this.apiUrl}/perfil`, datos);
   }
 
+  actualizarPerfilPublico(datos: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/perfil/publico`, datos);
+  }
+
+  obtenerPerfilPublico(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/perfil/publico`);
+  }
+
   subirFoto(archivo: File): Observable<any> {
     const formData = new FormData();
     formData.append('foto', archivo);
