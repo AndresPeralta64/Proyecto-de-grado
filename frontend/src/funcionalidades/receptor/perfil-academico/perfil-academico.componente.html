@@ -1,0 +1,106 @@
+<div class="contenedor-perfil fade-in">
+  <!-- Cabecera -->
+  <div class="perfil-header">
+    <h1 class="titulo-pagina">Mi Perfil Académico</h1>
+    <div class="acciones-header">
+      <button class="btn btn-primary btn-icon" (click)="guardarConfiguracion()">
+        <i class="bi bi-save"></i> Guardar Cambios
+      </button>
+      <button class="btn btn-secondary btn-icon" (click)="exportarPDF()">
+        <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mensaje" class="alerta alerta-success">
+    {{ mensaje }}
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando perfil...</p>
+  </div>
+
+  <div *ngIf="!cargando" class="perfil-layout">
+    <!-- Configuración del Perfil -->
+    <div class="panel-configuracion glass-panel">
+      <h2 class="subtitulo">Configuración</h2>
+      
+      <div class="form-group">
+        <label for="descripcion">Descripción del Perfil</label>
+        <textarea 
+          id="descripcion" 
+          [(ngModel)]="descripcion" 
+          class="form-control" 
+          rows="4" 
+          placeholder="Escribe un breve resumen sobre ti y tus metas...">
+        </textarea>
+      </div>
+
+      <div class="form-check toggle-container">
+        <label class="toggle-switch">
+          <input type="checkbox" [(ngModel)]="agrupar_insignias">
+          <span class="slider round"></span>
+        </label>
+        <span class="toggle-label">Agrupar insignias por áreas de conocimiento</span>
+      </div>
+      
+      <hr>
+      <p class="text-muted text-sm">Usa los interruptores en las insignias para mostrarlas u ocultarlas en tu perfil público.</p>
+    </div>
+
+    <!-- Vista de Insignias a Exportar/Mostrar -->
+    <div class="panel-preview">
+      <div id="perfil-exportar" class="perfil-exportar-contenedor">
+        <!-- Encabezado del usuario -->
+        <div class="usuario-header" *ngIf="usuario">
+          <div class="usuario-avatar">
+            <img [src]="usuario.foto_url || 'assets/img/default-avatar.png'" alt="Foto de perfil">
+          </div>
+          <div class="usuario-info">
+            <h2>{{ usuario.nombres }} {{ usuario.apellidos }}</h2>
+            <p class="correo">{{ usuario.correo }}</p>
+          </div>
+        </div>
+
+        <div class="usuario-descripcion" *ngIf="descripcion">
+          <p>{{ descripcion }}</p>
+        </div>
+
+        <!-- Insignias -->
+        <div class="insignias-contenedor">
+          <h3 class="seccion-titulo">Mis Logros y Credenciales</h3>
+          
+          <div *ngFor="let area of areas" class="area-grupo">
+            <h4 class="area-titulo" *ngIf="agrupar_insignias">{{ area }}</h4>
+            
+            <div class="insignias-grid">
+              <div class="insignia-card glass-card" *ngFor="let insignia of insigniasAgrupadas[area]" [class.oculta]="!insignia.visible">
+                
+                <!-- Controles de Visibilidad -->
+                <div class="insignia-controles no-print">
+                  <div class="toggle-switch-small">
+                    <input type="checkbox" [(ngModel)]="insignia.visible">
+                    <span class="slider round"></span>
+                  </div>
+                  <span class="visibilidad-label">{{ insignia.visible ? 'Visible' : 'Oculta' }}</span>
+                </div>
+
+                <div class="insignia-contenido">
+                  <img [src]="insignia.png_baked_url" alt="{{ insignia.microcredencial }}" class="insignia-img">
+                  <h5 class="insignia-nombre">{{ insignia.microcredencial }}</h5>
+                  <p class="insignia-fecha">Emitida: {{ insignia.fecha }}</p>
+                  <p class="insignia-nivel badge-nivel">{{ insignia.nivel }}</p>
+                </div>
+                
+              </div>
+            </div>
+            
+            <!-- Si no hay insignias en esta área (solo pasa si todas están ocultas y estamos filtrando en PDF) -->
+            <p *ngIf="insigniasAgrupadas[area].length === 0" class="text-muted">No hay insignias en esta categoría.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

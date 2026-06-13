@@ -11,6 +11,10 @@ export const rutasReceptor: Routes = [
         loadComponent: () => import('./insignias/insignias.componente').then(m => m.ReceptorInsigniasComponente)
       },
       {
+        path: 'perfil-academico',
+        loadComponent: () => import('./perfil-academico/perfil-academico.componente').then(m => m.PerfilAcademicoComponente)
+      },
+      {
         path: '',
         redirectTo: 'insignias',
         pathMatch: 'full'

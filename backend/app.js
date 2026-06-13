@@ -13,6 +13,7 @@ const usuariosRutas = require('./rutas/usuarios.rutas');
 const microcredencialesRutas = require('./rutas/microcredenciales.rutas');
 const insigniasRutas = require('./rutas/insignias.rutas');
 const publicRutas = require('./rutas/public.rutas');
+const perfilRutas = require('./rutas/perfil.rutas');
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api/usuarios', usuariosRutas);
 app.use('/api/microcredenciales', microcredencialesRutas);
 app.use('/api/insignias', insigniasRutas);
 app.use('/api/public', publicRutas);
+app.use('/api/perfil', perfilRutas);
 
 /**
  * Manejo de errores
