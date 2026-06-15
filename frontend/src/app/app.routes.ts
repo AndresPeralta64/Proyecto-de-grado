@@ -63,6 +63,30 @@ export const routes: Routes = [
     loadComponent: () => import('../funcionalidades/publico/insignia-publica/insignia-publica.componente').then(m => m.InsigniaPublicaComponente)
   },
 
+  // Catálogo Público
+  {
+    path: 'catalogo',
+    loadComponent: () => import('../funcionalidades/publico/catalogo/catalogo.componente').then(m => m.CatalogoComponente)
+  },
+
+  // Acreedores de Microcredencial
+  {
+    path: 'microcredencial/:id/acreedores',
+    loadComponent: () => import('../funcionalidades/publico/acreedores/acreedores.componente').then(m => m.AcreedoresComponente)
+  },
+
+  // Búsqueda de Perfiles
+  {
+    path: 'buscar-perfiles',
+    loadComponent: () => import('../funcionalidades/publico/busqueda-perfiles/busqueda-perfiles.componente').then(m => m.BusquedaPerfilesComponente)
+  },
+
+  // Perfil Público
+  {
+    path: 'perfil/:cedula',
+    loadComponent: () => import('../funcionalidades/publico/perfil-publico/perfil-publico.componente').then(m => m.PerfilPublicoComponente)
+  },
+
   // No Autorizado
   {
     path: 'no-autorizado',

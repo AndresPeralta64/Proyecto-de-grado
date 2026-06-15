@@ -1,0 +1,50 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h1 class="display-5 fw-bold text-primary">Catálogo de Microcredenciales</h1>
+      <p class="lead text-muted">Explora las certificaciones académicas ofrecidas por la ESPOCH</p>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6 mx-auto">
+      <input 
+        type="text" 
+        class="form-control form-control-lg shadow-sm" 
+        placeholder="Buscar microcredenciales..." 
+        [(ngModel)]="busqueda"
+        (input)="filtrarCatalogo()">
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && microcredencialesFiltradas.length === 0" class="alert alert-info text-center">
+    No se encontraron microcredenciales que coincidan con la búsqueda.
+  </div>
+
+  <div class="row g-4" *ngIf="!cargando && microcredencialesFiltradas.length > 0">
+    <div class="col-md-4" *ngFor="let m of microcredencialesFiltradas">
+      <div class="card h-100 shadow-sm hover-shadow border-0 rounded-4 overflow-hidden">
+        <div class="bg-light text-center p-4 border-bottom">
+          <img [src]="m.imagen_url || 'assets/placeholder.png'" class="img-fluid badge-img" alt="Insignia">
+        </div>
+        <div class="card-body">
+          <span class="badge bg-primary mb-2">{{ m.nivel_nombre }}</span>
+          <span class="badge bg-secondary mb-2 ms-1" *ngIf="m.area_nombre">{{ m.area_nombre }}</span>
+          <h5 class="card-title fw-bold">{{ m.nombre }}</h5>
+          <p class="card-text text-muted small text-truncate-3">{{ m.descripcion }}</p>
+        </div>
+        <div class="card-footer bg-white border-top-0 pb-3 pt-0">
+          <a [routerLink]="['/microcredencial', m.id_microcredencial, 'acreedores']" class="btn btn-outline-primary w-100 rounded-pill">
+            <i class="bi bi-people-fill me-2"></i> Ver Acreedores
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

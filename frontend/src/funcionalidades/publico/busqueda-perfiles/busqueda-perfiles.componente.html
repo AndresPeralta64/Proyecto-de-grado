@@ -1,0 +1,53 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h1 class="display-5 fw-bold text-primary">Búsqueda de Perfiles</h1>
+      <p class="lead text-muted">Encuentra los perfiles académicos de los estudiantes de la ESPOCH</p>
+    </div>
+  </div>
+
+  <div class="row mb-5 justify-content-center">
+    <div class="col-md-8">
+      <div class="input-group input-group-lg shadow-sm rounded-4 overflow-hidden">
+        <input 
+          type="text" 
+          class="form-control border-0" 
+          placeholder="Buscar por nombres, apellidos o cédula..." 
+          [(ngModel)]="busqueda"
+          (keypress)="onKeyPress($event)">
+        <button class="btn btn-primary px-4" type="button" (click)="buscar()">
+          <i class="bi bi-search me-2"></i> Buscar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && busquedaRealizada && perfiles.length === 0" class="alert alert-info text-center">
+    No se encontraron perfiles que coincidan con la búsqueda.
+  </div>
+
+  <div class="row g-4" *ngIf="!cargando && perfiles.length > 0">
+    <div class="col-md-6 col-lg-4" *ngFor="let p of perfiles">
+      <div class="card h-100 shadow-sm border-0 rounded-4 hover-card">
+        <div class="card-body d-flex align-items-center">
+          <img [src]="p.foto_url || 'assets/default-user.png'" class="rounded-circle me-3 border border-2 border-primary profile-thumb" alt="Foto de perfil">
+          <div>
+            <h5 class="card-title fw-bold mb-1">{{ p.nombres }} {{ p.apellidos }}</h5>
+            <p class="text-muted small mb-0 text-truncate-2">{{ p.descripcion || 'Sin descripción' }}</p>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0 pt-0 pb-3 text-end">
+          <a [routerLink]="['/perfil', p.cedula]" class="btn btn-outline-primary rounded-pill btn-sm">
+            Ver Perfil Público <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

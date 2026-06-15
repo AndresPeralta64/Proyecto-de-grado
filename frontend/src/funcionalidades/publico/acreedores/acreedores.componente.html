@@ -1,0 +1,40 @@
+<div class="container py-5">
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-2 text-md-start text-center mb-3 mb-md-0">
+      <a routerLink="/catalogo" class="btn btn-outline-secondary rounded-circle p-3 shadow-sm">
+        <i class="bi bi-arrow-left fs-4"></i>
+      </a>
+    </div>
+    <div class="col-md-8 text-center">
+      <h1 class="display-6 fw-bold text-primary">Acreedores de la Microcredencial</h1>
+      <p class="text-muted">Usuarios que han obtenido esta certificación</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && acreedores.length === 0" class="alert alert-info text-center">
+    Aún no hay usuarios que hayan obtenido esta microcredencial.
+  </div>
+
+  <div class="row g-4" *ngIf="!cargando && acreedores.length > 0">
+    <div class="col-md-4 col-sm-6" *ngFor="let a of acreedores">
+      <div class="card h-100 shadow-sm border-0 rounded-4 text-center hover-card">
+        <div class="card-body">
+          <img [src]="a.foto_url || 'assets/default-user.png'" class="rounded-circle mb-3 border border-3 border-primary shadow-sm profile-img" alt="Foto de perfil">
+          <h5 class="card-title fw-bold mb-1">{{ a.nombres }} {{ a.apellidos }}</h5>
+          <p class="text-muted small mb-3">Obtenida el: {{ a.fecha_emision | date:'dd/MM/yyyy' }}</p>
+          
+          <div class="d-grid gap-2">
+            <a [routerLink]="['/perfil', a.cedula]" class="btn btn-primary rounded-pill">Ver Perfil</a>
+            <a [href]="a.url_externo" target="_blank" class="btn btn-outline-secondary rounded-pill btn-sm">Ver Insignia</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

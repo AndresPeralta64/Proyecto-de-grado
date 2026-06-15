@@ -1,0 +1,14 @@
+.profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}

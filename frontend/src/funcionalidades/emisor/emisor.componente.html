@@ -40,6 +40,30 @@
         </span>
       </a>
 
+      <!-- Catálogo Público -->
+      <a routerLink="/catalogo"
+        class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+        routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+        <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+          <i class="bi bi-journal-bookmark fs-5"></i>
+        </div>
+        <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+          Catálogo Público
+        </span>
+      </a>
+
+      <!-- Buscar Perfiles -->
+      <a routerLink="/buscar-perfiles"
+        class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+        routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+        <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+          <i class="bi bi-search fs-5"></i>
+        </div>
+        <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+          Buscar Perfiles
+        </span>
+      </a>
+
     </div>
   </app-sidebar>
 
