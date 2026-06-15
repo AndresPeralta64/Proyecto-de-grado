@@ -22,10 +22,6 @@
 }
 
 /* Custom scrollbar styling (modal-scrollbar) */
-.modal-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
 .modal-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }

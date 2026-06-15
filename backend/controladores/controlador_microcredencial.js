@@ -356,29 +356,7 @@ const eliminarMicrocredencial = async (req, res) => {
       return res.status(403).json({ exito: false, mensaje: 'No tiene permisos para eliminar esta microcredencial.' });
     }
     
-    // 2. Si es Aprobada (2) o Inactiva (4), revocar insignias emitidas
-    if (estadoActual === 2 || estadoActual === 4) {
-      // Obtener todas las insignias emitidas activas de esta microcredencial
-      const queryInsignias = `SELECT id_insignia FROM insignia_emitida WHERE microcredencial = $1 AND estado = 1`;
-      const resInsignias = await consultar(queryInsignias, [id]);
-      
-      const insignias = resInsignias.rows;
-      if (insignias.length > 0) {
-        // Actualizar el estado de todas estas insignias a 2 (Revocada)
-        const updateInsignias = `UPDATE insignia_emitida SET estado = 2 WHERE microcredencial = $1 AND estado = 1`;
-        await consultar(updateInsignias, [id]);
-        
-        // Insertar en la tabla de revocacion_insignia
-        for (const ins of insignias) {
-          const insertRevocacion = `
-            INSERT INTO revocacion_insignia (insignia, revocado_por, justificacion, revocado_en)
-            VALUES ($1, $2, 'Revocada debido a la eliminación de la microcredencial asociada.', NOW())
-          `;
-          await consultar(insertRevocacion, [ins.id_insignia, idUsuario]);
-        }
-      }
-    }
-    
+
     // 3. Eliminar lógicamente la microcredencial
     const queryEliminar = `
       UPDATE microcredencial 

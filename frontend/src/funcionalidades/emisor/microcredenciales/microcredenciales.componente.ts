@@ -1004,6 +1004,14 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.modalEliminarAbierto = true;
   }
 
+  accionBotonEliminar(item: any) {
+    if (item.estado === 'APROBADA') {
+      this.lanzarNotificacion('Debe inactivar la microcredencial para realizar esta acción', 'advertencia');
+    } else {
+      this.abrirModalEliminar(item);
+    }
+  }
+
   esAprobadaOInactiva(item: any): boolean {
     if (!item) return false;
     const estado = (item.estado || '').toUpperCase();
