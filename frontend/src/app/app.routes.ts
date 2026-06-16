@@ -5,9 +5,14 @@ import { NuevaContraseniaComponente } from '../funcionalidades/auth/nueva-contra
 import { AdministradorComponente } from '../funcionalidades/administrador/administrador.componente';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { RolGuard } from '../core/guards/rol.guard';
+import { GuestGuard } from '../core/guards/guest.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'autenticacion/iniciar-sesion', pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () => import('../funcionalidades/publico/inicio-publico/inicio-publico.componente').then(m => m.InicioPublicoComponente),
+    canActivate: [GuestGuard]
+  }, // Trigger rebuild
   
   // Módulo de Autenticación
   { 

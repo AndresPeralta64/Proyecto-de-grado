@@ -44,65 +44,86 @@
 
   <!-- Parte Derecha: Usuario y Dropdown -->
   <div class="relative px-6">
-    <button (click)="toggleMenuPerfil()"
-      class="group flex items-center gap-1 text-[#334155] focus:outline-none cursor-pointer">
-      <!-- Texto con fondo gris al hover -->
-      <span
-        class="text-[13px] font-semibold tracking-wide uppercase px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline"
-        [ngClass]="{'bg-[#E2E8F0]': menuPerfilAbierto}">
-        {{ nombreUsuario }}
-      </span>
+    <ng-container *ngIf="estaLogeado">
+      <button (click)="toggleMenuPerfil()"
+        class="group flex items-center gap-1 text-[#334155] focus:outline-none cursor-pointer">
+        <!-- Texto con fondo gris al hover -->
+        <span
+          class="text-[13px] font-semibold tracking-wide uppercase px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline"
+          [ngClass]="{'bg-[#E2E8F0]': menuPerfilAbierto}">
+          {{ nombreUsuario }}
+        </span>
 
-      <!-- Ícono -->
-      <div class="p-1">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
-          <path fill="currentColor"
-            d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
-        </svg>
+        <!-- Ícono -->
+        <div class="p-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
+          </svg>
+        </div>
+      </button>
+
+      <!-- Menú Desplegable con Íconos -->
+      <div *ngIf="menuPerfilAbierto"
+        class="absolute right-6 top-full mt-1 w-52 bg-white border border-[#EEEEEE] shadow-xl z-[110] rounded-xl overflow-hidden py-0">
+        <button routerLink="/perfil"
+          class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+              <path
+                d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56" />
+              <path
+                d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.36 1.36 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.36 1.36 0 0 1-.953.395H8.197a1.36 1.36 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086" />
+            </g>
+          </svg>
+          Editar perfil
+        </button>
+  
+        <button routerLink="/cambiar-rol" (click)="menuPerfilAbierto = false"
+          class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+              <path
+                d="M3.53 11.47v2.118a4.235 4.235 0 0 0 4.235 4.236H20.47M3.53 6.176h12.705a4.235 4.235 0 0 1 4.236 4.236v2.117" />
+              <path d="m17.294 14.647l3.177 3.176L17.294 21M6.706 9.353L3.529 6.176L6.706 3" />
+            </g>
+          </svg>
+          Cambiar rol
+        </button>
+
+        <button (click)="cerrarSesion()"
+          class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+              <path stroke-linejoin="round"
+                d="M13.477 21.245H8.34a4.92 4.92 0 0 1-5.136-4.623V7.378A4.92 4.92 0 0 1 8.34 2.755h5.136" />
+              <path stroke-miterlimit="10" d="M20.795 12H7.442" />
+              <path stroke-linejoin="round" d="m16.083 17.136l4.404-4.404a1.04 1.04 0 0 0 0-1.464l-4.404-4.404" />
+            </g>
+          </svg>
+          Cerrar sesión
+        </button>
       </div>
-    </button>
+    </ng-container>
 
-    <!-- Menú Desplegable con Íconos -->
-    <div *ngIf="menuPerfilAbierto"
-      class="absolute right-6 top-full mt-1 w-52 bg-white border border-[#EEEEEE] shadow-xl z-[110] rounded-xl overflow-hidden py-0">
-      <button routerLink="/perfil"
-        class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-            <path
-              d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56" />
-            <path
-              d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.36 1.36 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.36 1.36 0 0 1-.953.395H8.197a1.36 1.36 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086" />
-          </g>
-        </svg>
-        Editar perfil
-      </button>
- 
-      <button routerLink="/cambiar-rol" (click)="menuPerfilAbierto = false"
-        class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-            <path
-              d="M3.53 11.47v2.118a4.235 4.235 0 0 0 4.235 4.236H20.47M3.53 6.176h12.705a4.235 4.235 0 0 1 4.236 4.236v2.117" />
-            <path d="m17.294 14.647l3.177 3.176L17.294 21M6.706 9.353L3.529 6.176L6.706 3" />
-          </g>
-        </svg>
-        Cambiar rol
-      </button>
+    <ng-container *ngIf="!estaLogeado">
+      <a routerLink="/autenticacion/iniciar-sesion"
+        class="group flex items-center gap-1 text-[#334155] focus:outline-none cursor-pointer">
+        <!-- Texto con fondo gris al hover -->
+        <span
+          class="text-[13px] font-semibold tracking-wide uppercase px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline">
+          Iniciar sesión
+        </span>
 
-      <button (click)="cerrarSesion()"
-        class="w-full text-left px-5 py-3.5 text-sm text-[#334155] hover:bg-[#FEF2F2] transition-colors cursor-pointer flex items-center gap-3 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-            <path stroke-linejoin="round"
-              d="M13.477 21.245H8.34a4.92 4.92 0 0 1-5.136-4.623V7.378A4.92 4.92 0 0 1 8.34 2.755h5.136" />
-            <path stroke-miterlimit="10" d="M20.795 12H7.442" />
-            <path stroke-linejoin="round" d="m16.083 17.136l4.404-4.404a1.04 1.04 0 0 0 0-1.464l-4.404-4.404" />
-          </g>
-        </svg>
-        Cerrar sesión
-      </button>
-    </div>
+        <!-- Ícono -->
+        <div class="p-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
+          </svg>
+        </div>
+      </a>
+    </ng-container>
   </div>
 </nav>
 

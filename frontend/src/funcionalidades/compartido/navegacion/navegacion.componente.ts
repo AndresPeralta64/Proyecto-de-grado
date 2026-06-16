@@ -14,6 +14,7 @@ import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
 export class NavegacionComponente implements OnInit {
   nombreUsuario: string = 'NOMBRE DE USUARIO';
   menuPerfilAbierto: boolean = false;
+  estaLogeado: boolean = false;
 
   constructor(
     private servicioToken: ServicioToken,
@@ -26,6 +27,9 @@ export class NavegacionComponente implements OnInit {
     const usuario = this.servicioToken.obtenerDatosUsuario();
     if (usuario && usuario.nombres && usuario.apellidos) {
       this.nombreUsuario = `${usuario.nombres} ${usuario.apellidos}`.toUpperCase();
+      this.estaLogeado = true;
+    } else {
+      this.estaLogeado = false;
     }
   }
 
