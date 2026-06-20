@@ -41,16 +41,18 @@
       </a>
 
       <!-- Perfiles académicos -->
-      <a routerLink="/perfiles-academicos"
+      <a routerLink="/emisor/perfiles-academicos"
         class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
         routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
         <div class="flex items-center justify-center min-w-[64px] w-[64px]">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
             <path d="M0 0h24v24H0z" fill="none" />
-            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-              <path d="M14.186 2.753v3.596c0 .487.195.955.54 1.3a1.85 1.85 0 0 0 1.306.539h4.125" />
+            <g fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="9" cy="9" r="2" />
+              <path d="M13 15c0 1.105 0 2-4 2s-4-.895-4-2s1.79-2 4-2s4 .895 4 2Z" />
               <path
-                d="M20.25 8.568v8.568a4.25 4.25 0 0 1-1.362 2.97a4.28 4.28 0 0 1-3.072 1.14h-7.59a4.3 4.3 0 0 1-3.1-1.124a4.26 4.26 0 0 1-1.376-2.986V6.862a4.25 4.25 0 0 1 1.362-2.97a4.28 4.28 0 0 1 3.072-1.14h5.714a3.5 3.5 0 0 1 2.361.905l2.96 2.722a2.97 2.97 0 0 1 1.031 2.189M7.647 7.647h3.265M7.647 12h8.706m-8.706 4.353h8.706" />
+                d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+              <path stroke-linecap="round" d="M19 12h-4m4-3h-5m5 6h-3" />
             </g>
           </svg>
         </div>
@@ -59,8 +61,8 @@
         </span>
       </a>
 
-      <!-- Microcredenciales públicas -->
-      <a routerLink="/microcredenciales-publicas"
+      <!-- Microcredenciales registradas -->
+      <a routerLink="/emisor/microcredenciales-registradas"
         class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
         routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
         <div class="flex items-center justify-center min-w-[64px] w-[64px]">
@@ -71,7 +73,7 @@
           </svg>
         </div>
         <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
-          Microcredenciales públicas
+          Microcredenciales registradas
         </span>
       </a>
 

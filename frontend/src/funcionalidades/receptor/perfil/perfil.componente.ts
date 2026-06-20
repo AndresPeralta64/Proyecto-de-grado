@@ -298,6 +298,7 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
     const colorTextoClaro: [number, number, number] = [100, 100, 100];
     const colorFondoHeader: [number, number, number] = [255, 255, 255]; // Blanco puro
     const colorLinea: [number, number, number] = [220, 220, 220];
+    const colorVacio: [number, number, number] = [148, 163, 184];
 
     // ── 1. Banner Superior ──
     const altoHeader = 55;
@@ -385,7 +386,7 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
     doc.setTextColor(...colorPrimario);
-    doc.text('Sobre mí', margenIzq, yLeft);
+    doc.text('Descripción', margenIzq, yLeft);
     yLeft += 8;
 
     if (this.descripcionPerfil && this.descripcionPerfil.trim()) {
@@ -398,11 +399,14 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
         yLeft += 5;
       }
     } else {
-      doc.setFont('helvetica', 'italic');
+      doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
-      doc.setTextColor(...colorTextoClaro);
-      doc.text('Sin descripción', margenIzq, yLeft);
-      yLeft += 5;
+      doc.setTextColor(...colorVacio);
+      const lineasDesc = doc.splitTextToSize('El usuario aún no ha redactado su presentación académica.', 90);
+      for (const linea of lineasDesc) {
+        doc.text(linea, margenIzq, yLeft);
+        yLeft += 5;
+      }
     }
 
     // Columna Derecha: Datos personales
@@ -482,10 +486,10 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
     const idsSeleccionados = Array.from(this.insigniasSeleccionadas);
 
     if (idsSeleccionados.length === 0) {
-      doc.setFont('helvetica', 'italic');
-      doc.setFontSize(11);
-      doc.setTextColor(...colorTextoClaro);
-      doc.text('No ha seleccionado ninguna insignia digital', margenIzq, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(...colorVacio);
+      doc.text('El usuario aún no ha seleccionado insignias para mostrar.', margenIzq, y);
     } else if (!this.agruparInsignias) {
       y = await this.dibujarInsigniasEnPDF(doc, idsSeleccionados, margenIzq, margenDer, margenInf, anchoUtil, y, 'Competencias obtenidas', undefined, colorPrimario);
     } else {

@@ -14,6 +14,18 @@ export const routes: Routes = [
     canActivate: [GuestGuard]
   }, // Trigger rebuild
   
+  // Perfiles Académicos (Público)
+  {
+    path: 'perfiles-academicos',
+    loadComponent: () => import('../funcionalidades/publico/perfiles-academicos-publico/perfiles-academicos-publico.componente').then(m => m.PerfilesAcademicosPublicoComponente)
+  },
+  
+  // Microcredenciales Registradas (Público)
+  {
+    path: 'microcredenciales-registradas',
+    loadComponent: () => import('../funcionalidades/publico/microcredenciales-registradas-publico/microcredenciales-registradas-publico.componente').then(m => m.MicrocredencialesRegistradasPublicoComponente)
+  },
+  
   // Módulo de Autenticación
   { 
     path: 'autenticacion',

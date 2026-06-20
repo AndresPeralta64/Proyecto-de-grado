@@ -1,0 +1,56 @@
+<app-navegacion></app-navegacion>
+
+<div class="flex h-[calc(100vh-64px)] min-h-[calc(100vh-64px)] bg-[#fffff] relative overflow-hidden">
+
+  <!-- Sidebar Pública -->
+  <app-sidebar>
+    <div class="flex flex-col">
+
+      <!-- Perfiles académicos -->
+      <a routerLink="/perfiles-academicos"
+        class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+        routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+        <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <g fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="9" cy="9" r="2" />
+              <path d="M13 15c0 1.105 0 2-4 2s-4-.895-4-2s1.79-2 4-2s4 .895 4 2Z" />
+              <path d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+              <path stroke-linecap="round" d="M19 12h-4m4-3h-5m5 6h-3" />
+            </g>
+          </svg>
+        </div>
+        <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+          Perfiles académicos
+        </span>
+      </a>
+
+      <!-- Microcredenciales registradas -->
+      <a routerLink="/microcredenciales-registradas"
+        class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+        routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+        <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18.7" height="22" viewBox="0 0 15 15">
+            <path d="M0 0h15v15H0z" fill="none" />
+            <path fill="currentColor"
+              d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z" />
+          </svg>
+        </div>
+        <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+          Microcredenciales registradas
+        </span>
+      </a>
+
+    </div>
+  </app-sidebar>
+
+  <!-- Contenido Principal -->
+  <main
+    class="flex-1 h-full min-h-0 overflow-y-auto bg-white flex flex-col p-20 transition-all duration-250 items-start"
+    [style.margin-left]="expandido ? '280px' : '64px'">
+    
+    <app-microcredenciales-registradas class="w-full"></app-microcredenciales-registradas>
+
+  </main>
+</div>

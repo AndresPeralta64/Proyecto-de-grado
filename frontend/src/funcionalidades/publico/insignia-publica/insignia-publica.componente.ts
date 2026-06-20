@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { InsigniaServicio } from '../../../core/servicios/insignia.servicio';
+import { NavegacionComponente } from '../../compartido/navegacion/navegacion.componente';
+import { SidebarComponent } from '../../compartido/sidebar/sidebar.componente';
+import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
+import { ServicioToken } from '../../../core/servicios/token.servicio';
 
 @Component({
   selector: 'app-insignia-publica',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NavegacionComponente, SidebarComponent],
   templateUrl: './insignia-publica.componente.html'
 })
 export class InsigniaPublicaComponente implements OnInit {
@@ -17,14 +21,18 @@ export class InsigniaPublicaComponente implements OnInit {
   
   formatoDescarga: 'PNG' | 'JSON' = 'PNG';
   dropdownFormatoAbierto: boolean = false;
+  rolActual: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private insigniaServicio: InsigniaServicio
+    private insigniaServicio: InsigniaServicio,
+    public sidebarServicio: SidebarServicio,
+    private servicioToken: ServicioToken
   ) {}
 
   ngOnInit(): void {
+    this.obtenerRolActual();
     this.route.paramMap.subscribe(params => {
       this.idGlobal = params.get('id') || '';
       if (this.idGlobal) {
@@ -34,6 +42,20 @@ export class InsigniaPublicaComponente implements OnInit {
         this.cargando = false;
       }
     });
+  }
+
+  obtenerRolActual(): void {
+    const token = this.servicioToken.obtenerToken();
+    if (token && this.servicioToken.estaAutenticado()) {
+      const usuario = this.servicioToken.obtenerDatosUsuario();
+      this.rolActual = usuario?.nombre_rol || '';
+    } else {
+      this.rolActual = '';
+    }
+  }
+
+  get expandido(): boolean {
+    return this.sidebarServicio.expandido();
   }
 
   cargarInsignia(): void {
@@ -121,7 +143,16 @@ export class InsigniaPublicaComponente implements OnInit {
   }
 
   volverAlInicio() {
-    this.router.navigate(['/autenticacion/iniciar-sesion']);
+    const rol = this.rolActual.toUpperCase();
+    if (rol === 'ADMINISTRADOR' || rol === 'ADMIN') {
+      this.router.navigate(['/administrador']);
+    } else if (rol === 'EMISOR') {
+      this.router.navigate(['/emisor']);
+    } else if (rol === 'RECEPTOR') {
+      this.router.navigate(['/receptor']);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   copiarUrlVerificacion() {
@@ -132,3 +163,4 @@ export class InsigniaPublicaComponente implements OnInit {
     }
   }
 }
+

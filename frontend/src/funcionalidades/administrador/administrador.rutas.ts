@@ -13,6 +13,8 @@ export const rutasAdministrador: Routes = [
       { path: 'usuarios', component: UsuariosComponente },
       { path: 'microcredenciales', component: MicrocredencialesComponente },
       { path: 'insignias', loadComponent: () => import('./insignias/insignias.componente').then(m => m.InsigniasAdminComponente) },
+      { path: 'perfiles-academicos', loadComponent: () => import('../publico/perfiles-academicos/perfiles-academicos.componente').then(m => m.PerfilesAcademicosComponente) },
+      { path: 'microcredenciales-registradas', loadComponent: () => import('../publico/microcredenciales-registradas/microcredenciales-registradas.componente').then(m => m.MicrocredencialesRegistradasComponente) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

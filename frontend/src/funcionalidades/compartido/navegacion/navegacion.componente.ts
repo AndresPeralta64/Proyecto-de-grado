@@ -23,11 +23,15 @@ export class NavegacionComponente implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Corregimos el nombre de la función a 'obtenerDatosUsuario'
-    const usuario = this.servicioToken.obtenerDatosUsuario();
-    if (usuario && usuario.nombres && usuario.apellidos) {
-      this.nombreUsuario = `${usuario.nombres} ${usuario.apellidos}`.toUpperCase();
-      this.estaLogeado = true;
+    // Verificar que el token sea válido y no haya expirado
+    if (this.servicioToken.estaAutenticado()) {
+      const usuario = this.servicioToken.obtenerDatosUsuario();
+      if (usuario && usuario.nombres && usuario.apellidos) {
+        this.nombreUsuario = `${usuario.nombres} ${usuario.apellidos}`.toUpperCase();
+        this.estaLogeado = true;
+      } else {
+        this.estaLogeado = false;
+      }
     } else {
       this.estaLogeado = false;
     }

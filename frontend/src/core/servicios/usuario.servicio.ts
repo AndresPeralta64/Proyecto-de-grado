@@ -31,6 +31,14 @@ export class UsuarioServicio {
     return this.http.get(`${this.apiUrl}/perfil/publico`);
   }
 
+  obtenerPerfilesAcademicosPublicos(): Observable<any> {
+    return this.http.get(`${environment.urlBackend}/public/perfiles-academicos`);
+  }
+
+  obtenerPerfilAcademicoPublicoPorId(id: number): Observable<any> {
+    return this.http.get(`${environment.urlBackend}/public/perfiles-academicos/${id}`);
+  }
+
   subirFoto(archivo: File): Observable<any> {
     const formData = new FormData();
     formData.append('foto', archivo);

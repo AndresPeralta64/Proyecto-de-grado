@@ -592,8 +592,8 @@
             </div>
           </td>
         </tr>
-        <!-- Mensaje si no hay registros o no coinciden los filtros -->
-        <tr *ngIf="usuariosFiltrados.length === 0">
+        <!-- Mensaje si no hay registros en absoluto -->
+        <tr *ngIf="usuarios.length === 0">
           <td colspan="7" class="py-8 text-center text-[#64748B] bg-white">
             <div class="flex flex-col items-center justify-center gap-2 py-4">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="text-[#94A3B8]">
@@ -601,7 +601,21 @@
                   stroke-width="1.5"
                   d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
               </svg>
-              <span class="text-[13px] font-medium">No se encontraron usuarios con los parámetros establecidos.</span>
+              <span class="text-[13px] font-medium text-center">Aún no se han registrado usuarios en el sistema.</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Mensaje si hay registros pero no coinciden con los filtros -->
+        <tr *ngIf="usuarios.length > 0 && usuariosFiltrados.length === 0">
+          <td colspan="7" class="py-8 text-center text-[#64748B] bg-white">
+            <div class="flex flex-col items-center justify-center gap-2 py-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="text-[#94A3B8]">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
+              </svg>
+              <span class="text-[13px] font-medium text-center">No se encontraron usuarios con los parámetros establecidos.</span>
             </div>
           </td>
         </tr>

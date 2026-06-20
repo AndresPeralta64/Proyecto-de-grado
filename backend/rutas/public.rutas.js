@@ -3,6 +3,8 @@ const router = express.Router();
 const { consultar } = require('../servicios/base_datos');
 const { obtenerClaves } = require('../utilidades/llaves');
 const { obtenerInsigniaPublica } = require('../controladores/controlador_insignias');
+const { obtenerPerfilesAcademicosPublicos, obtenerPerfilAcademicoPublicoPorId } = require('../controladores/controlador_usuario');
+const { obtenerMicrocredencialesPublicas } = require('../controladores/controlador_microcredencial');
 
 // Perfil del Emisor y Llave Pública
 router.get('/issuer', async (req, res) => {
@@ -63,5 +65,14 @@ router.get('/assertions/:idGlobal', async (req, res) => {
 
 // Detalles públicos de la insignia (para la página de compartir)
 router.get('/insignia/:idGlobal', obtenerInsigniaPublica);
+
+// Obtener perfiles académicos públicos
+router.get('/perfiles-academicos', obtenerPerfilesAcademicosPublicos);
+
+// Obtener detalle de perfil académico público por id
+router.get('/perfiles-academicos/:id', obtenerPerfilAcademicoPublicoPorId);
+
+// Obtener microcredenciales públicas
+router.get('/microcredenciales', obtenerMicrocredencialesPublicas);
 
 module.exports = router;

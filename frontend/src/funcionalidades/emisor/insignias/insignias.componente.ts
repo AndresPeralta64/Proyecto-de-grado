@@ -210,9 +210,22 @@ export class InsigniasEmisorComponente implements OnInit, OnDestroy {
   get insigniasFiltradas() {
     let filtradas = this.insignias.filter(ins => {
       // Búsqueda
-      const buscar = this.terminoBusqueda.toLowerCase();
-      const cumpleBusqueda = ins.receptor.toLowerCase().includes(buscar) ||
-        ins.microcredencial.toLowerCase().includes(buscar);
+      let cumpleBusqueda = true;
+      if (this.terminoBusqueda && this.terminoBusqueda.trim() !== '') {
+        const cleanString = (str: string) =>
+          (str || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+
+        const cleanQuery = cleanString(this.terminoBusqueda);
+        const queryWords = cleanQuery.split(/\s+/).filter(w => w.length > 0);
+        const cleanItem = cleanString(
+          (ins.receptor || '') + ' ' +
+          (ins.microcredencial || '')
+        );
+        cumpleBusqueda = queryWords.every(word => cleanItem.includes(word));
+      }
 
       // Filtros de estado
       let cumpleEstado = false;

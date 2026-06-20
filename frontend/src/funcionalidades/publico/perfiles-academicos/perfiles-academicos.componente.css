@@ -1,0 +1,23 @@
+/* Custom scrollbar styling */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e5e5;
+  border-radius: 4px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #8b8b8b;
+}
+
+.modal-scrollbar {
+  scrollbar-color: #e5e5e5 transparent;
+  scrollbar-width: thin;
+}
+

@@ -474,6 +474,75 @@ const obtenerPerfilPublico = async (req, res) => {
   }
 };
 
+const obtenerPerfilesAcademicosPublicos = async (req, res) => {
+  try {
+    const consulta = `
+      SELECT u.id_usuario as id, u.nombres, u.apellidos, u.correo, c.nombre as carrera, u.cedula, u.telefono, u.foto_url,
+             pu.descripcion, pu.ultima_actualizacion as ultima_actualizacion_perfil,
+             (SELECT COUNT(*)::int FROM insignias_perfil ip JOIN insignia_emitida ie ON ip.insignia = ie.id_insignia WHERE ip.receptor = u.id_usuario AND ie.estado = 1) AS n_insignias,
+             u.creado_en
+      FROM usuario u
+      LEFT JOIN carrera c ON u.carrera = c.id_carrera
+      JOIN usuario_rol ur ON u.id_usuario = ur.usuario
+      JOIN rol r ON ur.rol = r.id_rol AND r.nombre = 'Receptor'
+      LEFT JOIN perfil_usuario pu ON u.id_usuario = pu.receptor
+      WHERE u.activo = true
+      ORDER BY u.creado_en DESC
+    `;
+    const resultado = await consultar(consulta, []);
+    return res.status(200).json({
+      exito: true,
+      datos: resultado.rows
+    });
+  } catch (error) {
+    console.error('Error al obtener perfiles académicos:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener los perfiles académicos.' });
+  }
+};
+
+const obtenerPerfilAcademicoPublicoPorId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const consultaUsuario = `
+      SELECT u.id_usuario as id, u.nombres, u.apellidos, u.correo, c.nombre as carrera, u.cedula, u.telefono, u.foto_url,
+             pu.descripcion, pu.agrupar_insignias, pu.ultima_actualizacion as ultima_actualizacion_perfil
+      FROM usuario u
+      LEFT JOIN carrera c ON u.carrera = c.id_carrera
+      LEFT JOIN perfil_usuario pu ON u.id_usuario = pu.receptor
+      WHERE u.id_usuario = $1 AND u.activo = true
+    `;
+    const resultadoUsuario = await consultar(consultaUsuario, [id]);
+    
+    if (resultadoUsuario.rows.length === 0) {
+      return res.status(404).json({ exito: false, mensaje: 'Usuario no encontrado' });
+    }
+
+    const usuario = resultadoUsuario.rows[0];
+
+    const consultaInsignias = `
+      SELECT ie.id_insignia as id_insignia, ie.id_global, m.nombre as microcredencial, a.nombre as area, ie.png_baked_url
+      FROM insignias_perfil ip
+      JOIN insignia_emitida ie ON ip.insignia = ie.id_insignia
+      JOIN microcredencial m ON ie.microcredencial = m.id_microcredencial
+      JOIN area_conocimiento a ON m.area_conocimiento = a.id_area
+      WHERE ip.receptor = $1 AND ie.estado = 1
+      ORDER BY ip.orden ASC
+    `;
+    const resultadoInsignias = await consultar(consultaInsignias, [id]);
+    
+    return res.status(200).json({
+      exito: true,
+      datos: {
+        ...usuario,
+        insignias: resultadoInsignias.rows
+      }
+    });
+  } catch (error) {
+    console.error('Error al obtener perfil académico público por id:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener el perfil académico detallado.' });
+  }
+};
+
 module.exports = {
   obtenerPerfil,
   actualizarPerfil,
@@ -482,6 +551,7 @@ module.exports = {
   eliminarFotoPerfil,
   actualizarUsuario,
   actualizarPerfilPublico,
-  obtenerPerfilPublico
+  obtenerPerfilPublico,
+  obtenerPerfilesAcademicosPublicos,
+  obtenerPerfilAcademicoPublicoPorId
 };
-

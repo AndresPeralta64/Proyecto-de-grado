@@ -1,0 +1,285 @@
+<div class="flex flex-col w-full">
+  <h1 class="text-[22px] font-semibold text-[#334155] mb-8">Microcredenciales registradas</h1>
+
+  <!-- Barra de Herramientas -->
+  <div class="flex items-center gap-4 mb-8">
+
+    <!-- Barra de búsqueda -->
+    <div class="relative flex-1 max-w-[300px]">
+      <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M10.783 18.828a8.05 8.05 0 0 0 7.439-4.955a8.03 8.03 0 0 0-1.737-8.765a8.045 8.045 0 0 0-13.735 5.68c0 2.131.846 4.174 2.352 5.681a8.05 8.05 0 0 0 5.68 2.359m5.706-2.337l4.762 4.759" />
+        </svg>
+      </span>
+      <input type="text" [(ngModel)]="terminoBusqueda" (ngModelChange)="filtrarMicrocredenciales()"
+        class="w-full pl-10 pr-4 h-[38.5px] bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#828891] transition-all placeholder-[#CBD5E1] text-[14px]"
+        placeholder="Buscar...">
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="flex items-center gap-3">
+      <!-- Botón Ordenar por -->
+      <div class="relative">
+        <button (click)="toggleMenuOrdenar()" [ngClass]="{
+            'bg-[#C9CED5]': menuOrdenarAbierto,
+            'bg-[#E2E8F0]': !menuOrdenarAbierto,
+            'z-50': menuOrdenarAbierto
+          }"
+          class="relative flex items-center gap-2 px-2.5 h-[38.5px] border border-[#CBD5E1] rounded-lg text-[#334155] font-medium hover:bg-[#C9CED5] cursor-pointer transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <g fill="none" stroke="#334155" stroke-linecap="square" stroke-width="2">
+              <path d="m16 17l3 3V4l3 3" opacity=".88" />
+              <path d="M3 19h9M3 5h9m-9 7h9" />
+            </g>
+          </svg>
+          <span class="text-[14px]">Ordenar por</span>
+        </button>
+
+        <!-- Mini Ventana Modal (Dropdown) -->
+        <div *ngIf="menuOrdenarAbierto"
+          class="absolute mt-2 bg-white border border-[#CBD5E1] rounded-xl shadow-xl z-50 flex flex-col overflow-hidden min-w-46 p-3 gap-2.5">
+
+          <!-- Fecha -->
+          <label (click)="toggleFecha()" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.fecha ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.fecha" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Fecha</span>
+          </label>
+
+          <!-- Nombre -->
+          <label (click)="toggleNombre()" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.nombre ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.nombre" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Nombre</span>
+          </label>
+
+          <!-- Emisor -->
+          <label (click)="toggleEmisor()" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.emisor ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.emisor" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Emisor</span>
+          </label>
+
+          <!-- Área del conocimiento -->
+          <label (click)="toggleArea()" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.area ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.area" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Área de conocimiento</span>
+          </label>
+
+          <!-- Insignias emitidas -->
+          <label (click)="toggleEmisiones()" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.emisiones ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.emisiones" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Insignias emitidas</span>
+          </label>
+
+          <!-- Duración -->
+          <label (click)="toggleDuracion()" class="flex items-center gap-2.5 cursor-pointer group">
+            <div
+              [ngClass]="ordenarPor.duracion ? 'bg-[#4AB6D5] border-[#2EA6C8] hover:bg-[#43A5C2]' : 'bg-white border-[#CBD5E1] hover:border-[#828891]'"
+              class="w-4 h-4 border-2 rounded flex items-center justify-center transition-all">
+              <svg *ngIf="ordenarPor.duracion" xmlns="http://www.w3.org/2000/svg" width="11" height="11"
+                viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="m4.5 11.795l4.221 4.221a1.596 1.596 0 0 0 2.272 0L19.5 7.51" />
+              </svg>
+            </div>
+            <span class="text-[13.5px] text-[#334155]">Duración</span>
+          </label>
+
+        </div>
+
+        <!-- Backdrop para cerrar al hacer clic fuera -->
+        <div *ngIf="menuOrdenarAbierto" class="fixed inset-0 z-40" (click)="menuOrdenarAbierto = false"></div>
+      </div>
+
+      <!-- Botón Flecha -->
+      <button (click)="toggleOpciones()" [ngClass]="{'z-50': menuOrdenarAbierto}"
+        class="relative flex items-center justify-center w-[38.5px] h-[38.5px] bg-[#E2E8F0] border border-[#CBD5E1] rounded-lg text-[#334155] hover:bg-[#C9CED5] cursor-pointer transition-all">
+        <!-- Flecha hacia arriba -->
+        <svg *ngIf="opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m20 15.583l-6.587-6.587a2.013 2.013 0 0 0-2.826 0L4 15.583" />
+        </svg>
+        <!-- Flecha hacia abajo -->
+        <svg *ngIf="!opcionesExpandidas" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m4 8.417l6.587 6.587a2.013 2.013 0 0 0 2.826 0L20 8.417" />
+        </svg>
+      </button>
+
+      <span *ngIf="mostrarTextoOrdenamiento" class="text-[13px] text-[#64748b] ml-1.5 font-medium select-none">
+        Mostrando registros más {{ opcionesExpandidas ? 'antiguos' : 'recientes' }} primero
+      </span>
+    </div>
+  </div>
+  <!-- Empty States -->
+  <div class="flex-1 flex flex-col items-center justify-center gap-2 py-20 text-[#64748B]"
+    *ngIf="microcredenciales.length === 0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="text-[#94A3B8]">
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
+    </svg>
+    <span class="text-[13px] font-medium text-center">Aún no se han registrado microcredenciales en el sistema.</span>
+  </div>
+
+  <div class="flex-1 flex flex-col items-center justify-center gap-2 py-20 text-[#64748B]"
+    *ngIf="microcredenciales.length > 0 && microcredencialesFiltradas.length === 0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="text-[#94A3B8]">
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        d="M10.08 19.12a8.5 8.5 0 1 0-5.7-8.31a8.47 8.47 0 0 0 1.95 5.43l-2.63 2.62m4.8-10.87A3 3 0 1 1 12 12a3 3 0 0 1-3.46-2.64" />
+    </svg>
+    <span class="text-[13px] font-medium text-center">No se encontraron microcredenciales con los parámetros establecidos.</span>
+  </div>
+
+  <!-- Lista de microcredenciales -->
+  <div class="flex flex-col gap-6 w-full pb-12" *ngIf="!cargando && !error && microcredencialesFiltradas.length > 0">
+    <div *ngFor="let mc of microcredencialesFiltradas"
+      class="bg-white border border-[#CBD5E1] rounded-xl p-6 flex gap-8 w-full">
+
+      <!-- Imagen a la izquierda -->
+      <div class="w-[180px] flex flex-col items-center flex-shrink-0">
+        <div
+          class="w-[180px] h-[180px] flex items-center justify-center overflow-hidden border border-[#E2E8F0] bg-[#F8FAFC]">
+          <img *ngIf="mc.imagen_url" [src]="mc.imagen_url" alt="Imagen Microcredencial"
+            class="w-full h-full object-cover">
+        </div>
+        <span class="mt-4 text-[14px] text-[#334155] font-semibold">Insignia digital</span>
+      </div>
+
+      <!-- Contenido -->
+      <div class="flex-1 flex flex-col">
+
+        <!-- Fila superior: Nombre, Estado y Botón -->
+        <div class="flex justify-between items-start mb-3 gap-4">
+          <div class="flex items-center gap-5 flex-wrap">
+            <h2 class="text-[18px] font-medium text-[#334155] uppercase tracking-wide">{{ mc.nombre }}</h2>
+            <span [ngClass]="{
+                'text-[#30A32C] bg-[#DCFFDB]': mc.estado.toUpperCase() === 'APROBADA',
+                'text-[#A32C2E] bg-[#FFDBDC]': mc.estado.toUpperCase() === 'RECHAZADA',
+                'text-[#A3872C] bg-[#FFFBDB]': mc.estado.toUpperCase() === 'PENDIENTE',
+                'text-[#8B8B8B] bg-[#E5E5E5]': mc.estado.toUpperCase() === 'INACTIVA'
+              }" class="px-2 py-0.5 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
+              {{ mc.estado }}
+            </span>
+          </div>
+          <button type="button" (click)="verMicrocredencial(mc.id_microcredencial)"
+            class="relative flex items-center justify-center gap-2 px-3.5 h-[38.5px] bg-[#4AB6D5] border border-[#2EA6C8] rounded-lg text-white font-medium hover:bg-[#43A5C2] cursor-pointer transition-all shadow-sm flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path d="M14.186 2.753v3.596c0 .487.195.955.54 1.3a1.85 1.85 0 0 0 1.306.539h4.125" />
+                <path
+                  d="M20.25 8.568v8.568a4.25 4.25 0 0 1-1.362 2.97a4.28 4.28 0 0 1-3.072 1.14h-7.59a4.3 4.3 0 0 1-3.1-1.124a4.26 4.26 0 0 1-1.376-2.986V6.862a4.25 4.25 0 0 1 1.362-2.97a4.28 4.28 0 0 1 3.072-1.14h5.714a3.5 3.5 0 0 1 2.361.905l2.96 2.722a2.97 2.97 0 0 1 1.031 2.189M7.647 7.647h3.265M7.647 12h8.706m-8.706 4.353h8.706" />
+              </g>
+            </svg>
+            <span class="text-[14px]">Ver microcredencial</span>
+          </button>
+        </div>
+
+        <!-- Datos -->
+        <div class="flex flex-col gap-2.5 flex-1 mb-4">
+          <div class="text-[15px] text-[#334155]">
+            <span class="font-bold mr-1.5">Emisor:</span>
+            <span class="font-normal">{{ mc.emisor }}</span>
+          </div>
+          <div class="text-[15px] text-[#334155]">
+            <span class="font-bold mr-1.5">Correo:</span>
+            <span class="font-normal">{{ mc.emisor_correo }}</span>
+          </div>
+          <div class="text-[15px] text-[#334155]">
+            <span class="font-bold mr-1.5">Área del conocimiento:</span>
+            <span class="font-normal">{{ mc.area_conocimiento }}</span>
+          </div>
+          <div class="text-[15px] text-[#334155]">
+            <span class="font-bold mr-1.5">Competencias:</span>
+            <span class="font-normal">{{ mc.competencias }}</span>
+          </div>
+        </div>
+
+        <!-- Footer: Íconos -->
+        <div class="flex items-center gap-6 mt-auto text-[#334155] text-[15px] font-medium pt-4">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512">
+              <path d="M0 0h512v512H0z" fill="none" />
+              <path fill="#334155"
+                d="m328.375 384l3.698 74.999l-75.862-52.719l-76.287 52.769L183.625 384h-32.039l-5.522 112h36.692l73.413-50.78L329.242 496h36.694l-5.522-112zm87.034-229.086l-2.194-48.054L372.7 80.933l-25.932-40.519l-48.055-2.2L256 16.093l-42.713 22.126l-48.055 2.2L139.3 80.933L98.785 106.86l-2.194 48.054l-22.127 42.714l22.127 42.715l2.2 48.053l40.509 25.927l25.928 40.52l48.055 2.195L256 379.164l42.713-22.126l48.055-2.195l25.928-40.52l40.518-25.923l2.195-48.053l22.127-42.715Zm-31.646 76.949L382 270.377l-32.475 20.78l-20.78 32.475l-38.515 1.76L256 343.125l-34.234-17.733l-38.515-1.76l-20.78-32.475L130 270.377l-1.759-38.514l-17.741-34.235l17.737-34.228L130 124.88l32.471-20.78l20.78-32.474l38.515-1.76L256 52.132l34.234 17.733l38.515 1.76l20.78 32.474L382 124.88l1.759 38.515l17.741 34.233Z" />
+            </svg>
+            <span>{{ mc.num_emisiones || 0 }} insignias emitidas</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3"
+                d="M6 12H4.125c-.6 0-1.087.487-1.087 1.087v7.076c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087v-7.076c0-.6-.487-1.087-1.087-1.087m6.939-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v11.701c0 .6.486 1.087 1.086 1.087h1.874c.6 0 1.087-.487 1.087-1.087V8.462c0-.6-.487-1.087-1.087-1.087m6.937-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v16.326c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087V3.837c0-.6-.487-1.087-1.087-1.087" />
+            </svg>
+            <span>{{ mc.nivel }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="#334155" stroke-linecap="round" stroke-width="1.5">
+                <path stroke-miterlimit="10" d="m15.172 15.172l-3.167-3.167V5.672" />
+                <path stroke-linejoin="round" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19" />
+              </g>
+            </svg>
+            <span>{{ mc.duracion_horas }} Horas</span>
+          </div>
+        </div>
+
+        <div *ngIf="mc.ultima_actualizacion" class="pt-2 text-right">
+          <span class="text-[12px] text-[#94A3B8] font-medium">Última actualización: {{
+            mc.ultima_actualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
