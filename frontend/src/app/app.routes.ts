@@ -25,6 +25,12 @@ export const routes: Routes = [
     path: 'microcredenciales-registradas',
     loadComponent: () => import('../funcionalidades/publico/microcredenciales-registradas-publico/microcredenciales-registradas-publico.componente').then(m => m.MicrocredencialesRegistradasPublicoComponente)
   },
+
+  // Detalle de Microcredencial (Público)
+  {
+    path: 'microcredenciales/:id',
+    loadComponent: () => import('../funcionalidades/publico/detalle-microcredencial/detalle-microcredencial.componente').then(m => m.DetalleMicrocredencialComponente)
+  },
   
   // Módulo de Autenticación
   { 

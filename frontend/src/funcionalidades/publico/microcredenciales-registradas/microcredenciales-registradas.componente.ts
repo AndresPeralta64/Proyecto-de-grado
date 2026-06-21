@@ -198,6 +198,6 @@ export class MicrocredencialesRegistradasComponente implements OnInit {
   }
 
   verMicrocredencial(id: number): void {
-    console.log('Ver microcredencial con ID:', id);
+    window.open(`/microcredenciales/${id}`, '_blank');
   }
 }

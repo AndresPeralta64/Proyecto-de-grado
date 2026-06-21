@@ -474,6 +474,30 @@ const obtenerInsigniaPublica = async (req, res) => {
   }
 };
 
+const obtenerEmisionesPublicasPorMicrocredencial = async (req, res) => {
+  try {
+    const { idMicrocredencial } = req.params;
+    const query = `
+      SELECT 
+        ie.id_global,
+        ie.fecha_emision,
+        ie.png_baked_url,
+        ie.url_externo,
+        u.nombres,
+        u.apellidos
+      FROM insignia_emitida ie
+      JOIN usuario u ON ie.receptor = u.id_usuario
+      WHERE ie.microcredencial = $1 AND ie.estado = 1
+      ORDER BY ie.fecha_emision DESC
+    `;
+    const result = await consultar(query, [idMicrocredencial]);
+    return res.status(200).json({ exito: true, datos: result.rows });
+  } catch (error) {
+    console.error('Error en obtenerEmisionesPublicasPorMicrocredencial:', error);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener las emisiones.' });
+  }
+};
+
 module.exports = {
   obtenerHistorialGeneral,
   emitirInsignias,
@@ -482,5 +506,6 @@ module.exports = {
   obtenerReceptoresConInsignia,
   obtenerHistorialReceptor,
   obtenerInsigniaPublica,
-  consultarEstadoEmision
+  consultarEstadoEmision,
+  obtenerEmisionesPublicasPorMicrocredencial
 };

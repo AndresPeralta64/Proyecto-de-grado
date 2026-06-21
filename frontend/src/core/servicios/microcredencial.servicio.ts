@@ -45,4 +45,12 @@ export class MicrocredencialServicio {
   actualizarMicrocredencial(id: number, datos: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, datos);
   }
+
+  obtenerMicrocredencialPublicaPorId(id: number | string): Observable<any> {
+    return this.http.get(`${environment.urlBackend}/public/microcredenciales/${id}`);
+  }
+
+  obtenerEmisionesPublicas(idMicrocredencial: number | string): Observable<any> {
+    return this.http.get(`${environment.urlBackend}/public/microcredenciales/${idMicrocredencial}/emisiones`);
+  }
 }

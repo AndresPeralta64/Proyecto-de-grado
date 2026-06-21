@@ -442,6 +442,50 @@ const obtenerMicrocredencialesPublicas = async (req, res) => {
   }
 };
 
+const obtenerMicrocredencialPublicaPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const consulta = `
+      SELECT 
+        m.id_microcredencial,
+        m.nombre,
+        m.descripcion,
+        m.criterios_evaluacion,
+        m.duracion_horas,
+        m.competencias,
+        m.imagen_url,
+        m.aprobado_en,
+        m.creado_en,
+        m.ultima_actualizacion,
+        CONCAT(u_emisor.nombres, ' ', u_emisor.apellidos) AS emisor,
+        u_emisor.correo AS emisor_correo,
+        n.nombre AS nivel,
+        a.nombre AS area_conocimiento,
+        e.nombre AS estado,
+        (SELECT COUNT(*)::int FROM insignia_emitida ie WHERE ie.microcredencial = m.id_microcredencial AND ie.estado = 1) AS num_emisiones
+      FROM microcredencial m
+      JOIN usuario u_emisor ON m.emisor = u_emisor.id_usuario
+      JOIN nivel_microcredencial n ON m.nivel = n.id_nivel
+      JOIN area_conocimiento a ON m.area_conocimiento = a.id_area
+      JOIN estado_microcredencial e ON m.estado = e.id_estado
+      WHERE m.eliminado = false AND m.estado = 2 AND m.id_microcredencial = $1
+    `;
+    const resultado = await consultar(consulta, [id]);
+    
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({ exito: false, mensaje: 'Microcredencial no encontrada o no disponible públicamente.' });
+    }
+
+    return res.status(200).json({
+      exito: true,
+      datos: resultado.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al obtener la microcredencial pública por ID:', error.message);
+    return res.status(500).json({ exito: false, mensaje: 'Error al obtener el detalle de la microcredencial.' });
+  }
+};
+
 module.exports = {
   registrarMicrocredencial,
   actualizarMicrocredencial,
@@ -451,5 +495,6 @@ module.exports = {
   eliminarMicrocredencial,
   obtenerNiveles,
   obtenerAreasConocimiento,
-  obtenerMicrocredencialesPublicas
+  obtenerMicrocredencialesPublicas,
+  obtenerMicrocredencialPublicaPorId
 };

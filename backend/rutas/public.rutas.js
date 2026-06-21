@@ -4,7 +4,8 @@ const { consultar } = require('../servicios/base_datos');
 const { obtenerClaves } = require('../utilidades/llaves');
 const { obtenerInsigniaPublica } = require('../controladores/controlador_insignias');
 const { obtenerPerfilesAcademicosPublicos, obtenerPerfilAcademicoPublicoPorId } = require('../controladores/controlador_usuario');
-const { obtenerMicrocredencialesPublicas } = require('../controladores/controlador_microcredencial');
+const { obtenerMicrocredencialesPublicas, obtenerMicrocredencialPublicaPorId } = require('../controladores/controlador_microcredencial');
+const { obtenerEmisionesPublicasPorMicrocredencial } = require('../controladores/controlador_insignias');
 
 // Perfil del Emisor y Llave Pública
 router.get('/issuer', async (req, res) => {
@@ -74,5 +75,11 @@ router.get('/perfiles-academicos/:id', obtenerPerfilAcademicoPublicoPorId);
 
 // Obtener microcredenciales públicas
 router.get('/microcredenciales', obtenerMicrocredencialesPublicas);
+
+// Obtener detalle de microcredencial pública por id
+router.get('/microcredenciales/:id', obtenerMicrocredencialPublicaPorId);
+
+// Obtener emisiones de una microcredencial pública
+router.get('/microcredenciales/:idMicrocredencial/emisiones', obtenerEmisionesPublicasPorMicrocredencial);
 
 module.exports = router;
