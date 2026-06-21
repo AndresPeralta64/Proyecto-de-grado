@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarServicio } from '../../../core/servicios/sidebar.servicio';
 import { MicrocredencialServicio } from '../../../core/servicios/microcredencial.servicio';
+import { InsigniaServicio } from '../../../core/servicios/insignia.servicio';
 import { ServicioToken } from '../../../core/servicios/token.servicio';
 import { Subscription } from 'rxjs';
 import html2canvas from 'html2canvas';
@@ -80,6 +81,12 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
 
   // Set para habilitar edición tras ver info
   microcredencialesRechazadasVistas: Set<number> = new Set();
+
+  // Estado de la vista de Ver Microcredencial
+  modalVerMicrocredencialAbierto = false;
+  microcredencialSeleccionadaVer: any = null;
+  emisionesMicrocredencial: any[] = [];
+  cargandoEmisiones = false;
 
   // Estado del modal de registro de microcredenciales
   modalRegistroAbierto = false;
@@ -180,7 +187,8 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
   constructor(
     private sidebarServicio: SidebarServicio,
     private microcredencialServicio: MicrocredencialServicio,
-    private tokenServicio: ServicioToken
+    private tokenServicio: ServicioToken,
+    private insigniaServicio: InsigniaServicio
   ) { }
 
   ngOnInit(): void {
@@ -888,6 +896,44 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     this.modalEstadoAbierto = false;
     this.microcredencialAEditarEstado = null;
   }
+
+  // --- Ver Microcredencial Modal ---
+  verMicrocredencial(item: any) {
+    this.microcredencialSeleccionadaVer = item;
+    this.modalVerMicrocredencialAbierto = true;
+    this.cargandoEmisiones = true;
+    this.emisionesMicrocredencial = [];
+
+    // Cargar emisiones usando el servicio de insignias (historial)
+    this.insigniaServicio.obtenerHistorial().subscribe({
+      next: (res: any) => {
+        if (res && res.exito) {
+          // Filtrar por la microcredencial seleccionada
+          const emisiones = res.datos.filter((e: any) => e.id_microcredencial === item.id || e.microcredencial === item.nombre);
+          this.emisionesMicrocredencial = emisiones.map((emision: any) => ({
+            id_insignia: emision.id_insignia,
+            receptor: emision.receptor,
+            correo: emision.correo || 'Receptor',
+            estado: (emision.estado || 'ACTIVA').toUpperCase(),
+            fecha: emision.fecha_emision ? new Date(emision.fecha_emision).toLocaleDateString('es-ES') : (emision.fecha || 'Desconocida'),
+            imagen_url: emision.imagen_url || null
+          }));
+        }
+        this.cargandoEmisiones = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar historial de emisiones:', err);
+        this.cargandoEmisiones = false;
+      }
+    });
+  }
+
+  cerrarModalVerMicrocredencial() {
+    this.modalVerMicrocredencialAbierto = false;
+    this.microcredencialSeleccionadaVer = null;
+    this.emisionesMicrocredencial = [];
+  }
+  // ----------------------------------
 
   seleccionarNuevoEstado(estado: 'ACTIVO' | 'INACTIVO') {
     this.nuevoEstado = estado;

@@ -68,6 +68,18 @@ export const routes: Routes = [
     loadComponent: () => import('../funcionalidades/publico/insignia-publica/insignia-publica.componente').then(m => m.InsigniaPublicaComponente)
   },
 
+  // Perfiles Académicos
+  {
+    path: 'perfiles-academicos',
+    loadComponent: () => import('../funcionalidades/publico/perfiles-academicos/perfiles-academicos.componente').then(m => m.PerfilesAcademicosComponente)
+  },
+
+  // Microcredenciales Públicas
+  {
+    path: 'microcredenciales-publicas',
+    loadComponent: () => import('../funcionalidades/publico/microcredenciales-publicas/microcredenciales-publicas.componente').then(m => m.MicrocredencialesPublicasComponente)
+  },
+
   // No Autorizado
   {
     path: 'no-autorizado',
