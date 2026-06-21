@@ -80,6 +80,12 @@ export const routes: Routes = [
     loadComponent: () => import('../funcionalidades/publico/insignia-publica/insignia-publica.componente').then(m => m.InsigniaPublicaComponente)
   },
 
+  // Detalle de Microcredencial (Pública)
+  {
+    path: 'microcredencial/:id',
+    loadComponent: () => import('../funcionalidades/publico/detalle-microcredencial/detalle-microcredencial.componente').then(m => m.DetalleMicrocredencialComponente)
+  },
+
   // No Autorizado
   {
     path: 'no-autorizado',

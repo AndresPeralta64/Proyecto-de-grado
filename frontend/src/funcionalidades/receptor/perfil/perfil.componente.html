@@ -266,7 +266,7 @@
           <div class="w-full">
             <ng-container *ngIf="!agruparInsignias">
               <div class="grid grid-cols-[repeat(auto-fill,150px)] justify-center gap-x-12 gap-y-10 w-full">
-                <div *ngFor="let idInsignia of insigniasSeleccionadas"
+                <div *ngFor="let idInsignia of insigniasSeleccionadasValidas"
                   class="flex flex-col items-center gap-3 w-[150px]">
                   <img [src]="obtenerInsigniaPorId(idInsignia)?.png_baked_url" class="w-23 h-23 object-contain">
                   <span class="text-[13px] font-medium text-[#334155] text-center leading-tight">
@@ -293,7 +293,7 @@
               </div>
             </ng-container>
 
-            <div *ngIf="insigniasSeleccionadas.size === 0"
+            <div *ngIf="insigniasSeleccionadasValidas.length === 0"
               class="w-full py-1">
               <p class="text-[13px] text-[#94A3B8] text-justify font-normal leading-[1.6]">
                 No ha seleccionado ninguna insignia digital

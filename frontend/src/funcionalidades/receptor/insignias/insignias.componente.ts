@@ -108,8 +108,14 @@ export class InsigniasReceptorComponente implements OnInit, OnDestroy {
         let cmp = 0;
         switch (sortKey) {
           case 'fecha':
-            const timeA = new Date(a.fecha_completa).getTime();
-            const timeB = new Date(b.fecha_completa).getTime();
+            const timeAEmision = new Date(a.fecha_completa || 0).getTime();
+            const timeARevocacion = a.revocado_en ? new Date(a.revocado_en).getTime() : 0;
+            const timeA = Math.max(timeAEmision, timeARevocacion);
+
+            const timeBEmision = new Date(b.fecha_completa || 0).getTime();
+            const timeBRevocacion = b.revocado_en ? new Date(b.revocado_en).getTime() : 0;
+            const timeB = Math.max(timeBEmision, timeBRevocacion);
+
             cmp = timeA - timeB;
             break;
           case 'emisor':

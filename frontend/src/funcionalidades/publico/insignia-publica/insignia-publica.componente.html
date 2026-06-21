@@ -84,7 +84,7 @@
           </a>
 
           <!-- Microcredenciales registradas -->
-          <a routerLink="/microcredenciales-registradas"
+          <a routerLink="/administrador/microcredenciales-registradas"
             class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
             routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
             <div class="flex items-center justify-center min-w-[64px] w-[64px]">
@@ -158,7 +158,7 @@
           </a>
 
           <!-- Microcredenciales registradas -->
-          <a routerLink="/microcredenciales-registradas"
+          <a routerLink="/emisor/microcredenciales-registradas"
             class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
             routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
             <div class="flex items-center justify-center min-w-[64px] w-[64px]">
@@ -238,7 +238,7 @@
           </a>
 
           <!-- Microcredenciales registradas -->
-          <a routerLink="/microcredenciales-registradas"
+          <a routerLink="/receptor/microcredenciales-registradas"
             class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
             routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
             <div class="flex items-center justify-center min-w-[64px] w-[64px]">
@@ -298,7 +298,7 @@
     </app-sidebar>
 
     <!-- Main Content Area (Scrollable) -->
-    <main class="flex-1 h-full min-h-0 overflow-y-auto p-20 transition-all duration-250 flex flex-col"
+    <main class="flex-1 h-full min-h-0 overflow-y-auto px-20 pt-10 pb-20 transition-all duration-250 flex flex-col"
       [style.margin-left]="expandido ? '280px' : '64px'">
       <div class="w-full flex-1 flex flex-col gap-6" *ngIf="cargando">
         <p class="text-center text-gray-500">Cargando datos de la insignia...</p>

@@ -1,0 +1,499 @@
+<app-navegacion></app-navegacion>
+
+<div class="flex h-[calc(100vh-64px)] min-h-[calc(100vh-64px)] bg-white relative overflow-hidden">
+
+  <!-- Sidebar Pública -->
+  <app-sidebar>
+    <div class="flex flex-col">
+
+      <!-- Admin -->
+      <ng-container *ngIf="rolActual === 'Administrador'">
+        <!-- Gestionar usuarios -->
+        <a routerLink="/administrador/usuarios"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <!-- Ícono: mismo ancho fijo que la sidebar contraída -->
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M17.928 19.634h2.138a1.165 1.165 0 0 0 1.116-1.555a6.85 6.85 0 0 0-6.117-3.95m0-2.759a3.664 3.664 0 0 0 3.665-3.664a3.664 3.664 0 0 0-3.665-3.674m-1.04 16.795a1.908 1.908 0 0 0 1.537-3.035a8.03 8.03 0 0 0-6.222-3.196a8.03 8.03 0 0 0-6.222 3.197a1.909 1.909 0 0 0 1.536 3.034zM9.34 11.485a4.16 4.16 0 0 0 4.15-4.161a4.151 4.151 0 0 0-8.302 0a4.16 4.16 0 0 0 4.151 4.16" />
+            </svg>
+          </div>
+          <!-- Etiqueta: solo visible cuando está expandido -->
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Gestionar usuarios
+          </span>
+        </a>
+
+        <!-- Gestionar microcredenciales -->
+        <a routerLink="/administrador/microcredenciales"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 512 512">
+              <path fill="currentColor"
+                d="m328.375 384l3.698 74.999l-75.862-52.719l-76.287 52.769L183.625 384h-32.039l-5.522 112h36.692l73.413-50.78L329.242 496h36.694l-5.522-112zm87.034-229.086l-2.194-48.054L372.7 80.933l-25.932-40.519l-48.055-2.2L256 16.093l-42.713 22.126l-48.055 2.2L139.3 80.933L98.785 106.86l-2.194 48.054l-22.127 42.714l22.127 42.715l2.2 48.053l40.509 25.927l25.928 40.52l48.055 2.195L256 379.164l42.713-22.126l48.055-2.195l25.928-40.52l40.518-25.923l2.195-48.053l22.127-42.715Zm-31.646 76.949L382 270.377l-32.475 20.78l-20.78 32.475l-38.515 1.76L256 343.125l-34.234-17.733l-38.515-1.76l-20.78-32.475L130 270.377l-1.759-38.514l-17.741-34.235l17.737-34.228L130 124.88l32.471-20.78l20.78-32.474l38.515-1.76L256 52.132l34.234 17.733l38.515 1.76l20.78 32.474L382 124.88l1.759 38.515l17.741 34.233Z" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Aprobar microcredenciales
+          </span>
+        </a>
+
+        <!-- Ver insignias emitidas -->
+        <a routerLink="/administrador/insignias"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
+                <path
+                  d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Ver insignias digitales
+          </span>
+        </a>
+
+        <!-- Perfiles académicos -->
+        <a routerLink="/administrador/perfiles-academicos"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="9" cy="9" r="2" />
+                <path d="M13 15c0 1.105 0 2-4 2s-4-.895-4-2s1.79-2 4-2s4 .895 4 2Z" />
+                <path
+                  d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                <path stroke-linecap="round" d="M19 12h-4m4-3h-5m5 6h-3" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Perfiles académicos
+          </span>
+        </a>
+
+        <!-- Microcredenciales registradas -->
+        <a routerLink="/administrador/microcredenciales-registradas"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18.7" height="22" viewBox="0 0 15 15">
+              <path d="M0 0h15v15H0z" fill="none" />
+              <path fill="currentColor"
+                d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Microcredenciales registradas
+          </span>
+        </a>
+      </ng-container>
+
+      <!-- Emisor -->
+      <ng-container *ngIf="rolActual === 'Emisor'">
+        <!-- Gestionar microcredenciales -->
+        <a routerLink="/emisor/microcredenciales"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 512 512">
+              <path fill="currentColor"
+                d="m328.375 384l3.698 74.999l-75.862-52.719l-76.287 52.769L183.625 384h-32.039l-5.522 112h36.692l73.413-50.78L329.242 496h36.694l-5.522-112zm87.034-229.086l-2.194-48.054L372.7 80.933l-25.932-40.519l-48.055-2.2L256 16.093l-42.713 22.126l-48.055 2.2L139.3 80.933L98.785 106.86l-2.194 48.054l-22.127 42.714l22.127 42.715l2.2 48.053l40.509 25.927l25.928 40.52l48.055 2.195L256 379.164l42.713-22.126l48.055-2.195l25.928-40.52l40.518-25.923l2.195-48.053l22.127-42.715Zm-31.646 76.949L382 270.377l-32.475 20.78l-20.78 32.475l-38.515 1.76L256 343.125l-34.234-17.733l-38.515-1.76l-20.78-32.475L130 270.377l-1.759-38.514l-17.741-34.235l17.737-34.228L130 124.88l32.471-20.78l20.78-32.474l38.515-1.76L256 52.132l34.234 17.733l38.515 1.76l20.78 32.474L382 124.88l1.759 38.515l17.741 34.233Z" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Crear microcredenciales
+          </span>
+        </a>
+
+        <!-- Gestionar insignias -->
+        <a routerLink="/emisor/insignias"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
+                <path
+                  d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Emitir insignias digitales
+          </span>
+        </a>
+
+        <!-- Perfiles académicos -->
+        <a routerLink="/emisor/perfiles-academicos"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="9" cy="9" r="2" />
+                <path d="M13 15c0 1.105 0 2-4 2s-4-.895-4-2s1.79-2 4-2s4 .895 4 2Z" />
+                <path
+                  d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                <path stroke-linecap="round" d="M19 12h-4m4-3h-5m5 6h-3" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Perfiles académicos
+          </span>
+        </a>
+
+        <!-- Microcredenciales registradas -->
+        <a routerLink="/emisor/microcredenciales-registradas"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18.7" height="22" viewBox="0 0 15 15">
+              <path d="M0 0h15v15H0z" fill="none" />
+              <path fill="currentColor"
+                d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Microcredenciales registradas
+          </span>
+        </a>
+      </ng-container>
+
+      <!-- Receptor -->
+      <ng-container *ngIf="rolActual === 'Receptor'">
+        <!-- Gestionar perfil académico -->
+        <a routerLink="/receptor/perfil"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <!-- Ícono: mismo ancho fijo que la sidebar contraída -->
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.022 20.504c.284-1.394.974-2.138 2.076-3.038a6.17 6.17 0 0 1 7.805 0c1.101.9 1.882 1.644 2.165 3.038M12 13.028a3.31 3.31 0 1 0 0-6.619a3.31 3.31 0 0 0 0 6.619" />
+                <rect width="18.5" height="18.5" x="2.75" y="2.75" rx="6" />
+              </g>
+            </svg>
+          </div>
+          <!-- Etiqueta: solo visible cuando está expandido -->
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Gestionar perfil académico
+          </span>
+        </a>
+
+        <!-- Mis insignias digitales -->
+        <a routerLink="/receptor/insignias"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
+                <path
+                  d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Ver insignias adquiridas
+          </span>
+        </a>
+
+        <!-- Perfiles académicos -->
+        <a routerLink="/receptor/perfiles-academicos"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="9" cy="9" r="2" />
+                <path d="M13 15c0 1.105 0 2-4 2s-4-.895-4-2s1.79-2 4-2s4 .895 4 2Z" />
+                <path
+                  d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                <path stroke-linecap="round" d="M19 12h-4m4-3h-5m5 6h-3" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Perfiles académicos
+          </span>
+        </a>
+
+        <!-- Microcredenciales registradas -->
+        <a routerLink="/receptor/microcredenciales-registradas"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18.7" height="22" viewBox="0 0 15 15">
+              <path d="M0 0h15v15H0z" fill="none" />
+              <path fill="currentColor"
+                d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Microcredenciales registradas
+          </span>
+        </a>
+      </ng-container>
+
+      <!-- Publico -->
+      <ng-container *ngIf="!rolActual">
+        <!-- Perfiles académicos -->
+        <a routerLink="/perfiles-academicos"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="9" cy="9" r="2" />
+                <path d="M13 15c0 1.105 0 2-4 2s-4-.895-4-2s1.79-2 4-2s4 .895 4 2Z" />
+                <path
+                  d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                <path stroke-linecap="round" d="M19 12h-4m4-3h-5m5 6h-3" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Perfiles académicos
+          </span>
+        </a>
+
+        <!-- Microcredenciales registradas -->
+        <a routerLink="/microcredenciales-registradas"
+          class="flex items-center h-12 text-[#334155] no-underline transition-colors hover:bg-[#e2e8f0] hover:text-[#0067b8] cursor-pointer overflow-hidden border-b border-[#EEEEEE]"
+          routerLinkActive="bg-[#e2e8f0] text-[#0067b8]">
+          <div class="flex items-center justify-center min-w-[64px] w-[64px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18.7" height="22" viewBox="0 0 15 15">
+              <path d="M0 0h15v15H0z" fill="none" />
+              <path fill="currentColor"
+                d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium whitespace-nowrap pr-4" *ngIf="expandido">
+            Microcredenciales registradas
+          </span>
+        </a>
+      </ng-container>
+
+    </div>
+  </app-sidebar>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 h-full min-h-0 overflow-y-auto bg-white px-20 pt-10 pb-20 flex flex-col"
+    [style.margin-left]="expandido ? '280px' : '64px'">
+
+    <div class="w-full flex-1 flex flex-col">
+      <!-- Volver -->
+      <div class="mb-10 w-fit">
+        <button type="button" (click)="volver()"
+          class="group flex items-center gap-2 text-[#334155] focus:outline-none cursor-pointer">
+          <span
+            class="text-[16px] font-medium px-3 py-2 rounded-[10px] group-hover:bg-[#E2E8F0] flex items-center gap-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Volver
+          </span>
+        </button>
+      </div>
+
+      <!-- Estado de Carga -->
+      <div *ngIf="cargando" class="flex justify-center items-center py-20 w-full">
+        <span class="text-[#64748B] text-[15px]">Cargando detalles de la microcredencial...</span>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error"
+        class="bg-[#FEF2F2] border border-[#FCA5A5] rounded-xl p-6 text-center text-[#991B1B] text-[15px] w-full">
+        {{ mensajeError }}
+      </div>
+
+      <!-- Contenido Principal -->
+      <div *ngIf="!cargando && !error && microcredencial"
+        class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
+
+        <!-- Columna Izquierda: Detalles de la microcredencial -->
+        <div class="lg:col-span-4 flex flex-col bg-white border border-[#E2E8F0] rounded-b-2xl overflow-hidden">
+
+          <!-- Imagen -->
+          <div
+            class="w-full aspect-square bg-[#F8FAFC] flex items-center justify-center p-6 relative border-b border-[#E2E8F0]">
+            <img *ngIf="microcredencial.imagen_url" [src]="microcredencial.imagen_url" alt="Insignia"
+              class="max-w-full max-h-full object-contain">
+
+            <div
+              class="absolute top-4 right-4 bg-[#DCFFDB] text-[#30A32C] px-2 py-1 rounded text-[11px] font-bold tracking-wider uppercase">
+              {{ microcredencial.estado }}
+            </div>
+          </div>
+
+          <!-- Detalles texto -->
+          <div class="px-6 pb-6 pt-8 flex flex-col gap-5">
+            <h1 class="text-[18px] font-semibold text-[#334155] uppercase leading-snug m-0">
+              {{ microcredencial.nombre }}
+            </h1>
+
+            <div class="flex items-center gap-1.5 text-[13px] text-[#334155]">
+              <span class="font-bold uppercase">Emisor:</span>
+              <span>{{ microcredencial.emisor }}</span>
+            </div>
+
+            <div class="flex items-center gap-1.5 text-[13px] text-[#334155]">
+              <span class="font-bold uppercase">Correo:</span>
+              <span>{{ microcredencial.emisor_correo }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1 text-[13px] text-[#334155]">
+              <span class="font-bold uppercase">Descripción:</span>
+              <p class="text-[#334155] leading-relaxed m-0">{{ microcredencial.descripcion }}</p>
+            </div>
+
+            <div class="flex flex-col gap-1 text-[13px] text-[#334155]">
+              <span class="font-bold uppercase">Criterios de evaluación:</span>
+              <p class="text-[#334155] leading-relaxed m-0">{{ microcredencial.criterios_evaluacion }}</p>
+            </div>
+
+            <div class="flex flex-col gap-2 text-[13px] text-[#334155]">
+              <span class="font-bold uppercase">Competencias:</span>
+              <div class="flex flex-wrap gap-2 mt-0.5">
+                <span *ngFor="let comp of competenciasArray"
+                  class="px-2.5 py-1 bg-[#F4F6F8] border border-[#E2E8F0] rounded-lg text-[#334155] text-[13px] font-normal">
+                  {{ comp }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center gap-16 mt-2 pt-4 border-t border-[#E2E8F0]">
+              <div class="flex flex-col items-center gap-1 text-[13px]">
+                <span class="font-bold text-[#334155] uppercase">Nivel</span>
+                <span class="text-[#334155] flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="none" stroke="#334155" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3"
+                      d="M6 12H4.125c-.6 0-1.087.487-1.087 1.087v7.076c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087v-7.076c0-.6-.487-1.087-1.087-1.087m6.939-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v11.701c0 .6.486 1.087 1.086 1.087h1.874c.6 0 1.087-.487 1.087-1.087V8.462c0-.6-.487-1.087-1.087-1.087m6.937-4.625h-1.873c-.6 0-1.087.487-1.087 1.087v16.326c0 .6.487 1.087 1.087 1.087h1.873c.6 0 1.087-.487 1.087-1.087V3.837c0-.6-.487-1.087-1.087-1.087" />
+                  </svg>
+                  {{ microcredencial.nivel }}
+                </span>
+              </div>
+              <div class="flex flex-col items-center gap-1 text-[13px]">
+                <span class="font-bold text-[#334155] uppercase">Duración</span>
+                <span class="text-[#334155] flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <g fill="none" stroke="#334155" stroke-linecap="round" stroke-width="1.5">
+                      <path stroke-miterlimit="10" d="m15.172 15.172l-3.167-3.167V5.672" />
+                      <path stroke-linejoin="round" d="M12 21.5a9.5 9.5 0 1 0 0-19a9.5 9.5 0 0 0 0 19" />
+                    </g>
+                  </svg>
+                  {{ microcredencial.duracion_horas }} Horas
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Insignias Emitidas -->
+        <div class="lg:col-span-8 flex flex-col bg-white border border-[#E2E8F0] rounded-2xl p-6">
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3">
+              <h2 class="text-[18px] font-semibold text-[#334155] m-0">Insignias emitidas</h2>
+              <span
+                class="bg-[#E2E8F0] text-[#475569] px-2.5 py-1 rounded-lg text-[13px] font-medium border border-[#CBD5E1]">
+                {{ insigniasEmitidas.length }} emisiones
+              </span>
+            </div>
+
+            <div class="relative max-w-[300px] w-full">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M10.783 18.828a8.05 8.05 0 0 0 7.439-4.955a8.03 8.03 0 0 0-1.737-8.765a8.045 8.045 0 0 0-13.735 5.68c0 2.131.846 4.174 2.352 5.681a8.05 8.05 0 0 0 5.68 2.359m5.706-2.337l4.762 4.759" />
+                </svg>
+              </span>
+              <input type="text" [(ngModel)]="terminoBusqueda" (input)="filtrarInsignias()"
+                class="w-full pl-10 pr-4 h-[38.5px] bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#828891] transition-all placeholder-[#CBD5E1] text-[14px]"
+                placeholder="Buscar...">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div *ngFor="let insignia of insigniasFiltradas"
+              class="flex items-center justify-between p-3 border border-[#E2E8F0] rounded-xl bg-white">
+
+              <div class="flex items-center gap-3 overflow-hidden">
+                <!-- Avatar -->
+                <div
+                  class="w-[42px] h-[42px] rounded-full bg-[#E6F0FF] text-[#0067B8] flex items-center justify-center text-[15px] font-semibold flex-shrink-0">
+                  {{ obtenerIniciales(insignia.nombres, insignia.apellidos) }}
+                </div>
+
+                <!-- Info -->
+                <div class="flex flex-col gap-0.5 overflow-hidden pr-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[14px] font-semibold text-[#334155] truncate max-w-[120px]"
+                      [title]="obtenerNombreFormateado(insignia.nombres, insignia.apellidos)">
+                      {{ obtenerNombreFormateado(insignia.nombres, insignia.apellidos) }}
+                    </span>
+                    <!-- Pill de estado -->
+                    <span [ngClass]="{
+                        'text-[#30A32C] bg-[#DCFFDB]': insignia.estado === 'ACTIVA',
+                        'text-[#A32C2E] bg-[#FFDBDC]': insignia.estado === 'REVOCADA'
+                      }"
+                      class="px-1.5 py-0.5 rounded font-bold text-[10px] uppercase tracking-wider inline-block flex-shrink-0">
+                      {{ insignia.estado }}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[12px] text-[#64748B]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 7h16M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2M4 7v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01" />
+                    </svg>
+                    {{ insignia.fecha_emision | date:'dd MMM yyyy' }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botón de compartir / Enlace -->
+              <a [routerLink]="['/insignia', insignia.id_global]" target="_blank"
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-[#BAE6FD] bg-white text-[#0EA5E9] hover:bg-[#F0F9FF] active:bg-[#D1E4F1] transition-all flex-shrink-0 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" />
+                </svg>
+              </a>
+
+            </div>
+
+            <div *ngIf="insigniasFiltradas.length === 0 && !cargando"
+              class="col-span-1 md:col-span-2 text-center py-8 text-[#64748B] text-[13px]">
+              No se encontraron emisiones.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -50,7 +50,8 @@ export class MicrocredencialesRegistradasComponente implements OnInit {
   };
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -198,6 +199,7 @@ export class MicrocredencialesRegistradasComponente implements OnInit {
   }
 
   verMicrocredencial(id: number): void {
-    console.log('Ver microcredencial con ID:', id);
+    this.router.navigate(['/microcredencial', id]);
   }
 }
+

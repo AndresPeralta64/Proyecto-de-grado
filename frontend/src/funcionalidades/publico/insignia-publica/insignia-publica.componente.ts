@@ -45,13 +45,8 @@ export class InsigniaPublicaComponente implements OnInit {
   }
 
   obtenerRolActual(): void {
-    const token = this.servicioToken.obtenerToken();
-    if (token && this.servicioToken.estaAutenticado()) {
-      const usuario = this.servicioToken.obtenerDatosUsuario();
-      this.rolActual = usuario?.nombre_rol || '';
-    } else {
-      this.rolActual = '';
-    }
+    const usuario = this.servicioToken.obtenerDatosUsuario();
+    this.rolActual = usuario?.nombre_rol || '';
   }
 
   get expandido(): boolean {

@@ -258,11 +258,15 @@ export class PerfilReceptorComponente implements OnInit, OnDestroy {
     }, 3000);
   }
 
+  get insigniasSeleccionadasValidas(): number[] {
+    return Array.from(this.insigniasSeleccionadas).filter(id => this.obtenerInsigniaPorId(id) !== undefined);
+  }
+
   guardarPerfil() {
     const datos = {
       descripcion: this.descripcionPerfil,
       agrupar_insignias: this.agruparInsignias,
-      insignias_seleccionadas: Array.from(this.insigniasSeleccionadas)
+      insignias_seleccionadas: this.insigniasSeleccionadasValidas
     };
 
     this.usuarioServicio.actualizarPerfilPublico(datos).subscribe({
