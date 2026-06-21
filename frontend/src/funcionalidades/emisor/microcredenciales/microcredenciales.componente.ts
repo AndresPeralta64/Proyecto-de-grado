@@ -1111,4 +1111,19 @@ export class MicrocredencialesEmisorComponente implements OnInit, OnDestroy {
     }
     return String(competencias);
   }
+
+  obtenerArrayCompetencias(competencias: string | string[]): string[] {
+    if (!competencias) return [];
+    if (Array.isArray(competencias)) return competencias;
+    try {
+      const arr = JSON.parse(competencias);
+      if (Array.isArray(arr)) return arr;
+    } catch (e) {
+      // Ignorar
+    }
+    if (typeof competencias === 'string') {
+      return competencias.split(',').map(c => c.trim()).filter(c => c.length > 0);
+    }
+    return [];
+  }
 }

@@ -46,20 +46,23 @@
   <div class="relative px-6">
     <ng-container *ngIf="estaLogeado">
       <button (click)="toggleMenuPerfil()"
-        class="group flex items-center gap-1 text-[#334155] focus:outline-none cursor-pointer">
-        <!-- Texto con fondo gris al hover -->
-        <span
-          class="text-[13px] font-semibold tracking-wide uppercase px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline"
+        class="group flex items-center gap-2.5 text-[#334155] focus:outline-none cursor-pointer">
+        
+        <!-- Contenedor del nombre y chevron -->
+        <div class="hidden md:flex items-center gap-1.5 px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0]"
           [ngClass]="{'bg-[#E2E8F0]': menuPerfilAbierto}">
-          {{ nombreUsuario }}
-        </span>
-
-        <!-- Ícono -->
-        <div class="p-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
-            <path fill="currentColor"
-              d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
+          <span class="text-[13.5px] font-semibold tracking-wide uppercase text-[#334155]">
+            {{ nombreUsuario }}
+          </span>
+          <!-- Chevron -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="text-[#334155] flex-shrink-0">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m6 9l6 6l6-6"/>
           </svg>
+        </div>
+
+        <!-- Iniciales -->
+        <div class="flex items-center justify-center w-11 h-11 rounded-full bg-[#E5E5E5] text-[#334155] font-semibold text-[17px]">
+          {{ iniciales }}
         </div>
       </button>
 
@@ -111,7 +114,7 @@
         class="group flex items-center gap-1 text-[#334155] focus:outline-none cursor-pointer">
         <!-- Texto con fondo gris al hover -->
         <span
-          class="text-[13px] font-semibold tracking-wide uppercase px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline">
+          class="text-[13px] font-semibold tracking-wide uppercase text-[#334155] px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0] hidden md:inline">
           Iniciar sesión
         </span>
 
