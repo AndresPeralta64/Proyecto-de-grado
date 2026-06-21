@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { MicrocredencialServicio } from '../../../core/servicios/microcredencial.servicio';
 import { NavegacionComponente } from '../../compartido/navegacion/navegacion.componente';
@@ -10,13 +11,14 @@ import { ServicioToken } from '../../../core/servicios/token.servicio';
 @Component({
   selector: 'app-detalle-microcredencial',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavegacionComponente, SidebarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, NavegacionComponente, SidebarComponent],
   templateUrl: './detalle-microcredencial.componente.html'
 })
 export class DetalleMicrocredencialComponente implements OnInit {
   idMicrocredencial: string = '';
   microcredencial: any = null;
   emisiones: any[] = [];
+  terminoBusqueda: string = '';
   cargando: boolean = true;
   error: boolean = false;
   rolActual: string = '';
@@ -118,5 +120,16 @@ export class DetalleMicrocredencialComponente implements OnInit {
     const n = nombres ? nombres.charAt(0).toUpperCase() : '';
     const a = apellidos ? apellidos.charAt(0).toUpperCase() : '';
     return `${n}${a}`;
+  }
+
+  get emisionesFiltradas(): any[] {
+    if (!this.terminoBusqueda.trim()) {
+      return this.emisiones;
+    }
+    const termino = this.terminoBusqueda.toLowerCase();
+    return this.emisiones.filter(emision => {
+      const nombreCompleto = `${emision.nombres} ${emision.apellidos}`.toLowerCase();
+      return nombreCompleto.includes(termino);
+    });
   }
 }
