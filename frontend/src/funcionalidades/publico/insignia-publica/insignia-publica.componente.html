@@ -419,10 +419,13 @@
           <div class="flex flex-col items-center justify-center min-w-[240px] flex-shrink-0">
 
             <!-- Etiqueta de estado de la insignia -->
-            <div class="w-full flex justify-center mb-3" *ngIf="insignia.estado === 'REVOCADA'">
-              <span
-                class="text-[#A32C2E] bg-[#FFDBDC] px-2 py-1 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
-                REVOCADA
+            <div class="w-full flex justify-center mb-3" *ngIf="insignia.estado">
+              <span [ngClass]="{
+                  'text-[#30A32C] bg-[#DCFFDB]': insignia.estado === 'ACTIVA',
+                  'text-[#A32C2E] bg-[#FFDBDC]': insignia.estado === 'REVOCADA'
+                }"
+                class="px-2 py-1 rounded font-bold text-[12px] uppercase tracking-wider inline-block">
+                {{ insignia.estado }}
               </span>
             </div>
 
