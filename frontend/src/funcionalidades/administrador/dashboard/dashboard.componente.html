@@ -7,53 +7,58 @@
   </div>
 
   <!-- Error -->
-  <div *ngIf="error" class="bg-[#FEF2F2] border border-[#FCA5A5] rounded-xl p-6 text-center text-[#991B1B] text-[15px] w-full">
+  <div *ngIf="error"
+    class="bg-[#FEF2F2] border border-[#FCA5A5] rounded-xl p-6 text-center text-[#991B1B] text-[15px] w-full">
     {{ error }}
   </div>
 
   <!-- Dashboard Content -->
   <div *ngIf="!cargando && !error && estadisticas" class="flex flex-col gap-8">
-    
+
     <!-- Top Cards (now just summary cards) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Usuarios Activos -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col gap-2">
+      <!-- Usuarios Registrados -->
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col gap-2">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-[#E6F0FF] text-[#0067B8] flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.928 19.634h2.138a1.165 1.165 0 0 0 1.116-1.555a6.85 6.85 0 0 0-6.117-3.95m0-2.759a3.664 3.664 0 0 0 3.665-3.664a3.664 3.664 0 0 0-3.665-3.674m-1.04 16.795a1.908 1.908 0 0 0 1.537-3.035a8.03 8.03 0 0 0-6.222-3.196a8.03 8.03 0 0 0-6.222 3.197a1.909 1.909 0 0 0 1.536 3.034zM9.34 11.485a4.16 4.16 0 0 0 4.15-4.161a4.151 4.151 0 0 0-8.302 0a4.16 4.16 0 0 0 4.151 4.16"/>
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M17.928 19.634h2.138a1.165 1.165 0 0 0 1.116-1.555a6.85 6.85 0 0 0-6.117-3.95m0-2.759a3.664 3.664 0 0 0 3.665-3.664a3.664 3.664 0 0 0-3.665-3.674m-1.04 16.795a1.908 1.908 0 0 0 1.537-3.035a8.03 8.03 0 0 0-6.222-3.196a8.03 8.03 0 0 0-6.222 3.197a1.909 1.909 0 0 0 1.536 3.034zM9.34 11.485a4.16 4.16 0 0 0 4.15-4.161a4.151 4.151 0 0 0-8.302 0a4.16 4.16 0 0 0 4.151 4.16" />
             </svg>
           </div>
-          <span class="text-[14px] font-medium text-[#64748B] uppercase tracking-wider">Usuarios Activos</span>
+          <span class="text-[14px] font-semibold text-[#334155] uppercase tracking-wider">Usuarios Registrados</span>
         </div>
-        <div class="text-[32px] font-bold text-[#334155] mt-2">{{ estadisticas.totalUsuariosActivos }}</div>
+        <div class="text-[32px] font-bold text-[#334155] mt-2">{{ estadisticas.totalUsuariosRegistrados }}</div>
       </div>
       <!-- Microcredenciales -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col gap-2">
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col gap-2">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-[#F5F3FF] text-[#7C3AED] flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 15 15">
               <path d="M0 0h15v15H0z" fill="none" />
-              <path fill="currentColor" d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z"/>
+              <path fill="currentColor"
+                d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z" />
             </svg>
           </div>
-          <span class="text-[14px] font-medium text-[#64748B] uppercase tracking-wider">Microcredenciales</span>
+          <span class="text-[14px] font-semibold text-[#334155] uppercase tracking-wider">Microcredenciales</span>
         </div>
         <div class="text-[32px] font-bold text-[#334155] mt-2">{{ estadisticas.totalMicrocredenciales }}</div>
       </div>
       <!-- Insignias Emitidas -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col gap-2">
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col gap-2">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none" />
               <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                <path d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
-                <path d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
+                <path
+                  d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
+                <path
+                  d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
               </g>
             </svg>
           </div>
-          <span class="text-[14px] font-medium text-[#64748B] uppercase tracking-wider">Insignias Emitidas</span>
+          <span class="text-[14px] font-semibold text-[#334155] uppercase tracking-wider">Insignias Emitidas</span>
         </div>
         <div class="text-[32px] font-bold text-[#334155] mt-2">{{ estadisticas.totalInsigniasEmitidas }}</div>
       </div>
@@ -61,9 +66,10 @@
 
     <!-- Gráficos Pastel Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
+
       <!-- Usuarios Pastel -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col sm:flex-row items-center justify-between gap-8">
+      <div
+        class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col sm:flex-row items-center justify-between gap-8">
         <div class="flex flex-col gap-2 w-full">
           <h2 class="text-[16px] font-semibold text-[#334155] mb-2">Estado de Usuarios</h2>
           <div class="flex flex-col gap-4">
@@ -81,9 +87,10 @@
               </div>
               <span class="font-semibold text-[#334155]">{{ obtenerCantidadUsuariosPorEstado('Inactivo') }}</span>
             </div>
-            <div class="border-t border-[#E2E8F0] pt-2 mt-1 flex justify-between">
+            <div class="border-t border-[#cbd5e1] pt-2 mt-1 flex justify-between">
               <span class="text-[#64748B] text-[14px] font-medium">Total Usuarios</span>
-              <span class="text-[#334155] font-bold">{{ obtenerCantidadUsuariosPorEstado('Activo') + obtenerCantidadUsuariosPorEstado('Inactivo') }}</span>
+              <span class="text-[#334155] font-bold">{{ obtenerCantidadUsuariosPorEstado('Activo') +
+                obtenerCantidadUsuariosPorEstado('Inactivo') }}</span>
             </div>
           </div>
         </div>
@@ -92,7 +99,8 @@
       </div>
 
       <!-- Microcredenciales Pastel -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col sm:flex-row items-center justify-between gap-8">
+      <div
+        class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col sm:flex-row items-center justify-between gap-8">
         <div class="flex flex-col gap-2 w-full">
           <h2 class="text-[16px] font-semibold text-[#334155] mb-2">Estado de Microcredenciales</h2>
           <div class="flex flex-col gap-3">
@@ -127,30 +135,34 @@
           </div>
         </div>
         <!-- Gráfico -->
-        <div class="w-32 h-32 rounded-full flex-shrink-0 shadow-inner" [style.background]="getMicrocredencialesPieChart()"></div>
+        <div class="w-32 h-32 rounded-full flex-shrink-0 shadow-inner"
+          [style.background]="getMicrocredencialesPieChart()"></div>
       </div>
     </div>
 
-      <!-- Pendientes por revisar -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0]">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-[16px] font-semibold text-[#334155]">Microcredenciales Pendientes</h2>
-          <a routerLink="/administrador/microcredenciales" class="text-[13px] text-[#0067b8] hover:underline font-medium">Ver todas</a>
+    <!-- Pendientes por revisar -->
+    <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1]">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-[16px] font-semibold text-[#334155]">Microcredenciales Pendientes</h2>
+        <a routerLink="/administrador/microcredenciales"
+          class="text-[13px] text-[#0067b8] hover:underline font-medium">Ver todas</a>
+      </div>
+
+      <div class="flex flex-col gap-0">
+        <div *ngIf="estadisticas.recientesPendientes.length === 0" class="text-center py-6 text-[#64748B] text-[14px]">
+          No hay microcredenciales pendientes por revisión.
         </div>
-        
-        <div class="flex flex-col gap-0">
-          <div *ngIf="estadisticas.recientesPendientes.length === 0" class="text-center py-6 text-[#64748B] text-[14px]">
-            No hay microcredenciales pendientes por revisión.
-          </div>
-          <div *ngFor="let item of estadisticas.recientesPendientes" class="flex flex-col gap-1 py-3 border-b border-[#E2E8F0] last:border-0">
-            <span class="text-[14px] font-semibold text-[#334155] truncate" [title]="item.nombre">{{ item.nombre | uppercase }}</span>
-            <div class="flex items-center justify-between text-[12px] text-[#64748B]">
-              <span>{{ item.emisor }}</span>
-              <span>{{ item.creado_en | date:'dd MMM yyyy' }}</span>
-            </div>
+        <div *ngFor="let item of estadisticas.recientesPendientes"
+          class="flex flex-col gap-1 py-3 border-b border-[#cbd5e1] last:border-0">
+          <span class="text-[14px] font-semibold text-[#334155] truncate" [title]="item.nombre">{{ item.nombre |
+            uppercase }}</span>
+          <div class="flex items-center justify-between text-[12px] text-[#64748B]">
+            <span>{{ item.emisor }}</span>
+            <span>{{ item.creado_en | date:'dd MMM yyyy' }}</span>
           </div>
         </div>
       </div>
+    </div>
 
   </div>
 </div>

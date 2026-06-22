@@ -2,9 +2,9 @@ const { consultar } = require('../servicios/base_datos');
 
 const obtenerEstadisticasAdministrador = async (req, res) => {
   try {
-    // Total de usuarios activos
-    const usuariosRes = await consultar('SELECT COUNT(*)::int FROM usuario WHERE activo = true');
-    const totalUsuariosActivos = usuariosRes.rows[0].count;
+    // Total de usuarios registrados
+    const usuariosRes = await consultar('SELECT COUNT(*)::int FROM usuario');
+    const totalUsuariosRegistrados = usuariosRes.rows[0].count;
 
     // Total de usuarios por estado
     const usuariosEstadoRes = await consultar(`
@@ -47,7 +47,7 @@ const obtenerEstadisticasAdministrador = async (req, res) => {
     return res.status(200).json({
       exito: true,
       datos: {
-        totalUsuariosActivos,
+        totalUsuariosRegistrados,
         usuariosPorEstado,
         totalMicrocredenciales,
         microcredencialesPorEstado,

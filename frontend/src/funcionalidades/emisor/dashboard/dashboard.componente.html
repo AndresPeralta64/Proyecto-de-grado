@@ -18,7 +18,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       
       <!-- Total Microcredenciales -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col gap-2 relative overflow-hidden group">
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col gap-2 relative overflow-hidden group">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#F5F3FF] rounded-full opacity-50 group-hover:scale-110 transition-transform duration-300"></div>
         <div class="flex items-center gap-3 relative z-10">
           <div class="w-10 h-10 rounded-lg bg-[#F5F3FF] text-[#7C3AED] flex items-center justify-center">
@@ -27,13 +27,13 @@
               <path fill="currentColor" d="M9.5 14.5H9a.5.5 0 0 0 .8.4zm2-1.5l.3-.4a.5.5 0 0 0-.6 0zm2 1.5l-.3.4a.5.5 0 0 0 .8-.4zm-2-3.5A2.5 2.5 0 0 1 9 8.5H8a3.5 3.5 0 0 0 3.5 3.5zM14 8.5a2.5 2.5 0 0 1-2.5 2.5v1A3.5 3.5 0 0 0 15 8.5zM11.5 6A2.5 2.5 0 0 1 14 8.5h1A3.5 3.5 0 0 0 11.5 5zm0-1A3.5 3.5 0 0 0 8 8.5h1A2.5 2.5 0 0 1 11.5 6zM9 10.5v4h1v-4zm.8 4.4l2-1.5l-.6-.8l-2 1.5zm1.4-1.5l2 1.5l.6-.8l-2-1.5zm2.8 1.1v-4h-1v4zM15 5V1.5h-1V5zm-1.5-5h-12v1h12zM0 1.5v12h1v-12zM1.5 15H8v-1H1.5zM0 13.5A1.5 1.5 0 0 0 1.5 15v-1a.5.5 0 0 1-.5-.5zM1.5 0A1.5 1.5 0 0 0 0 1.5h1a.5.5 0 0 1 .5-.5zM15 1.5A1.5 1.5 0 0 0 13.5 0v1a.5.5 0 0 1 .5.5zM3 5h5V4H3zm0 3h3V7H3z"/>
             </svg>
           </div>
-          <span class="text-[14px] font-medium text-[#64748B] uppercase tracking-wider">Mis Microcredenciales</span>
+          <span class="text-[14px] font-medium text-[#334155] uppercase tracking-wider">Mis Microcredenciales</span>
         </div>
         <div class="text-[32px] font-bold text-[#334155] mt-2 relative z-10">{{ estadisticas.totalMicrocredenciales }}</div>
       </div>
 
       <!-- Total Insignias Emitidas -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col gap-2 relative overflow-hidden group">
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col gap-2 relative overflow-hidden group">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#ECFDF5] rounded-full opacity-50 group-hover:scale-110 transition-transform duration-300"></div>
         <div class="flex items-center gap-3 relative z-10">
           <div class="w-10 h-10 rounded-lg bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
@@ -45,7 +45,7 @@
               </g>
             </svg>
           </div>
-          <span class="text-[14px] font-medium text-[#64748B] uppercase tracking-wider">Insignias Emitidas</span>
+          <span class="text-[14px] font-medium text-[#334155] uppercase tracking-wider">Insignias Emitidas</span>
         </div>
         <div class="text-[32px] font-bold text-[#334155] mt-2 relative z-10">{{ estadisticas.totalInsigniasEmitidas }}</div>
       </div>
@@ -55,7 +55,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       
       <!-- Estado de las Microcredenciales Pastel -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0] flex flex-col sm:flex-row items-center justify-between gap-8">
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col sm:flex-row items-center justify-between gap-8">
         <div class="flex flex-col gap-2 w-full">
           <h2 class="text-[16px] font-semibold text-[#334155] mb-2">Estado de mis Microcredenciales</h2>
           <div class="flex flex-col gap-3">
@@ -94,7 +94,7 @@
       </div>
 
       <!-- Top Microcredenciales -->
-      <div class="bg-white p-6 rounded-2xl border border-[#E2E8F0]">
+      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1]">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-[16px] font-semibold text-[#334155]">Top Microcredenciales (Más emitidas)</h2>
           <a routerLink="/emisor/microcredenciales" class="text-[13px] text-[#0067b8] hover:underline font-medium">Gestionar todas</a>
@@ -104,7 +104,7 @@
           <div *ngIf="estadisticas.topMicrocredenciales.length === 0" class="text-center py-6 text-[#64748B] text-[14px]">
             No hay microcredenciales con insignias emitidas.
           </div>
-          <div *ngFor="let item of estadisticas.topMicrocredenciales" class="flex flex-col gap-1 py-3 border-b border-[#E2E8F0] last:border-0">
+          <div *ngFor="let item of estadisticas.topMicrocredenciales" class="flex flex-col gap-1 py-3 border-b border-[#cbd5e1] last:border-0">
             <span class="text-[14px] font-semibold text-[#334155] truncate" [title]="item.nombre">{{ item.nombre | uppercase }}</span>
             <div class="flex items-center justify-between text-[12px] text-[#64748B]">
               <span>Insignias emitidas: <span class="font-medium text-[#334155]">{{ item.total_emitidas }}</span></span>
