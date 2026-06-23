@@ -47,14 +47,19 @@
   </app-sidebar>
 
   <!-- Contenido Principal -->
-  <main
-    class="flex-1 h-full min-h-0 overflow-y-auto bg-white flex flex-col items-center justify-center p-8 transition-all duration-250"
+  <main class="flex-1 h-full min-h-0 overflow-y-auto bg-white p-10 transition-all duration-250"
     [style.margin-left]="expandido ? '280px' : '64px'">
 
-    <!-- Contenido Principal -->
-    <div class="flex flex-col items-center justify-center text-center max-w-2xl">
-      <h1 class="text-3xl font-bold text-[#334155] mb-4">Bienvenido al Sistema</h1>
-      <p class="text-[#64748b] text-lg">Seleccione una opción del menú lateral para comenzar.</p>
+    <div class="max-w-6xl mx-auto flex flex-col h-full">
+
+      <div class="flex flex-col items-center justify-center text-center flex-grow mt-4">
+        <h1 class="text-2xl md:text-4xl font-normal text-[#334155] tracking-wider mb-12 uppercase">
+          Bienvenido al Sistema de Microcredenciales ESPOCH
+        </h1>
+
+        <img src="imagen-principal.png" alt="Ilustración principal" class="w-full max-w-4xl object-contain mb-8">
+        <p class="text-[#64748b] text-lg mt-2">Seleccione una opción del menú lateral o inicie sesión para comenzar.</p>
+      </div>
     </div>
   </main>
 </div>

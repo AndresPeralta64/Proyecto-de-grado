@@ -52,7 +52,7 @@ export class NavegacionComponente implements OnInit {
 
   cerrarSesion(): void {
     this.servicioToken.eliminarToken();
-    this.router.navigate(['/autenticacion/iniciar-sesion']);
+    this.router.navigate(['/']);
   }
 
   redirigirAlDashboard(): void {
