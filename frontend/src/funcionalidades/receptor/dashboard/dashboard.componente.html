@@ -1,5 +1,5 @@
 <div class="flex flex-col">
-  <h1 class="text-[22px] font-semibold text-[#334155] mb-8">Dashboard de Receptor</h1>
+  <h1 class="text-[22px] font-semibold text-[#334155] mb-8">Resumen de actividad</h1>
 
   <!-- Loader -->
   <div *ngIf="cargando" class="flex justify-center items-center py-20 w-full">
@@ -7,89 +7,142 @@
   </div>
 
   <!-- Error -->
-  <div *ngIf="error" class="bg-[#FEF2F2] border border-[#FCA5A5] rounded-xl p-6 text-center text-[#991B1B] text-[15px] w-full">
-    {{ error }}
+  <div *ngIf="error" class="flex justify-center items-center py-20 w-full">
+    <span class="text-[#EF4444] text-[15px]">Ha ocurrido un error al cargar las estadísticas registradas.</span>
   </div>
 
   <!-- Dashboard Content -->
   <div *ngIf="!cargando && !error && estadisticas" class="flex flex-col gap-8">
-    
     <!-- Top Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
       <!-- Total Insignias -->
-      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col gap-2 relative overflow-hidden group col-span-1 lg:col-span-2">
-        <div class="absolute -right-6 -top-6 w-32 h-32 bg-[#F5F3FF] rounded-full opacity-50 group-hover:scale-110 transition-transform duration-300"></div>
-        <div class="flex items-center gap-3 relative z-10">
+      <div
+        class="bg-white p-6 rounded-2xl border border-[#cbd5e1] border-l-[4px] border-l-[#7C3AED] flex flex-col gap-2">
+        <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-[#F5F3FF] text-[#7C3AED] flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M12 2.25c-5.376 0-9.75 4.374-9.75 9.75c0 5.376 4.374 9.75 9.75 9.75c5.376 0 9.75-4.374 9.75-9.75c0-5.376-4.374-9.75-9.75-9.75zm4.72 6.53l-5.47 5.47a.75.75 0 0 1-1.06 0l-2.47-2.47a.75.75 0 0 1 1.06-1.06l1.94 1.94l4.94-4.94a.75.75 0 1 1 1.06 1.06z"/>
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M4.268 4.328C5.954 3.028 8.573 2 12 2s6.046 1.027 7.732 2.328c.237.182.356.274.453.436c.082.136.14.342.143.5c.002.189-.06.357-.187.692c-.31.83-.466 1.244-.529 1.654c-.079.518-.08.645-.007 1.163c.058.412.375 1.287 1.007 3.037A6.4 6.4 0 0 1 21 14c0 3-2.5 5.375-5 6c-2.192.548-3.333 1.333-4 2c-.667-.667-1.808-1.452-4-2c-2.5-.625-5-3-5-6c0-.82.156-1.548.388-2.19c.633-1.75.949-2.625 1.007-3.037c.073-.518.072-.645-.007-1.163c-.063-.41-.218-.825-.53-1.654c-.125-.335-.188-.503-.185-.692a1.1 1.1 0 0 1 .142-.5c.097-.162.216-.254.453-.436" />
+                <path
+                  d="m12.691 7.578l.704 1.42a.87.87 0 0 0 .568.423l1.276.213c.816.137 1.008.734.42 1.323l-.992 1a.88.88 0 0 0-.208.73l.284 1.238c.224.98-.292 1.359-1.152.847l-1.196-.714a.86.86 0 0 0-.792 0l-1.196.714c-.856.512-1.376.129-1.152-.847l.284-1.238a.88.88 0 0 0-.208-.73l-.991-1c-.584-.589-.396-1.186.42-1.323l1.275-.213a.87.87 0 0 0 .564-.424l.704-1.42c.384-.77 1.008-.77 1.388 0" />
+              </g>
             </svg>
           </div>
-          <span class="text-[14px] font-medium text-[#334155] uppercase tracking-wider">Mis Insignias Obtenidas</span>
+          <span class="text-[14px] font-semibold text-[#334155] uppercase tracking-wider">Insignias Obtenidas</span>
         </div>
-        <div class="text-[40px] font-bold text-[#334155] mt-2 relative z-10">{{ estadisticas.totalInsignias }}</div>
+        <div class="text-[32px] font-bold text-[#334155] mt-2">{{ estadisticas.totalInsignias }}</div>
       </div>
 
+      <!-- Insignias Públicas -->
+      <div
+        class="bg-white p-6 rounded-2xl border border-[#cbd5e1] border-l-[4px] border-l-[#059669] flex flex-col gap-2">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <path
+                  d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 12 5.004c1.897-.059 3.768.502 5.385 1.614s2.908 2.727 3.716 4.647a1.87 1.87 0 0 1 0 1.47c-.808 1.92-2.1 3.535-3.716 4.647S13.897 19.055 12 18.996c-1.897.059-3.768-.502-5.385-1.614S3.707 14.655 2.9 12.735" />
+                <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
+              </g>
+            </svg>
+          </div>
+          <span class="text-[14px] font-semibold text-[#334155] uppercase tracking-wider">Insignias Mostradas en el
+            Perfil</span>
+        </div>
+        <div class="text-[32px] font-bold text-[#334155] mt-2">{{ estadisticas.insigniasPublicas }}</div>
+      </div>
+
+    </div>
+
+    <!-- Second Row -->
+    <div class="flex justify-center w-full">
       <!-- Estado -->
-      <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col sm:flex-row items-center justify-between gap-8 h-full">
-        <div class="flex flex-col gap-2 w-full">
-          <h2 class="text-[14px] font-semibold text-[#64748B] uppercase tracking-wider mb-2">Estado de mis Insignias</h2>
-          <div class="flex flex-col gap-4">
+      <div
+        class="w-full lg:w-[calc(50%-0.75rem)] bg-white p-6 rounded-2xl border border-[#cbd5e1] flex flex-col sm:flex-row items-stretch justify-between gap-8 h-full">
+        <div class="flex flex-col gap-2 w-full justify-between">
+          <h2 class="text-[18px] font-semibold text-[#334155] mb-2">Estado de insignias digitales</h2>
+          <div class="flex flex-col gap-4 h-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-3 h-3 rounded-full bg-[#30A32C]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#27AE60]"></div>
                 <span class="text-[#334155] text-[14px]">Activas</span>
               </div>
               <span class="font-semibold text-[#334155]">{{ obtenerCantidadPorEstado('Activa') }}</span>
             </div>
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-3 h-3 rounded-full bg-[#A32C2E]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#C0392B]"></div>
                 <span class="text-[#334155] text-[14px]">Revocadas</span>
               </div>
               <span class="font-semibold text-[#334155]">{{ obtenerCantidadPorEstado('Revocada') }}</span>
             </div>
+            <div class="border-t border-[#cbd5e1] pt-2 mt-auto flex justify-between">
+              <span class="text-[#64748B] text-[14px] font-medium">Total Insignias</span>
+              <span class="text-[#334155] font-bold">{{ obtenerCantidadPorEstado('Activa') +
+                obtenerCantidadPorEstado('Revocada') }}</span>
+            </div>
           </div>
         </div>
         <!-- Gráfico -->
-        <div class="w-24 h-24 rounded-full flex-shrink-0 shadow-inner" [style.background]="getInsigniasPieChart()"></div>
+        <div class="w-32 h-32 rounded-full flex-shrink-0 shadow-inner my-auto"
+          [style.background]="getInsigniasPieChart()"></div>
       </div>
-
     </div>
 
     <!-- Insignias Recientes -->
     <div class="bg-white p-6 rounded-2xl border border-[#cbd5e1]">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-[16px] font-semibold text-[#334155]">Últimas insignias obtenidas</h2>
-        <a routerLink="/receptor/insignias" class="text-[13px] text-[#0067b8] hover:underline font-medium">Ver todas mis insignias</a>
+        <h2 class="text-[18px] font-semibold text-[#334155]">Últimas insignias obtenidas</h2>
+        <a routerLink="/receptor/insignias" class="text-[13px] text-[#0067b8] hover:underline font-medium">Ver insignias
+          obtenidas</a>
       </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div *ngIf="estadisticas.recientes.length === 0" class="col-span-1 md:col-span-3 text-center py-6 text-[#64748B] text-[14px]">
-          Aún no has obtenido ninguna insignia.
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngIf="estadisticas.recientes.length === 0"
+          class="col-span-full text-center py-6 text-[#64748B] text-[16px] font-semibold">
+          Aún no ha adquirido ninguna insignia digital.
         </div>
-        
-        <div *ngFor="let item of estadisticas.recientes" class="border border-[#cbd5e1] rounded-xl p-4 flex flex-col items-center gap-4 hover:shadow-md transition-shadow relative">
-          <!-- Etiqueta de estado -->
-          <div class="absolute top-3 left-3 flex justify-center">
+
+        <div *ngFor="let item of estadisticas.recientes"
+          class="bg-white rounded-b-xl border border-[#cbd5e1] overflow-hidden flex flex-col hover:shadow-md transition-shadow relative">
+
+          <!-- Top Section (Image) -->
+          <div
+            class="bg-[#F8FAFC] relative flex items-center justify-center border-b border-[#cbd5e1] aspect-square w-full">
+            <div class="absolute top-3 right-3 flex justify-center z-10">
               <span [ngClass]="{
                   'text-[#30A32C] bg-[#DCFFDB]': item.estado === 'Activa',
                   'text-[#A32C2E] bg-[#FFDBDC]': item.estado === 'Revocada'
-                }"
-                class="px-2 py-1 rounded font-bold text-[10px] uppercase tracking-wider inline-block">
+                }" class="px-2 py-1 rounded font-bold text-[10px] uppercase tracking-wider inline-block">
                 {{ item.estado }}
               </span>
+            </div>
+            <div class="w-full h-full p-6">
+              <img [src]="item.imagen_url" alt="Insignia" class="w-full h-full object-contain drop-shadow-md">
+            </div>
           </div>
-          
-          <div class="w-24 h-24 mt-4">
-            <img [src]="apiUrl + item.png_baked_url" alt="Insignia" class="w-full h-full object-contain drop-shadow-md">
+
+          <!-- Bottom Section (Details) -->
+          <div class="p-4 flex flex-col flex-1 text-left">
+            <h3 class="text-[#334155] font-semibold text-[13px] line-clamp-2 leading-tight mb-3"
+              [title]="item.microcredencial">
+              {{ item.microcredencial | uppercase }}
+            </h3>
+
+            <div class="text-[#334155] text-[12px] mt-auto">
+              <span class="font-semibold">Fecha de emisión: </span> <span>{{ item.fecha_emision | date:'dd MMM yyyy'
+                }}</span>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-[#cbd5e1] flex justify-center">
+              <a [routerLink]="['/insignia', item.id_global]"
+                class="text-[#0067B8] text-[13px] font-medium hover:underline">Ver detalle</a>
+            </div>
           </div>
-          <div class="text-center">
-            <h3 class="text-[#334155] font-semibold text-[14px] line-clamp-2 leading-tight" [title]="item.microcredencial">{{ item.microcredencial }}</h3>
-            <p class="text-[#64748B] text-[12px] mt-1">{{ item.fecha_emision | date:'dd MMM yyyy' }}</p>
-          </div>
-          <a [routerLink]="['/insignia', item.id_global]" class="mt-2 text-[#0067B8] text-[13px] font-medium hover:underline">Ver detalle</a>
         </div>
       </div>
     </div>

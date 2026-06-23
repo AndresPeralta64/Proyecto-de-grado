@@ -48,16 +48,12 @@
       <button (click)="toggleMenuPerfil()"
         class="group flex items-center gap-2.5 text-[#334155] focus:outline-none cursor-pointer">
         
-        <!-- Contenedor del nombre y chevron -->
+        <!-- Contenedor del nombre -->
         <div class="hidden md:flex items-center gap-1.5 px-2 py-2 rounded-[10px] transition-colors group-hover:bg-[#E2E8F0]"
           [ngClass]="{'bg-[#E2E8F0]': menuPerfilAbierto}">
           <span class="text-[13.5px] font-semibold tracking-wide uppercase text-[#334155]">
             {{ nombreUsuario }}
           </span>
-          <!-- Chevron -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="text-[#334155] flex-shrink-0">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m6 9l6 6l6-6"/>
-          </svg>
         </div>
 
         <!-- Iniciales -->

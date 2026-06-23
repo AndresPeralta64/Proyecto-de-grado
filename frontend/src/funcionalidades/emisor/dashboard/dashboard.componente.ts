@@ -56,10 +56,30 @@ export class DashboardComponente implements OnInit {
     const pRechazadas = pPendientes + ((rechazadas / total) * 100);
 
     return `conic-gradient(
-      #30A32C 0% ${pAprobadas}%, 
-      #A3872C ${pAprobadas}% ${pPendientes}%, 
-      #A32C2E ${pPendientes}% ${pRechazadas}%, 
-      #8B8B8B ${pRechazadas}% 100%
+      #27AE60 0% ${pAprobadas}%, 
+      #F1C40F ${pAprobadas}% ${pPendientes}%, 
+      #C0392B ${pPendientes}% ${pRechazadas}%, 
+      #717B81 ${pRechazadas}% 100%
+    )`;
+  }
+
+  obtenerCantidadInsigniasPorEstado(estadoNombre: string): number {
+    if (!this.estadisticas || !this.estadisticas.insigniasPorEstado) return 0;
+    const item = this.estadisticas.insigniasPorEstado.find((e: any) => e.estado === estadoNombre);
+    return item ? item.count : 0;
+  }
+
+  getInsigniasPieChart(): string {
+    const activas = this.obtenerCantidadInsigniasPorEstado('Activa');
+    const revocadas = this.obtenerCantidadInsigniasPorEstado('Revocada');
+    const total = activas + revocadas;
+    if (total === 0) return 'conic-gradient(#E2E8F0 0% 100%)';
+
+    const pActivas = (activas / total) * 100;
+
+    return `conic-gradient(
+      #27AE60 0% ${pActivas}%, 
+      #C0392B ${pActivas}% 100%
     )`;
   }
 }

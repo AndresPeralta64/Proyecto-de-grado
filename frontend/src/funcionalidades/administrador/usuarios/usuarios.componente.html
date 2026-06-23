@@ -471,7 +471,7 @@
                     <div
                       [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
                       <div class="mb-1">
-                        <span class="font-semibold text-[#1E293B]">Creado en: </span>
+                        <span class="font-semibold text-[#1E293B]">Fecha de creación: </span>
                         <span class="font-normal">{{ usuario.creado_en ? (usuario.creado_en | date:'dd/MM/yyyy HH:mm') :
                           '-' }}</span>
                       </div>
@@ -570,7 +570,7 @@
                     <div
                       [ngClass]="(tieneRolUsuario(usuario, 'Emisor') || tieneRolUsuario(usuario, 'Receptor') || (!tieneRolUsuario(usuario, 'Emisor') && !tieneRolUsuario(usuario, 'Receptor') && !tieneRolUsuario(usuario, 'Administrador'))) ? 'border-t border-[#F1F5F9] mt-2 pt-2' : ''">
                       <div class="text-[12px] mb-1">
-                        <span class="font-semibold text-[#1E293B]">Creado en: </span>
+                        <span class="font-semibold text-[#1E293B]">Fecha de creación: </span>
                         <span class="font-normal">{{ usuario.creado_en ? (usuario.creado_en | date:'dd/MM/yyyy HH:mm') :
                           '-' }}</span>
                       </div>

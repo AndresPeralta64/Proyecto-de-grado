@@ -337,14 +337,14 @@
               <span class="font-normal leading-relaxed text-left">{{ insignia.microcredencial }}</span>
             </div>
 
-            <div class="text-[15px] text-[#334155] flex flex-col gap-2">
-              <span class="font-bold uppercase">Emisor:</span>
-              <span class="font-normal leading-relaxed text-left">{{ insignia.emisor }}</span>
+            <div class="text-[15px] text-[#334155]">
+              <span class="font-bold uppercase mr-1.5">Emisor:</span>
+              <span class="font-normal">{{ insignia.emisor }}</span>
             </div>
 
-            <div class="text-[15px] text-[#334155] flex flex-col gap-2">
-              <span class="font-bold uppercase">Correo:</span>
-              <span class="font-normal leading-relaxed text-left">{{ insignia.emisor_correo }}</span>
+            <div class="text-[15px] text-[#334155]">
+              <span class="font-bold uppercase mr-1.5">Correo:</span>
+              <span class="font-normal">{{ insignia.emisor_correo }}</span>
             </div>
 
             <div class="text-[15px] text-[#E90E12] flex flex-col gap-2"
@@ -397,20 +397,20 @@
               </div>
             </div>
 
-            <div class="text-[15px] text-[#334155] flex flex-col gap-2" *ngIf="insignia.estado !== 'REVOCADA'">
-              <span class="font-bold uppercase">Fecha de Emisión:</span>
-              <span class="font-normal leading-relaxed text-left">{{ insignia.fecha_completa | date:'dd/MM/yyyy HH:mm' }}</span>
+            <div class="text-[15px] text-[#334155]" *ngIf="insignia.estado !== 'REVOCADA'">
+              <span class="font-bold uppercase mr-1.5">Fecha de Emisión:</span>
+              <span class="font-normal">{{ insignia.fecha_completa | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
 
-            <div class="text-[15px] text-[#334155] flex flex-col gap-2"
+            <div class="text-[15px] text-[#334155]"
               *ngIf="insignia.estado === 'REVOCADA' && insignia.revocado_por_nombre">
-              <span class="font-bold uppercase">Revocado por:</span>
-              <span class="font-normal leading-relaxed text-left">{{ insignia.revocado_por_nombre }}</span>
+              <span class="font-bold uppercase mr-1.5">Revocado por:</span>
+              <span class="font-normal">{{ insignia.revocado_por_nombre }}</span>
             </div>
 
-            <div class="text-[15px] text-[#334155] flex flex-col gap-2" *ngIf="insignia.estado === 'REVOCADA'">
-              <span class="font-bold uppercase">Fecha de Revocación:</span>
-              <span class="font-normal leading-relaxed text-left">{{ insignia.revocado_en | date:'dd/MM/yyyy HH:mm' }}</span>
+            <div class="text-[15px] text-[#334155]" *ngIf="insignia.estado === 'REVOCADA'">
+              <span class="font-bold uppercase mr-1.5">Fecha de Revocación:</span>
+              <span class="font-normal">{{ insignia.revocado_en | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
 
           </div>

@@ -26,15 +26,33 @@ const obtenerEstadisticasAdministrador = async (req, res) => {
     `);
     const microcredencialesPorEstado = microcredencialesRes.rows;
 
+    // Total de usuarios por rol
+    const usuariosRolRes = await consultar(`
+      SELECT r.nombre as rol, COUNT(ur.usuario)::int
+      FROM rol r
+      LEFT JOIN usuario_rol ur ON r.id_rol = ur.rol
+      GROUP BY r.nombre
+    `);
+    const usuariosPorRol = usuariosRolRes.rows;
+
     const totalMicrocredenciales = microcredencialesPorEstado.reduce((acc, curr) => acc + curr.count, 0);
 
     // Total de insignias emitidas en todo el sistema
     const insigniasRes = await consultar('SELECT COUNT(*)::int FROM insignia_emitida');
     const totalInsigniasEmitidas = insigniasRes.rows[0].count;
 
+    // Insignias por estado
+    const insigniasEstadoRes = await consultar(`
+      SELECT e.nombre as estado, COUNT(i.id_insignia)::int
+      FROM estado_insignia e
+      LEFT JOIN insignia_emitida i ON e.id_estado = i.estado
+      GROUP BY e.nombre
+    `);
+    const insigniasPorEstado = insigniasEstadoRes.rows;
+
     // Microcredenciales recientes pendientes
     const recientesPendientesRes = await consultar(`
-      SELECT m.id_microcredencial, m.nombre, u.nombres || ' ' || u.apellidos AS emisor, m.creado_en
+      SELECT m.id_microcredencial, m.nombre, u.nombres || ' ' || u.apellidos AS emisor, u.correo AS emisor_correo, m.creado_en
       FROM microcredencial m
       JOIN usuario u ON m.emisor = u.id_usuario
       JOIN estado_microcredencial e ON m.estado = e.id_estado
@@ -49,9 +67,11 @@ const obtenerEstadisticasAdministrador = async (req, res) => {
       datos: {
         totalUsuariosRegistrados,
         usuariosPorEstado,
+        usuariosPorRol,
         totalMicrocredenciales,
         microcredencialesPorEstado,
         totalInsigniasEmitidas,
+        insigniasPorEstado,
         recientesPendientes
       }
     });
@@ -78,6 +98,15 @@ const obtenerEstadisticasEmisor = async (req, res) => {
     );
     const totalInsigniasEmitidas = insigniasRes.rows[0].count;
 
+    // Breakdown de estado de insignias
+    const insigniasEstadoRes = await consultar(`
+      SELECT e.nombre as estado, COUNT(i.id_insignia)::int
+      FROM estado_insignia e
+      LEFT JOIN insignia_emitida i ON e.id_estado = i.estado AND i.emisor = $1
+      GROUP BY e.nombre
+    `, [idEmisor]);
+    const insigniasPorEstado = insigniasEstadoRes.rows;
+
     // Breakdown de estados de microcredenciales
     const microcredencialesEstadoRes = await consultar(`
       SELECT e.nombre as estado, COUNT(m.id_microcredencial)::int
@@ -89,9 +118,9 @@ const obtenerEstadisticasEmisor = async (req, res) => {
 
     // Microcredenciales más usadas (Top 5 con más insignias emitidas)
     const topMicrocredencialesRes = await consultar(`
-      SELECT m.nombre, COUNT(i.id_insignia)::int as total_emitidas
+      SELECT m.nombre, COUNT(i.id_insignia)::int as total_emitidas, MAX(i.fecha_emision) AS ultima_emision
       FROM microcredencial m
-      LEFT JOIN insignia_emitida i ON m.id_microcredencial = i.microcredencial
+      JOIN insignia_emitida i ON m.id_microcredencial = i.microcredencial
       WHERE m.emisor = $1 AND m.eliminado = false
       GROUP BY m.id_microcredencial
       ORDER BY total_emitidas DESC
@@ -105,7 +134,8 @@ const obtenerEstadisticasEmisor = async (req, res) => {
         totalMicrocredenciales,
         totalInsigniasEmitidas,
         microcredencialesPorEstado,
-        topMicrocredenciales
+        topMicrocredenciales,
+        insigniasPorEstado
       }
     });
   } catch (error) {
@@ -124,6 +154,13 @@ const obtenerEstadisticasReceptor = async (req, res) => {
     );
     const totalInsignias = insigniasRes.rows[0].count;
 
+    // Total de insignias públicas
+    const insigniasPublicasRes = await consultar(
+      'SELECT COUNT(*)::int FROM insignias_perfil ip JOIN insignia_emitida ie ON ip.insignia = ie.id_insignia WHERE ip.receptor = $1 AND ie.estado = 1',
+      [idReceptor]
+    );
+    const insigniasPublicas = insigniasPublicasRes.rows[0].count;
+
     // Insignias agrupadas por estado (Activa / Revocada)
     const insigniasEstadoRes = await consultar(`
       SELECT e.nombre as estado, COUNT(i.id_insignia)::int
@@ -135,13 +172,13 @@ const obtenerEstadisticasReceptor = async (req, res) => {
 
     // Insignias recientes
     const recientesRes = await consultar(`
-      SELECT i.id_global, m.nombre as microcredencial, i.fecha_emision, i.png_baked_url, e.nombre as estado
+      SELECT i.id_global, m.nombre as microcredencial, i.fecha_emision, i.png_baked_url, m.imagen_url, e.nombre as estado
       FROM insignia_emitida i
       JOIN microcredencial m ON i.microcredencial = m.id_microcredencial
       JOIN estado_insignia e ON i.estado = e.id_estado
       WHERE i.receptor = $1
       ORDER BY i.fecha_emision DESC
-      LIMIT 3
+      LIMIT 8
     `, [idReceptor]);
     const recientes = recientesRes.rows;
 
@@ -149,6 +186,7 @@ const obtenerEstadisticasReceptor = async (req, res) => {
       exito: true,
       datos: {
         totalInsignias,
+        insigniasPublicas,
         insigniasPorEstado,
         recientes
       }

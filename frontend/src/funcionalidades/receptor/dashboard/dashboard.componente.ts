@@ -52,6 +52,6 @@ export class DashboardReceptorComponente implements OnInit {
     if (total === 0) return 'conic-gradient(#E2E8F0 0% 100%)';
 
     const pActivas = (activas / total) * 100;
-    return `conic-gradient(#30A32C 0% ${pActivas}%, #A32C2E ${pActivas}% 100%)`;
+    return `conic-gradient(#27AE60 0% ${pActivas}%, #C0392B ${pActivas}% 100%)`;
   }
 }

@@ -56,6 +56,11 @@ export class NavegacionComponente implements OnInit {
   }
 
   redirigirAlDashboard(): void {
+    if (!this.servicioToken.estaAutenticado()) {
+      this.router.navigate(['/']);
+      return;
+    }
+
     const usuario = this.servicioToken.obtenerDatosUsuario();
     const rol = usuario?.nombre_rol;
     if (rol === 'Administrador') {
