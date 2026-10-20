@@ -1,4 +1,4 @@
-const { firmarRS256 } = require('./servicio_criptografia');
+const { firmarEd25519 } = require('./servicio_criptografia');
 
 /**
  * Genera una declaración (assertion) de insignia digital conforme al estándar Open Badges 3.0
@@ -46,12 +46,12 @@ const generarInsigniaFirmada = (datosInsignia, clavePrivada) => {
   };
 
   // Generar la firma digital sobre el contenido de la declaración
-  const valorFirma = firmarRS256(declaracion, clavePrivada);
+  const valorFirma = firmarEd25519(declaracion, clavePrivada);
 
   // Añadir la prueba de integridad (Proof) según el estándar de Linked Data Proofs
   declaracion.proof = {
     "type": "DataIntegrityProof",
-    "cryptosuite": "rsa-2018",
+    "cryptosuite": "eddsa-2022",
     "created": fechaActual,
     "verificationMethod": `${datosInsignia.urlEmisor}#clave-publica`,
     "proofPurpose": "assertionMethod",

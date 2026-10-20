@@ -114,7 +114,7 @@
     <tr>
       <td>RF-019</td>
       <td>Verificación del perfil público institucional</td>
-      <td>El sistema debe exponer una URL pública institucional única que retorne el nombre de la institución, el correo institucional y la clave pública RSA del sistema en formato JWK, permitiendo que terceros verifiquen criptográficamente cualquier insignia emitida por la plataforma.</td>
+      <td>El sistema debe exponer una URL pública institucional única que retorne el nombre de la institución, el correo institucional y la clave pública Ed25519 del sistema en formato JWK, permitiendo que terceros verifiquen criptográficamente cualquier insignia emitida por la plataforma.</td>
     </tr>
   </tbody>
 </table>
@@ -131,7 +131,7 @@
     <tr>
       <td>RNF-001</td>
       <td>Seguridad de la insignia digital</td>
-      <td>El sistema debe implementar el algoritmo RS256 para la firma criptográfica de las insignias.</td>
+      <td>El sistema debe implementar el algoritmo EdDSA (Ed25519) para la firma criptográfica de las insignias.</td>
     </tr>
     <tr>
       <td>RNF-002</td>
@@ -150,8 +150,8 @@
     </tr>
     <tr>
       <td>RNF-005</td>
-      <td>Gestión del par de claves RSA del sistema</td>
-      <td>El sistema debe disponer de un único par de claves RSA de mínimo 2048 bits a nivel institucional. La clave privada debe almacenarse cifrada en el servidor y nunca exponerse públicamente; la clave pública debe estar disponible en el perfil público institucional definido en RF-019.</td>
+      <td>Gestión del par de claves Ed25519 del sistema</td>
+      <td>El sistema debe disponer de un único par de claves Ed25519 a nivel institucional. La clave privada debe almacenarse cifrada en el servidor y nunca exponerse públicamente; la clave pública debe estar disponible en el perfil público institucional definido en RF-019.</td>
     </tr>
   </tbody>
 </table>

@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const { cifrarAES, descifrarAES } = require('../servicios/servicio_criptografia');
 
 /**
- * Obtiene o genera las claves RSA para la firma de insignias (RS256)
+ * Obtiene o genera las claves Ed25519 para la firma de insignias (EdDSA)
  */
 const obtenerClaves = async () => {
   const query = 'SELECT emisor_url, clave_publica, clave_privada, creado_en, ultima_actualizacion FROM configuracion_sistema LIMIT 1';
