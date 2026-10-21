@@ -63,26 +63,28 @@ Marzo 2026 – Julio 2026
 
 
 
-||**HU-002 Restablecimiento de contraseña**|
+||**HU-002 Simulación de restablecimiento de contraseña**|
 |---|---|
 |**Referencia**|RF-002|
 |**Como**|Emisor / Receptor / Administrador|
-|**Quiero**|Restablecer mi contraseña mediante un proceso de verificación|
-|**Para**|Recuperar el acceso al sistema en caso de olvidar mis credenciales|
-|**Criterios de**<br>**aceptación**|• Dado que el usuario solicita restablecer su contraseña, cuando<br>ingresa su correo institucional, entonces el sistema envía un<br>enlace de verificación al correo registrado.|
+|**Quiero**|Restablecer mi contraseña mediante un proceso simulado de verificación por correo|
+|**Para**|Demostrar el flujo de recuperación de acceso al sistema, considerando que el inicio de sesión simula la autenticación institucional|
+|**Criterios de**<br>**aceptación**|• Dado que el usuario solicita restablecer su contraseña, cuando<br>ingresa su correo institucional registrado, entonces el sistema<br>genera un token de verificación y simula el envío de un enlace<br>de recuperación (el enlace se registra en la consola del servidor<br>en lugar de enviarse por correo electrónico real).|
 
 
 
 4 
 
-||• Dado que el usuario accede al enlace de verificación, cuando|
+||• Dado que el usuario accede al enlace de recuperación generado,|
 |---|---|
-||ingresa y confirma la nueva contraseña, entonces el sistema|
-||actualiza las credenciales y redirige al inicio de sesión.|
-||• Dado que el enlace de verificación ha expirado, cuando el|
-||usuario intenta usarlo, entonces el sistema muestra un mensaje|
-||de error y ofrece solicitar uno nuevo.|
+||cuando ingresa y confirma la nueva contraseña, entonces el|
+||sistema actualiza las credenciales y redirige al inicio de sesión.|
+||• Dado que el enlace de verificación ha expirado (después de 1|
+||hora) o ya fue utilizado, cuando el usuario intenta usarlo,|
+||entonces el sistema muestra un mensaje de error indicando que el|
+||enlace es inválido o ha expirado.|
 |**Prioridad**|Alta|
+|**Notas**|Esta funcionalidad opera como una simulación del flujo de<br>recuperación de contraseña institucional. El servicio de correo<br>no envía mensajes reales; en su lugar, imprime el enlace de<br>recuperación en la consola del servidor para fines de<br>demostración y pruebas.|
 
 
 
@@ -132,9 +134,19 @@ Marzo 2026 – Julio 2026
 
 6 
 
-**Prioridad** 
-
 Alta 
+
+||**HU-017 Panel de estadísticas por rol (Dashboard)**|
+|---|---|
+|**Referencia**|Complemento a RF-001|
+|**Como**|Administrador / Emisor / Receptor|
+|**Quiero**|Visualizar un panel de estadísticas personalizado según mi rol al acceder al sistema|
+|**Para**|Obtener una vista general del estado de los recursos que gestiono o que me conciernen dentro de la plataforma|
+|**Criterios de**<br>**aceptación**|• Dado que el Administrador accede al sistema, cuando se carga<br>el dashboard, entonces se muestran tarjetas con el total de<br>usuarios registrados, microcredenciales registradas e insignias<br>emitidas en el sistema, gráficos circulares del estado de usuarios<br>(activos/inactivos), estado de microcredenciales (aprobadas,<br>pendientes, rechazadas, inactivas), distribución de usuarios por<br>rol (Administrador, Emisor, Receptor) y estado de insignias<br>(activas/revocadas), además de un listado de las últimas<br>microcredenciales pendientes por aprobar.<br>• Dado que el Emisor accede al sistema, cuando se carga el<br>dashboard, entonces se muestran tarjetas con el total de<br>microcredenciales creadas por él y el total de insignias emitidas<br>por él, gráficos circulares del estado de sus microcredenciales<br>y del estado de sus insignias, además de un listado de sus<br>microcredenciales más emitidas (Top 5).<br>• Dado que el Receptor accede al sistema, cuando se carga el<br>dashboard, entonces se muestran tarjetas con el total de<br>insignias obtenidas y el total de insignias mostradas en su perfil<br>público, un gráfico circular del estado de sus insignias<br>(activas/revocadas) y una galería de sus insignias obtenidas<br>más recientes con imagen, nombre y fecha de emisión.<br>• Dado que ocurre un error al cargar las estadísticas, cuando el<br>sistema no puede obtener los datos, entonces se muestra un<br>mensaje de error informativo.|
+|**Prioridad**|Media|
+|**Notas**|Cada rol visualiza únicamente los datos que le corresponden.<br>Los datos se obtienen de endpoints protegidos por rol en el<br>backend (/estadisticas/administrador, /estadisticas/emisor,<br>/estadisticas/receptor).|
+
+
 
 ## **1.2. Módulo de gestión de microcredenciales** 
 
