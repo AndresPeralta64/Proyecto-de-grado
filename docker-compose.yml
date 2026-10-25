@@ -1,0 +1,85 @@
+services:
+  # ============================================================================
+  # 1. Base de Datos Relacional: PostgreSQL
+  # ============================================================================
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: espoch_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: Microcredenciales_ESPOCH
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-andrespacman2003}
+    volumes:
+      # Persistencia de los datos relacionales
+      - postgres_data:/var/lib/postgresql/data
+      # Inicialización automática del esquema y catálogos en el primer arranque
+      - "./documentación/query base de datos.sql:/docker-entrypoint-initdb.d/01_init.sql:ro"
+    networks:
+      - espoch_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Microcredenciales_ESPOCH"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # 2. Servidor de Aplicaciones: Node.js + Express
+  # ============================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: espoch_backend
+    restart: unless-stopped
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD:-andrespacman2003}@postgres_db:5432/Microcredenciales_ESPOCH?schema=public"
+      JWT_SECRET: ${JWT_SECRET:-super_secret_jwt_key_12345}
+      AES_SECRET_KEY: ${AES_SECRET_KEY:-la_clave_secreta_aes_256_de_32_bytes!!}
+      URL_BACKEND: ${URL_BACKEND:-http://localhost/api}
+      URL_FRONTEND: ${URL_FRONTEND:-http://localhost}
+    volumes:
+      # Volumen persistente crítico: evita perder fotos de perfil e insignias emitidas (baked PNG)
+      - backend_recursos:/app/recursos
+    ports:
+      - "3000:3000"
+    networks:
+      - espoch_network
+
+  # ============================================================================
+  # 3. Servidor Web y Frontend: Angular 20 + Nginx Reverse Proxy
+  # ============================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: espoch_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - espoch_network
+
+# ==============================================================================
+# Definición de Volúmenes Persistentes
+# ==============================================================================
+volumes:
+  postgres_data:
+    driver: local
+  backend_recursos:
+    driver: local
+
+# ==============================================================================
+# Red Interna Aislada
+# ==============================================================================
+networks:
+  espoch_network:
+    driver: bridge
+

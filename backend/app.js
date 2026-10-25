@@ -20,6 +20,19 @@ const app = express();
 /**
  * Configuración de middleware base y seguridad
  */
+
+// Redirección forzada a HTTPS en entornos de producción (HT-008 / RNF-004)
+if (process.env.NODE_ENV === 'production') {
+  app.enable('trust proxy');
+  app.use((req, res, next) => {
+    const esHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    if (!esHttps) {
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
+}
+
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 })); // Protege la aplicación permitiendo recursos cruzados para imágenes
