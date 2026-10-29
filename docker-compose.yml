@@ -18,10 +18,34 @@ services:
     networks:
       - espoch_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d Microcredenciales_ESPOCH"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d Microcredenciales_ESPOCH" ]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # ============================================================================
+  # 1.1 Respaldo Automático Diario de Base de Datos
+  # ============================================================================
+  postgres_backup:
+    image: prodrigestivill/postgres-backup-local:16-alpine
+    container_name: espoch_postgres_backup
+    restart: unless-stopped
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres_db
+      POSTGRES_DB: Microcredenciales_ESPOCH
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-andrespacman2003}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 6
+    volumes:
+      - postgres_backups:/backups
+    networks:
+      - espoch_network
 
   # ============================================================================
   # 2. Servidor de Aplicaciones: Node.js + Express
@@ -41,8 +65,8 @@ services:
       DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD:-andrespacman2003}@postgres_db:5432/Microcredenciales_ESPOCH?schema=public"
       JWT_SECRET: ${JWT_SECRET:-super_secret_jwt_key_12345}
       AES_SECRET_KEY: ${AES_SECRET_KEY:-la_clave_secreta_aes_256_de_32_bytes!!}
-      URL_BACKEND: ${URL_BACKEND:-http://localhost/api}
-      URL_FRONTEND: ${URL_FRONTEND:-http://localhost}
+      URL_BACKEND: ${URL_BACKEND:-https://localhost}
+      URL_FRONTEND: ${URL_FRONTEND:-https://localhost}
     volumes:
       # Volumen persistente crítico: evita perder fotos de perfil e insignias emitidas (baked PNG)
       - backend_recursos:/app/recursos
@@ -52,7 +76,7 @@ services:
       - espoch_network
 
   # ============================================================================
-  # 3. Servidor Web y Frontend: Angular 20 + Nginx Reverse Proxy
+  # 3. Servidor Web y Frontend: Angular 20 + Nginx Reverse Proxy (HTTPS)
   # ============================================================================
   frontend:
     build:
@@ -64,6 +88,7 @@ services:
       - backend
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - espoch_network
 
@@ -75,6 +100,8 @@ volumes:
     driver: local
   backend_recursos:
     driver: local
+  postgres_backups:
+    driver: local
 
 # ==============================================================================
 # Red Interna Aislada
@@ -82,4 +109,3 @@ volumes:
 networks:
   espoch_network:
     driver: bridge
-
