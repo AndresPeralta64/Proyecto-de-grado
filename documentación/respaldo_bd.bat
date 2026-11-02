@@ -1,6 +1,6 @@
 @echo off
 REM ==============================================================================
-REM Script de Respaldo de Base de Datos PostgreSQL para Windows (HT-004 / RNF-003)
+REM Script de Respaldo de Base de Datos PostgreSQL para Windows
 REM ==============================================================================
 
 set FECHA=%date:~6,4%%date:~3,2%%date:~0,2%_%time:~0,2%%time:~3,2%%time:~6,2%

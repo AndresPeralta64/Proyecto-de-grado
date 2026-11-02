@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# Script de Respaldo de Base de Datos PostgreSQL (HT-004 / RNF-003)
+# Script de Respaldo de Base de Datos PostgreSQL
 # Escuela Superior Politécnica de Chimborazo (ESPOCH)
 # ==============================================================================
 
