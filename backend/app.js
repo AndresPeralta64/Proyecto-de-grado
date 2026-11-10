@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
@@ -20,6 +21,19 @@ const app = express();
 /**
  * Configuración de middleware base y seguridad
  */
+
+// Redirección forzada a HTTPS en entornos de producción (HT-008 / RNF-004)
+if (process.env.NODE_ENV === 'production') {
+  app.enable('trust proxy');
+  app.use((req, res, next) => {
+    const esHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    if (!esHttps) {
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
+}
+
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 })); // Protege la aplicación permitiendo recursos cruzados para imágenes
@@ -29,6 +43,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Asegurar automáticamente la estructura de almacenamiento estático (recursos y sus subcarpetas)
+const carpetasRecursos = [
+  path.join(__dirname, 'recursos', 'perfiles'),
+  path.join(__dirname, 'recursos', 'insignias'),
+  path.join(__dirname, 'recursos', 'insignias_metadatos')
+];
+carpetasRecursos.forEach(carpeta => {
+  if (!fs.existsSync(carpeta)) {
+    fs.mkdirSync(carpeta, { recursive: true });
+  }
+});
+
 app.use('/recursos', express.static(path.join(__dirname, 'recursos')));
 
 

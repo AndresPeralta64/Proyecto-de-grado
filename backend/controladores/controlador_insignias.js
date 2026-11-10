@@ -177,7 +177,11 @@ const emitirInsignias = async (req, res) => {
                 const ts = fechaObj.getTime();
 
                 const nombreNuevo = `insignia-digital-baked-${idEmisor}-${idReceptor}-${fechaFormateada}-${ts}.png`;
-                const rutaNueva = path.join(__dirname, '..', 'recursos', 'insignias_metadatos', nombreNuevo);
+                const dirMetadatos = path.join(__dirname, '..', 'recursos', 'insignias_metadatos');
+                if (!fs.existsSync(dirMetadatos)) {
+                  fs.mkdirSync(dirMetadatos, { recursive: true });
+                }
+                const rutaNueva = path.join(dirMetadatos, nombreNuevo);
                 
                 await fs.promises.writeFile(rutaNueva, bufferBaked);
                 fotoUrlBaked = `${host}/recursos/insignias_metadatos/${nombreNuevo}`;
