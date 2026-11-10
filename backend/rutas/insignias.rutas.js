@@ -17,7 +17,7 @@ router.get('/historial', autorizacion(['Emisor', 'Administrador']), controladorI
 router.get('/historial-general', autorizacion(['Administrador']), controladorInsignias.obtenerHistorialGeneral);
 
 // Revocación
-router.post('/revocar/:idInsignia', autorizacion(['Emisor']), controladorInsignias.revocarInsignia);
+router.post('/revocar/:idInsignia', autorizacion(['Emisor', 'Administrador']), controladorInsignias.revocarInsignia);
 
 // Receptores que ya tienen la insignia
 router.get('/receptores-con-insignia/:idMicrocredencial', autorizacion(['Emisor', 'Administrador']), controladorInsignias.obtenerReceptoresConInsignia);
